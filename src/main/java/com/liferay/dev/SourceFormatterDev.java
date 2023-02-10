@@ -1,0 +1,103 @@
+package com.liferay.dev;
+
+import com.liferay.portal.kernel.util.ListUtil;
+import com.liferay.portal.tools.GitException;
+import com.liferay.source.formatter.SourceFormatter;
+import com.liferay.source.formatter.SourceFormatterArgs;
+
+import com.puppycrawl.tools.checkstyle.api.CheckstyleException;
+
+public class SourceFormatterDev {
+
+	public static void main(String[] args) {
+		SourceFormatterArgs sourceFormatterArgs = _getSourceFormatterArgs(true);
+
+		sourceFormatterArgs.setBaseDirName("[insert path here]");
+		sourceFormatterArgs.setCheckCategoryNames(
+			ListUtil.fromArray("Upgrade"));
+		sourceFormatterArgs.setFileExtensions(ListUtil.fromArray("java"));
+		sourceFormatterArgs.setSkipCheckNames(
+			ListUtil.fromArray("GradleUpgradeReleaseDXPCheck"));
+
+		try {
+			SourceFormatter sourceFormatter = new SourceFormatter(
+				sourceFormatterArgs);
+
+			sourceFormatter.format();
+		}
+		catch (Exception exception) {
+			if (exception instanceof GitException) {
+				System.err.println(exception.getMessage());
+			}
+			else {
+				CheckstyleException checkstyleException =
+					_getNestedCheckstyleException(exception);
+
+				if (checkstyleException != null) {
+					checkstyleException.printStackTrace(System.err);
+				}
+				else {
+					exception.printStackTrace(System.err);
+				}
+			}
+
+			System.exit(1);
+		}
+	}
+
+	private static CheckstyleException _getNestedCheckstyleException(
+		Exception exception) {
+
+		Throwable throwable = exception;
+
+		while (true) {
+			if (throwable == null) {
+				return null;
+			}
+
+			if (throwable instanceof CheckstyleException) {
+				return (CheckstyleException)throwable;
+			}
+
+			throwable = throwable.getCause();
+		}
+	}
+
+	private static SourceFormatterArgs _getSourceFormatterArgs(boolean debug) {
+		SourceFormatterArgs sourceFormatterArgs = new SourceFormatterArgs();
+
+		sourceFormatterArgs.setAutoFix(SourceFormatterArgs.AUTO_FIX);
+		sourceFormatterArgs.setBaseDirName(SourceFormatterArgs.BASE_DIR_NAME);
+		sourceFormatterArgs.setFailOnAutoFix(
+			SourceFormatterArgs.FAIL_ON_AUTO_FIX);
+		sourceFormatterArgs.setFailOnHasWarning(
+			SourceFormatterArgs.FAIL_ON_HAS_WARNING);
+		sourceFormatterArgs.setFormatCurrentBranch(
+			SourceFormatterArgs.FORMAT_CURRENT_BRANCH);
+		sourceFormatterArgs.setFormatLatestAuthor(
+			SourceFormatterArgs.FORMAT_LATEST_AUTHOR);
+		sourceFormatterArgs.setFormatLocalChanges(
+			SourceFormatterArgs.FORMAT_LOCAL_CHANGES);
+		sourceFormatterArgs.setGitWorkingBranchName(
+			SourceFormatterArgs.GIT_WORKING_BRANCH_NAME);
+		sourceFormatterArgs.setCommitCount(SourceFormatterArgs.COMMIT_COUNT);
+		sourceFormatterArgs.setIncludeGeneratedFiles(
+			SourceFormatterArgs.INCLUDE_GENERATED_FILES);
+		sourceFormatterArgs.setIncludeSubrepositories(
+			SourceFormatterArgs.INCLUDE_SUBREPOSITORIES);
+		sourceFormatterArgs.setMaxLineLength(
+			SourceFormatterArgs.MAX_LINE_LENGTH);
+		sourceFormatterArgs.setMaxDirLevel(SourceFormatterArgs.MAX_DIR_LEVEL);
+		sourceFormatterArgs.setOutputFileName(
+			SourceFormatterArgs.OUTPUT_FILE_NAME);
+		sourceFormatterArgs.setPrintErrors(SourceFormatterArgs.PRINT_ERRORS);
+		sourceFormatterArgs.setProcessorThreadCount(
+			SourceFormatterArgs.PROCESSOR_THREAD_COUNT);
+		sourceFormatterArgs.setShowDebugInformation(debug);
+		sourceFormatterArgs.setValidateCommitMessages(
+			SourceFormatterArgs.VALIDATE_COMMIT_MESSAGES);
+
+		return sourceFormatterArgs;
+	}
+
+}

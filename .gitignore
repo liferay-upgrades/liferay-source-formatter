@@ -1,0 +1,13 @@
+**/*.class
+**/*.jar
+**/*.iml
+**/*.ipr
+**/*.iws
+
+/.gradle
+/.idea
+/bin
+/build
+/target
+/src/main/java/com/liferay/source/formatter
+/src/main/resources
