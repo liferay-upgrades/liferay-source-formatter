@@ -1,7 +1,7 @@
 # Liferay Source Formatter
 
-[Liferay Source Formatter](https://github.com/liferay/liferay-portal/tree/master/modules/util/source-formatter) as an
-individual Gradle project for easier development.
+[Liferay Source Formatter](https://github.com/liferay/liferay-portal/tree/master/modules/util/source-formatter) as a
+standalone project for easier development.
 
 ## Setup
 
