@@ -14,10 +14,8 @@ public class SourceFormatterDev {
 
 		sourceFormatterArgs.setBaseDirName("[insert path here]");
 		sourceFormatterArgs.setCheckCategoryNames(
-			ListUtil.fromArray("Upgrade"));
+			ListUtil.fromArray("Bug Prevention"));
 		sourceFormatterArgs.setFileExtensions(ListUtil.fromArray("java"));
-		sourceFormatterArgs.setSkipCheckNames(
-			ListUtil.fromArray("GradleUpgradeReleaseDXPCheck"));
 
 		try {
 			SourceFormatter sourceFormatter = new SourceFormatter(
