@@ -57,6 +57,7 @@ task pushCode
 
 cleanCode {
 	group "dev"
+	description "Cleans up all Source Formatter code"
 	doLast {
 		delete files("./src/main/java/com/liferay/source", "./src/main/resources")
 	}
@@ -65,9 +66,10 @@ cleanCode {
 pullCode {
 	group "dev"
 	dependsOn("cleanCode")
+	description "Pulls code from liferay-portal"
 	doLast {
 		def repoDir = project.findProperty('liferay.portal.repo.dir')
-		if (repoDir == null) {
+		if (repoDir == null || repoDir.trim().length() == 0) {
 			throw new IllegalArgumentException("please supply path to 'liferay.portal.repo.dir' in 'gradle.properties'")
 		}
 
@@ -84,9 +86,10 @@ pullCode {
 
 pushCode {
 	group "dev"
+	description "Pushes changes to liferay-portal"
 	doLast {
 		def repoDir = project.findProperty('liferay.portal.repo.dir')
-		if (repoDir == null) {
+		if (repoDir == null || repoDir.trim().length() == 0) {
 			throw new IllegalArgumentException("please supply path to 'liferay.portal.repo.dir' in 'gradle.properties'")
 		}
 
