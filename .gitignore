@@ -4,6 +4,7 @@
 **/*.ipr
 **/*.iws
 
+/gradle.properties
 /.gradle
 /.idea
 /bin
