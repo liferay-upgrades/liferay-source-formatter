@@ -1,10 +1,10 @@
+gradle.properties
 **/*.class
 **/*.jar
 **/*.iml
 **/*.ipr
 **/*.iws
 
-/gradle.properties
 /.gradle
 /.idea
 /bin

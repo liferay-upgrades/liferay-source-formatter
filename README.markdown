@@ -12,7 +12,7 @@ __Requirements:__
 This development environment relies on your [Liferay Portal](https://github.com/liferay/liferay-portal/)
 repository. It is important to keep your `liferay-portal` up-to-date when using this project.
 
-To get started, configure `liferay.portal.repo.dir` in this project's `gradle.properties` file:
+To get started, create a `gradle.properties` file in the root directory and set the field `liferay.portal.repo.dir`:
 
 ```properties
 liferay.portal.repo.dir=[insert path to your Liferay Portal repository]
