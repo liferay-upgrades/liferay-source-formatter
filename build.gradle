@@ -38,6 +38,8 @@ dependencies {
 	compile group: "com.liferay.portal", name: "com.liferay.util.java", version: "2.5.0"
 	compile group: "org.apache.felix", name: "org.apache.felix.http.servlet-api", version: "1.1.2"
 	compile group: "org.apache.maven", name: "maven-plugin-api", transitive: false, version: "3.0.4"
+
+	compile group: "com.github.fracpete", name: "rsync4j-all", version: "3.2.7-1"
 }
 
 repositories {
@@ -78,13 +80,10 @@ pullCode {
 			throw new IllegalArgumentException("please supply path to 'liferay.portal.repo.dir' in 'gradle.properties'")
 		}
 
-		copy {
-			from files("${repoDir}/modules/util/source-formatter/src/main/java/com/liferay/source")
-			into file('./src/main/java/com/liferay/source')
-		}
-		copy {
-			from files("${repoDir}/modules/util/source-formatter/src/main/resources")
-			into file('./src/main/resources')
+		javaexec {
+			classpath = sourceSets.main.runtimeClasspath
+			main = "com.liferay.dev.script.RSyncCode"
+			args = ["pull", repoDir]
 		}
 	}
 }
@@ -98,19 +97,10 @@ pushCode {
 			throw new IllegalArgumentException("please supply path to 'liferay.portal.repo.dir' in 'gradle.properties'")
 		}
 
-		delete files(
-			"${repoDir}/modules/util/source-formatter/src/main/java/com/liferay/source",
-			"${repoDir}/modules/util/source-formatter/src/main/resources"
-		)
-
-		copy {
-			from files("./src/main/java/com/liferay/source")
-			into file("${repoDir}/modules/util/source-formatter/src/main/java/com/liferay/source")
-		}
-
-		copy {
-			from files("./src/main/resources")
-			into file("${repoDir}/modules/util/source-formatter/src/main/resources")
+		javaexec {
+			classpath = sourceSets.main.runtimeClasspath
+			main = "com.liferay.dev.script.RSyncCode"
+			args = ["push", repoDir]
 		}
 	}
 }
