@@ -3,6 +3,7 @@
 <suppressions>
 	<checkstyle>
 		<suppress checks="ContractionsCheck" files="src/main/java/com/liferay/source/formatter/checkstyle/check/ContractionsCheck\.java" />
+		<suppress checks="ExceptionPrintStackTraceCheck" files="src/main/java/com/liferay/dev/SourceFormatterDev\.java" />
 		<suppress checks="ExceptionPrintStackTraceCheck" files="src/main/java/com/liferay/source/formatter/SourceFormatter\.java" />
 		<suppress checks="MissingAuthorCheck" files="src/main/java/com/liferay/dev/.*" />
 	</checkstyle>

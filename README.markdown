@@ -34,3 +34,21 @@ To push local changes in this project to `liferay-portal`, run the following com
 ```
 
 This will overwrite and sync files in this project to the ones in your `liferay-portal` repository.
+
+## Running code
+
+You can run Source Formatter code in this project by one of two ways:
+
+- Execute `./src/main/java/com/liferay/dev/SourceFormatterDev.java` from an editor/IDE
+- Execute the Gradle task `./gradlew run`
+
+`./gradlew run` takes arguments `args` that configure Source Formatter. For example:
+
+```shell
+./gradlew run --args="source.base.dir=[path to directory to format]"
+```
+
+To see what you can configure through `args`, check the following documentation:
+
+- <https://github.com/liferay/liferay-portal/tree/master/modules/sdk/gradle-plugins-source-formatter#task-properties>
+- <https://github.com/liferay/liferay-portal/blob/master/modules/util/source-formatter/src/main/java/com/liferay/source/formatter/SourceFormatter.java#L118-L281>
