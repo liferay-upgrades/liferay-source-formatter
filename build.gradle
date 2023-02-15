@@ -53,7 +53,7 @@ repositories {
 }
 
 application {
-	mainClassName = "com.liferay.dev.SourceFormatterDev"
+	mainClassName = "com.liferay.source.formatter.SourceFormatter"
 }
 
 task cleanCode
