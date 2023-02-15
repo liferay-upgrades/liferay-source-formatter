@@ -20,8 +20,7 @@ import java.util.Map;
 public class SourceFormatterDev {
 
 	public static void main(String[] args) throws Exception {
-		SourceFormatterArgs sourceFormatterArgs = _getSourceFormatterArgs(
-			args, true);
+		SourceFormatterArgs sourceFormatterArgs = _getSourceFormatterArgs(args);
 
 		try {
 			SourceFormatter sourceFormatter = new SourceFormatter(
@@ -67,8 +66,7 @@ public class SourceFormatterDev {
 		}
 	}
 
-	private static SourceFormatterArgs _getSourceFormatterArgs(
-			String[] args, boolean debug)
+	private static SourceFormatterArgs _getSourceFormatterArgs(String[] args)
 		throws Exception {
 
 		Map<String, String> arguments = ArgumentsUtil.parseArguments(args);
@@ -208,7 +206,7 @@ public class SourceFormatterDev {
 		sourceFormatterArgs.setShowDebugInformation(
 			ArgumentsUtil.getBoolean(
 				arguments, "show.debug.information",
-				debug || SourceFormatterArgs.SHOW_DEBUG_INFORMATION));
+				SourceFormatterArgs.SHOW_DEBUG_INFORMATION));
 
 		String[] skipCheckNames = StringUtil.split(
 			ArgumentsUtil.getString(
