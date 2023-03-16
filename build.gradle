@@ -72,7 +72,7 @@ cleanCode {
 
 pullCode {
 	group "dev"
-	dependsOn("cleanCode")
+	dependsOn("cleanCode", "compileJava")
 	description "Pulls code from liferay-portal"
 	doLast {
 		def repoDir = project.findProperty('liferay.portal.repo.dir')
@@ -90,6 +90,7 @@ pullCode {
 
 pushCode {
 	group "dev"
+	dependsOn("compileJava")
 	description "Pushes changes to liferay-portal"
 	doLast {
 		def repoDir = project.findProperty('liferay.portal.repo.dir')
