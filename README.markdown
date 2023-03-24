@@ -18,24 +18,15 @@ To get started, create a `gradle.properties` file in the root directory and set 
 liferay.portal.repo.dir=[insert path to your Liferay Portal repository]
 ```
 
-To set up the project, run the following command:
+## Usage
 
-```shell
-./gradlew pullCode
-```
+This project provides several Gradle tasks for developing and running SF checks.
 
-This command pulls Source Formatter code from your `liferay-portal` repository to this project. Make
-sure to save all local changes before running this command.
+The `pullCode` task pulls Source Formatter code from your `liferay-portal` repository to this project.
+Make sure to save all local changes before running this command.
 
-To push local changes in this project to `liferay-portal`, run the following command:
-
-```shell
-./gradlew pushCode
-```
-
-This will overwrite and sync files in this project to the ones in your `liferay-portal` repository.
-
-## Running code
+The `pushCode` task pushes local changes in this project to `liferay-portal`. This will overwrite and
+sync files in this project to the ones in your `liferay-portal` repository.
 
 You can run Source Formatter code in this project by one of two ways:
 

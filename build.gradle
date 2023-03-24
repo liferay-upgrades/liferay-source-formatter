@@ -20,22 +20,22 @@ dependencies {
 	compile group: "org.reflections", name: "reflections", "version": "0.10.2"
 	compile group: "xerces", name: "xercesImpl", version: "2.12.2"
 
-	compile group: "com.liferay", name: "com.liferay.petra.function", version: "5.0.1"
-	compile group: "com.liferay", name: "com.liferay.petra.lang", version: "1.0.0"
-	compile group: "com.liferay", name: "com.liferay.petra.nio", version: "1.0.0"
-	compile group: "com.liferay", name: "com.liferay.petra.string", version: "2.0.0"
-	compile group: "com.liferay", name: "com.liferay.poshi.core", version: "1.0.85"
+	compile group: "com.liferay", name: "com.liferay.petra.function", version: "latest.release"
+	compile group: "com.liferay", name: "com.liferay.petra.lang", version: "latest.release"
+	compile group: "com.liferay", name: "com.liferay.petra.nio", version: "latest.release"
+	compile group: "com.liferay", name: "com.liferay.petra.string", version: "latest.release"
+	compile group: "com.liferay", name: "com.liferay.poshi.core", version: "latest.release"
 	compile group: "org.codehaus.groovy", name: "groovy", version: "2.4.21"
 
 	compile group: "biz.aQute.bnd", name: "biz.aQute.bndlib", version: "3.1.0"
-	compile group: "com.liferay", name: "com.liferay.petra.concurrent", version: "1.1.0"
-	compile group: "com.liferay", name: "com.liferay.petra.memory", version: "1.0.0"
-	compile group: "com.liferay", name: "com.liferay.petra.reflect", version: "1.1.0"
-	compile group: "com.liferay", name: "com.liferay.petra.xml", version: "1.0.0"
-	compile group: "com.liferay", name: "com.liferay.portal.tools.java.parser", version: "1.0.47"
+	compile group: "com.liferay", name: "com.liferay.petra.concurrent", version: "latest.release"
+	compile group: "com.liferay", name: "com.liferay.petra.memory", version: "latest.release"
+	compile group: "com.liferay", name: "com.liferay.petra.reflect", version: "latest.release"
+	compile group: "com.liferay", name: "com.liferay.petra.xml", version: "latest.release"
+	compile group: "com.liferay", name: "com.liferay.portal.tools.java.parser", version: "latest.release"
 	compile group: "com.liferay.portal", name: "com.liferay.portal.impl", version: "latest.release"
 	compile group: "com.liferay.portal", name: "com.liferay.portal.kernel", version: "latest.release"
-	compile group: "com.liferay.portal", name: "com.liferay.util.java", version: "2.5.0"
+	compile group: "com.liferay.portal", name: "com.liferay.util.java", version: "latest.release"
 	compile group: "org.apache.felix", name: "org.apache.felix.http.servlet-api", version: "1.1.2"
 	compile group: "org.apache.maven", name: "maven-plugin-api", transitive: false, version: "3.0.4"
 
@@ -58,21 +58,12 @@ application {
 	mainClassName = "com.liferay.source.formatter.SourceFormatter"
 }
 
-task cleanCode
 task pullCode
 task pushCode
 
-cleanCode {
-	group "dev"
-	description "Cleans up all Source Formatter code"
-	doLast {
-		delete files("./src/main/java/com/liferay/source", "./src/main/resources")
-	}
-}
-
 pullCode {
 	group "dev"
-	dependsOn("cleanCode", "compileJava")
+	dependsOn("compileJava")
 	description "Pulls code from liferay-portal"
 	doLast {
 		def repoDir = project.findProperty('liferay.portal.repo.dir')
