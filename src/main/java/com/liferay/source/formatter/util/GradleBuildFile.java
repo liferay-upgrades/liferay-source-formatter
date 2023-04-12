@@ -12,10 +12,13 @@
  * details.
  */
 
-package com.liferay.source.formatter.upgrade;
+package com.liferay.source.formatter.util;
 
 import com.liferay.petra.string.StringUtil;
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.ListUtil;
+import com.liferay.portal.kernel.util.Validator;
 
 import java.util.List;
 import java.util.ListIterator;
@@ -24,6 +27,7 @@ import java.util.Objects;
 import org.codehaus.groovy.ast.ASTNode;
 import org.codehaus.groovy.ast.ClassNode;
 import org.codehaus.groovy.ast.builder.AstBuilder;
+import org.codehaus.groovy.control.CompilationFailedException;
 import org.codehaus.groovy.control.CompilePhase;
 
 /**
@@ -93,6 +97,23 @@ public class GradleBuildFile {
 		_saveSource(sourceLines);
 	}
 
+	public List<GradleDependency> getBuildScriptDependencies() {
+		GradleBuildFileVisitor gradleBuildFileVisitor = _walkAST();
+
+		return gradleBuildFileVisitor.getBuildScriptDependencies();
+	}
+
+	public List<GradleDependency> getBuildScriptDependencies(
+		String configuration) {
+
+		GradleBuildFileVisitor gradleBuildFileVisitor = _walkAST();
+
+		return ListUtil.filter(
+			gradleBuildFileVisitor.getBuildScriptDependencies(),
+			gradleDependency -> Objects.equals(
+				configuration, gradleDependency.getConfiguration()));
+	}
+
 	public List<GradleDependency> getGradleDependencies() {
 		GradleBuildFileVisitor gradleBuildFileVisitor = _walkAST();
 
@@ -113,7 +134,7 @@ public class GradleBuildFile {
 	}
 
 	public List<String> getSourceLines() {
-		return ListUtil.fromString(_source, System.lineSeparator());
+		return ListUtil.fromString(_source, "\n");
 	}
 
 	public void insertGradleDependency(GradleDependency gradleDependency) {
@@ -161,27 +182,42 @@ public class GradleBuildFile {
 	}
 
 	private void _saveSource(List<String> lines) {
-		_source = StringUtil.merge(lines, System.lineSeparator());
+		_source = StringUtil.merge(lines, "\n");
 	}
 
 	private GradleBuildFileVisitor _walkAST() {
-		AstBuilder astBuilder = new AstBuilder();
-
 		GradleBuildFileVisitor gradleBuildFileVisitor =
 			new GradleBuildFileVisitor();
 
-		for (ASTNode astNode :
-				astBuilder.buildFromString(CompilePhase.CONVERSION, _source)) {
+		if (Validator.isNull(_source)) {
+			return gradleBuildFileVisitor;
+		}
 
-			if (astNode instanceof ClassNode) {
-				continue;
+		AstBuilder astBuilder = new AstBuilder();
+
+		try {
+			for (ASTNode astNode :
+					astBuilder.buildFromString(
+						CompilePhase.CONVERSION, _source)) {
+
+				if (astNode instanceof ClassNode) {
+					continue;
+				}
+
+				astNode.visit(gradleBuildFileVisitor);
 			}
-
-			astNode.visit(gradleBuildFileVisitor);
+		}
+		catch (CompilationFailedException compilationFailedException) {
+			if (_log.isDebugEnabled()) {
+				_log.debug(compilationFailedException);
+			}
 		}
 
 		return gradleBuildFileVisitor;
 	}
+
+	private static final Log _log = LogFactoryUtil.getLog(
+		GradleBuildFile.class);
 
 	private String _source;
 

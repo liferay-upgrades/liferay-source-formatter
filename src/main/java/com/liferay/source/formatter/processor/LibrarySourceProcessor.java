@@ -19,9 +19,9 @@ import java.io.IOException;
 import java.util.List;
 
 /**
- * @author Hugo Huijser
+ * @author Qi Zhang
  */
-public class JSONSourceProcessor extends BaseSourceProcessor {
+public class LibrarySourceProcessor extends BaseSourceProcessor {
 
 	@Override
 	protected List<String> doGetFileNames() throws IOException {
@@ -34,7 +34,11 @@ public class JSONSourceProcessor extends BaseSourceProcessor {
 	}
 
 	private static final String[] _INCLUDES = {
-		"**/*.ipynb", "**/*.json", "**/.npmbridgerc"
+		"**/build.gradle", "**/build-buildscript.gradle",
+		"**/dependencies.properties", "**/ivy.xml", "**/package.json",
+		"**/pakcage-lock.json", "**/pom.xml", "**/releng.gradle",
+		"**/releng-pom-compile-only-dependencies.properties",
+		"**/settings.gradle"
 	};
 
 }
