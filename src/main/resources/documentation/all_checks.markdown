@@ -47,6 +47,7 @@ CodeownersWhitespaceCheck | [Styling](styling_checks.markdown#styling-checks) | 
 [CompanyIterationCheck](check/company_iteration_check.markdown#companyiterationcheck) | [Bug Prevention](bug_prevention_checks.markdown#bug-prevention-checks) | .java, .jsp, .jspf, .jspx, .tag, .tpl or .vm | Checks that `CompanyLocalService.forEachCompany` or `CompanyLocalService.forEachCompanyId` is used when iterating over companies |
 CompatClassImportsCheck | [Bug Prevention](bug_prevention_checks.markdown#bug-prevention-checks) | .java, .jsp, .jspf, .jspx, .tag, .tpl or .vm | Checks that classes are imported from `compat` modules, when possible. |
 ComponentAnnotationCheck | [Bug Prevention](bug_prevention_checks.markdown#bug-prevention-checks) | .java | Performs several checks on classes with @Component annotation. |
+[ComponentExposureCheck](check/component_exposure_check.markdown#componentexposurecheck) | [Bug Prevention](bug_prevention_checks.markdown#bug-prevention-checks) | .java | Avoid exposing static component. |
 ConcatCheck | [Performance](performance_checks.markdown#performance-checks) | .java, .jsp, .jspf, .jspx, .tag, .tpl or .vm | Checks for correct use of `StringBundler.concat`. |
 ConfigDefinitionKeysCheck | [Styling](styling_checks.markdown#styling-checks) | .cfg or .config | Sorts definition keys in `.config` files. |
 ConfigWhitespaceCheck | [Styling](styling_checks.markdown#styling-checks) | .cfg or .config | Finds missing and unnecessary whitespace. |
@@ -109,6 +110,7 @@ HTMLEmptyLinesCheck | [Styling](styling_checks.markdown#styling-checks) | .html 
 HTMLWhitespaceCheck | [Styling](styling_checks.markdown#styling-checks) | .html or .path | Finds missing and unnecessary whitespace in `.html` files. |
 [IfStatementCheck](check/if_statement_check.markdown#ifstatementcheck) | [Styling](styling_checks.markdown#styling-checks) | .java, .jsp, .jspf, .jspx, .tag, .tpl or .vm | Finds empty if-statements and consecutive if-statements with identical bodies |
 IllegalImportsCheck | [Bug Prevention](bug_prevention_checks.markdown#bug-prevention-checks) | .java, .jsp, .jspf, .jspx, .tag, .tpl or .vm | Finds cases of incorrect use of certain classes. |
+IllegalTaglibsCheck | [Bug Prevention](bug_prevention_checks.markdown#bug-prevention-checks) | .ftl, .jsp, .jspf, .jspx, .tag, .tpl or .vm | Finds cases of incorrect use of certain taglibs. |
 [IncorrectFileLocationCheck](check/incorrect_file_location_check.markdown#incorrectfilelocationcheck) | [Bug Prevention](bug_prevention_checks.markdown#bug-prevention-checks) | | Checks that `/src/*/java/` only contains `.java` files. |
 IncorrectFilePathCheck | [Bug Prevention](bug_prevention_checks.markdown#bug-prevention-checks) | | Checks that file path contains illegal characters. |
 InstanceInitializerCheck | [Styling](styling_checks.markdown#styling-checks) | .java | Checks the order of variable assignments and set* calls in the instance initializer. |
@@ -229,11 +231,13 @@ JavaModuleServiceReferenceCheck | [Bug Prevention](bug_prevention_checks.markdow
 [JavaModuleTestCheck](check/java_module_test_check.markdown#javamoduletestcheck) | [Bug Prevention](bug_prevention_checks.markdown#bug-prevention-checks) | .java | Checks package names in tests. |
 JavaModuleUniqueVerifyProcessCheck | [Bug Prevention](bug_prevention_checks.markdown#bug-prevention-checks) | .java | Checks that a module can not have more than 1 verify process class (class extends VerifyProcess). |
 [JavaMultiPlusConcatCheck](check/java_multi_plus_concat_check.markdown#javamultiplusconcatcheck) | [Performance](performance_checks.markdown#performance-checks) | .java | Checks that we do not concatenate more than 3 String objects. |
+JavaNewProblemInstantiationParametersCheck | [Bug Prevention](bug_prevention_checks.markdown#bug-prevention-checks) | .java | Finds cases where `new Problem` can be simplified. |
 [JavaOSGiReferenceCheck](check/java_osgi_reference_check.markdown#javaosgireferencecheck) | [Bug Prevention](bug_prevention_checks.markdown#bug-prevention-checks) | .java | Performs several checks on classes with `@Component` annotation. |
 [JavaPackagePathCheck](check/java_package_path_check.markdown#javapackagepathcheck) | [Bug Prevention](bug_prevention_checks.markdown#bug-prevention-checks) | .java | Checks that the package name matches the file location. |
 [JavaProcessCallableCheck](check/java_process_callable_check.markdown#javaprocesscallablecheck) | [Bug Prevention](bug_prevention_checks.markdown#bug-prevention-checks) | .java | Checks that a class implementing `ProcessCallable` assigns a `serialVersionUID`. |
 JavaProviderTypeAnnotationCheck | [Bug Prevention](bug_prevention_checks.markdown#bug-prevention-checks) | .java | Performs several checks on classes with `@ProviderType` annotation. |
 JavaRedundantConstructorCheck | [Bug Prevention](bug_prevention_checks.markdown#bug-prevention-checks) | .java | Finds unnecessary empty constructor. |
+JavaReferenceAnnotationsCheck | [Bug Prevention](bug_prevention_checks.markdown#bug-prevention-checks) | .java | Performs several checks on classes with `@Reference` annotations. |
 JavaReleaseInfoCheck | [Bug Prevention](bug_prevention_checks.markdown#bug-prevention-checks) | .java | Validates information in `ReleaseInfo.java`. |
 [JavaResultSetCheck](check/java_result_set_check.markdown#javaresultsetcheck) | [Bug Prevention](bug_prevention_checks.markdown#bug-prevention-checks) | .java | Checks for correct use `java.sql.ResultSet.getInt(int)`. |
 JavaReturnStatementCheck | [Styling](styling_checks.markdown#styling-checks) | .java | Finds unnecessary `else` statement (when `if` and `else` statement both end with `return` statement). |
@@ -287,7 +291,7 @@ LFRBuildReadmeCheck | [Documentation](documentation_checks.markdown#documentatio
 LPS42924Check | [Bug Prevention](bug_prevention_checks.markdown#bug-prevention-checks) | .java | Finds cases where `PortalUtil.getClassName*` (instead of calling `classNameLocalService` directly). |
 [LambdaCheck](check/lambda_check.markdown#lambdacheck) | [Styling](styling_checks.markdown#styling-checks) | .java, .jsp, .jspf, .jspx, .tag, .tpl or .vm | Checks that `lambda` statements are as simple as possible. |
 LanguageKeysCheck | [Bug Prevention](bug_prevention_checks.markdown#bug-prevention-checks) | .java, .js or .jsx | Finds missing language keys in `Language.properties`. |
-LibraryVulnerabilitiesCheck | [Bug Prevention](bug_prevention_checks.markdown#bug-prevention-checks) | | Checks the introduction of libraries and third party components with known vulnerabilities |
+LibraryVulnerabilitiesCheck | [Bug Prevention](bug_prevention_checks.markdown#bug-prevention-checks) | .gradle, .gradle, .gradle, .gradle, .json, .json, .properties, .properties, .xml or .xml | Checks the introduction of libraries and third party components with known vulnerabilities |
 [ListUtilCheck](check/list_util_check.markdown#listutilcheck) | [Styling](styling_checks.markdown#styling-checks) | .java, .jsp, .jspf, .jspx, .tag, .tpl or .vm | Checks for utilization of class `ListUtil`. |
 LiteralStringEqualsCheck | [Styling](styling_checks.markdown#styling-checks) | .java, .jsp, .jspf, .jspx, .tag, .tpl or .vm | Finds cases where `Objects.equals` should be used. |
 [LocalFinalVariableNameCheck](https://checkstyle.sourceforge.io/config_naming.html#LocalFinalVariableName) | [Naming Conventions](naming_conventions_checks.markdown#naming-conventions-checks) | .java, .jsp, .jspf, .jspx, .tag, .tpl or .vm | Checks that local final variable names conform to a specified pattern. |
@@ -444,7 +448,11 @@ UpgradeGradleIncludeResourceCheck | [Upgrade](upgrade_checks.markdown#upgrade-ch
 UpgradeJavaCheck | [Upgrade](upgrade_checks.markdown#upgrade-checks) | .bnd, .gradle, .java or .vm | Performs upgrade checks for `java` files |
 [UpgradeProcessCheck](check/upgrade_process_check.markdown#upgradeprocesscheck) | [Performance](performance_checks.markdown#performance-checks) | .java | Performs several checks on `*UpgradeProcess` classes. |
 UpgradeRemovedAPICheck | [Upgrade](upgrade_checks.markdown#upgrade-checks) | .java | Finds cases where calls are made to removed API after an upgrade. |
-UpgradeVelocityCommentMigrationCheck | [Upgrade](upgrade_checks.markdown#upgrade-checks) | .bnd, .gradle, .java or .vm | Run code migration of comments from a `velocity` file to a `fremarker` file with the syntax replacements |
+UpgradeVelocityCommentMigrationCheck | [Upgrade](upgrade_checks.markdown#upgrade-checks) | .bnd, .gradle, .java or .vm | Run code migration of comments from a Velocity file to a Freemarker file with the syntax replacements |
+UpgradeVelocityFileImportMigrationCheck | [Upgrade](upgrade_checks.markdown#upgrade-checks) | .bnd, .gradle, .java or .vm | Run code migration of file import from a Velocity file to a Freemarker file with the syntax replacements |
+UpgradeVelocityIfStatementsMigrationCheck | [Upgrade](upgrade_checks.markdown#upgrade-checks) | .bnd, .gradle, .java or .vm | Run code migration of references to If statements from a Velocity file to a Freemarker file with the syntax replacements |
+UpgradeVelocityVariableReferenceMigrationCheck | [Upgrade](upgrade_checks.markdown#upgrade-checks) | .bnd, .gradle, .java or .vm | Run code migration of references to variables from a Velocity file to a Freemarker file with the syntax replacements |
+UpgradeVelocityVariableSetMigrationCheck | [Upgrade](upgrade_checks.markdown#upgrade-checks) | .bnd, .gradle, .java or .vm | Run code migration of set variables from a Velocity file to a Freemarker file with the syntax replacements |
 [ValidatorEqualsCheck](check/validator_equals_check.markdown#validatorequalscheck) | [Performance](performance_checks.markdown#performance-checks) | .java, .jsp, .jspf, .jspx, .tag, .tpl or .vm | Checks that there are no calls to `Validator.equals(Object, Object)`. |
 ValidatorIsNullCheck | [Bug Prevention](bug_prevention_checks.markdown#bug-prevention-checks) | .java, .jsp, .jspf, .jspx, .tag, .tpl or .vm | Ensures that only variable of type `Long`, `Serializable` or `String` is passed to method `com.liferay.portal.kernel.util.Validator.isNull`. |
 VariableDeclarationAsUsedCheck | [Performance](performance_checks.markdown#performance-checks) | .java | Finds cases where a variable declaration can be inlined or moved closer to where it is used. |

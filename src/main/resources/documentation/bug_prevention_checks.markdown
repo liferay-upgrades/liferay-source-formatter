@@ -26,6 +26,7 @@ CQLKeywordCheck | .cql | Checks that Cassandra keywords are upper case. |
 [CompanyIterationCheck](check/company_iteration_check.markdown#companyiterationcheck) | .java, .jsp, .jspf, .jspx, .tag, .tpl or .vm | Checks that `CompanyLocalService.forEachCompany` or `CompanyLocalService.forEachCompanyId` is used when iterating over companies |
 CompatClassImportsCheck | .java, .jsp, .jspf, .jspx, .tag, .tpl or .vm | Checks that classes are imported from `compat` modules, when possible. |
 ComponentAnnotationCheck | .java | Performs several checks on classes with @Component annotation. |
+[ComponentExposureCheck](check/component_exposure_check.markdown#componentexposurecheck) | .java | Avoid exposing static component. |
 ConsumerTypeAnnotationCheck | .java | Performs several checks on classes with @ConsumerType annotation. |
 DTOEnumCreationCheck | .java | Checks the creation of DTO enum. |
 DeprecatedAPICheck | .java | Finds calls to deprecated classes, constructors, fields or methods. |
@@ -45,6 +46,7 @@ GradleProvidedDependenciesCheck | .gradle | Validates the scope of dependencies 
 [GradleRequiredDependenciesCheck](check/gradle_required_dependencies_check.markdown#gradlerequireddependenciescheck) | .gradle | Validates the dependencies in `/required-dependencies/required-dependencies/build.gradle`. |
 GradleTestDependencyVersionCheck | .gradle | Checks the version for dependencies in gradle build files. |
 IllegalImportsCheck | .java, .jsp, .jspf, .jspx, .tag, .tpl or .vm | Finds cases of incorrect use of certain classes. |
+IllegalTaglibsCheck | .ftl, .jsp, .jspf, .jspx, .tag, .tpl or .vm | Finds cases of incorrect use of certain taglibs. |
 [IncorrectFileLocationCheck](check/incorrect_file_location_check.markdown#incorrectfilelocationcheck) | | Checks that `/src/*/java/` only contains `.java` files. |
 IncorrectFilePathCheck | | Checks that file path contains illegal characters. |
 JSCompatibilityCheck | | Checks for JavaScript compatibility. |
@@ -105,11 +107,13 @@ JavaModuleJavaxPortletInitParamTemplatePathCheck | .java | Validates the value o
 JavaModuleServiceReferenceCheck | .java | Finds cases where `@BeanReference` annotation should be used instead of `@ServiceReference` annotation. |
 [JavaModuleTestCheck](check/java_module_test_check.markdown#javamoduletestcheck) | .java | Checks package names in tests. |
 JavaModuleUniqueVerifyProcessCheck | .java | Checks that a module can not have more than 1 verify process class (class extends VerifyProcess). |
+JavaNewProblemInstantiationParametersCheck | .java | Finds cases where `new Problem` can be simplified. |
 [JavaOSGiReferenceCheck](check/java_osgi_reference_check.markdown#javaosgireferencecheck) | .java | Performs several checks on classes with `@Component` annotation. |
 [JavaPackagePathCheck](check/java_package_path_check.markdown#javapackagepathcheck) | .java | Checks that the package name matches the file location. |
 [JavaProcessCallableCheck](check/java_process_callable_check.markdown#javaprocesscallablecheck) | .java | Checks that a class implementing `ProcessCallable` assigns a `serialVersionUID`. |
 JavaProviderTypeAnnotationCheck | .java | Performs several checks on classes with `@ProviderType` annotation. |
 JavaRedundantConstructorCheck | .java | Finds unnecessary empty constructor. |
+JavaReferenceAnnotationsCheck | .java | Performs several checks on classes with `@Reference` annotations. |
 JavaReleaseInfoCheck | .java | Validates information in `ReleaseInfo.java`. |
 [JavaResultSetCheck](check/java_result_set_check.markdown#javaresultsetcheck) | .java | Checks for correct use `java.sql.ResultSet.getInt(int)`. |
 [JavaSeeAnnotationCheck](check/java_see_annotation_check.markdown#javaseeannotationcheck) | .java | Checks for nested annotations inside `@see`. |
@@ -137,7 +141,7 @@ JavaVerifyUpgradeConnectionCheck | .java | Finds cases where `DataAccess.getConn
 LFRBuildContentCheck | .lfrbuild-* | Finds `.lfrbuild*` files that are not empty. |
 LPS42924Check | .java | Finds cases where `PortalUtil.getClassName*` (instead of calling `classNameLocalService` directly). |
 LanguageKeysCheck | .java, .js or .jsx | Finds missing language keys in `Language.properties`. |
-LibraryVulnerabilitiesCheck | | Checks the introduction of libraries and third party components with known vulnerabilities |
+LibraryVulnerabilitiesCheck | .gradle, .gradle, .gradle, .gradle, .json, .json, .properties, .properties, .xml or .xml | Checks the introduction of libraries and third party components with known vulnerabilities |
 LocaleUtilCheck | .java, .jsp, .jspf, .jspx, .tag, .tpl or .vm | Finds cases where `com.liferay.portal.kernel.util.LocaleUtil` should be used (instead of `java.util.Locale`). |
 LogParametersCheck | .java, .jsp, .jspf, .jspx, .tag, .tpl or .vm | Validates the values of parameters passed to `_log.*` calls. |
 [MissingDeprecatedCheck](https://checkstyle.sourceforge.io/config_annotation.html#MissingDeprecated) | .java | Verifies that the annotation @Deprecated and the Javadoc tag @deprecated are both present when either of them is present. |

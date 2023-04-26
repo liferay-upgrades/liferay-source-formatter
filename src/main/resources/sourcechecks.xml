@@ -243,6 +243,10 @@
 			<category name="Styling" />
 			<description name="Finds missing and unnecessary whitespace in `.ftl` files." />
 		</check>
+		<check name="IllegalTaglibsCheck">
+			<category name="Bug Prevention" />
+			<description name="Finds cases of incorrect use of certain taglibs." />
+		</check>
 	</source-processor>
 	<source-processor name="GradleSourceProcessor">
 		<check name="GradleBlockOrderCheck">
@@ -520,6 +524,11 @@
 			<category name="Bug Prevention" />
 			<description name="Finds missing empty lines before `removedService` or `addingService` calls." />
 		</check>
+		<check name="JavaNewProblemInstantiationParametersCheck">
+			<category name="Bug Prevention" />
+			<description name="Finds cases where `new Problem` can be simplified." />
+			<property name="enabled" value="false" />
+		</check>
 		<check name="JavaPackagePathCheck">
 			<category name="Bug Prevention" />
 			<description name="Checks that the package name matches the file location." />
@@ -714,6 +723,10 @@
 		<check name="JavaProviderTypeAnnotationCheck">
 			<category name="Bug Prevention" />
 			<description name="Performs several checks on classes with `@ProviderType` annotation." />
+		</check>
+		<check name="JavaReferenceAnnotationsCheck">
+			<category name="Bug Prevention" />
+			<description name="Performs several checks on classes with `@Reference` annotations." />
 		</check>
 		<check name="JavaReleaseInfoCheck">
 			<category name="Bug Prevention" />
@@ -976,6 +989,10 @@
 			<category name="Bug Prevention" />
 			<description name="Finds cases of incorrect use of certain classes." />
 			<property name="enforceJavaUtilFunctionImports" value="true" />
+		</check>
+		<check name="IllegalTaglibsCheck">
+			<category name="Bug Prevention" />
+			<description name="Finds cases of incorrect use of certain taglibs." />
 		</check>
 		<check name="JSPArrowFunctionCheck">
 			<category name="Bug Prevention" />
@@ -1553,7 +1570,23 @@
 		</check>
 		<check name="UpgradeVelocityCommentMigrationCheck">
 			<category name="Upgrade" />
-			<description name="Run code migration of comments from a `velocity` file to a `fremarker` file with the syntax replacements" />
+			<description name="Run code migration of comments from a Velocity file to a Freemarker file with the syntax replacements" />
+		</check>
+		<check name="UpgradeVelocityFileImportMigrationCheck">
+			<category name="Upgrade" />
+			<description name="Run code migration of file import from a Velocity file to a Freemarker file with the syntax replacements" />
+		</check>
+		<check name="UpgradeVelocityIfStatementsMigrationCheck">
+			<category name="Upgrade" />
+			<description name="Run code migration of references to If statements from a Velocity file to a Freemarker file with the syntax replacements" />
+		</check>
+		<check name="UpgradeVelocityVariableReferenceMigrationCheck">
+			<category name="Upgrade" />
+			<description name="Run code migration of references to variables from a Velocity file to a Freemarker file with the syntax replacements" />
+		</check>
+		<check name="UpgradeVelocityVariableSetMigrationCheck">
+			<category name="Upgrade" />
+			<description name="Run code migration of set variables from a Velocity file to a Freemarker file with the syntax replacements" />
 		</check>
 	</source-processor>
 	<source-processor name="XMLSourceProcessor">

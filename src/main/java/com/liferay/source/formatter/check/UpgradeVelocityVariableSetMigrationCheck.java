@@ -14,13 +14,14 @@
 
 package com.liferay.source.formatter.check;
 
+import com.liferay.petra.string.CharPool;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
 
 /**
  * @author Nícolas Moura
  */
-public class UpgradeVelocityCommentMigrationCheck
+public class UpgradeVelocityVariableSetMigrationCheck
 	extends BaseUpgradeVelocityMigrationCheck {
 
 	@Override
@@ -28,27 +29,19 @@ public class UpgradeVelocityCommentMigrationCheck
 		String[] lines = content.split(StringPool.NEW_LINE);
 
 		for (String line : lines) {
-			if (line.contains("##") && (line.length() != 2)) {
-				String newLine = line.replace("##", "<#--") + " -->";
+			if (line.contains("#set")) {
+				String newLine = line.replace("#set", "<#assign");
 
-				if (newLine.contains("Velocity Transform Template")) {
-					newLine = StringUtil.replace(
-						newLine, "Velocity Transform Template",
-						"FreeMarker Template");
-				}
+				newLine = StringUtil.removeFirst(
+					newLine, StringPool.OPEN_PARENTHESIS);
+				newLine = StringUtil.replaceLast(
+					newLine, CharPool.CLOSE_PARENTHESIS, " />");
 
 				content = StringUtil.replace(content, line, newLine);
 			}
 		}
 
-		StringUtil.replace(content, "#*", _COMMENT_START);
-		StringUtil.replace(content, "*#", _COMMENT_END);
-
-		return StringUtil.removeSubstring(content, "##");
+		return content;
 	}
-
-	private static final String _COMMENT_END = " -->";
-
-	private static final String _COMMENT_START = "<#--";
 
 }
