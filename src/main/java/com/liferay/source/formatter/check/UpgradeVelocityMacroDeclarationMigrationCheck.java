@@ -15,6 +15,7 @@
 package com.liferay.source.formatter.check;
 
 import com.liferay.petra.string.CharPool;
+import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.source.formatter.check.constants.VelocityMigrationConstants;
 import com.liferay.source.formatter.check.util.VelocityMigrationUtil;
@@ -22,29 +23,37 @@ import com.liferay.source.formatter.check.util.VelocityMigrationUtil;
 /**
  * @author Nícolas Moura
  */
-public class UpgradeVelocityFileImportMigrationCheck
+public class UpgradeVelocityMacroDeclarationMigrationCheck
 	extends BaseUpgradeVelocityMigrationCheck {
 
 	@Override
 	protected String migrateContent(String content) {
 		String[] lines = StringUtil.splitLines(content);
 
-		for (String line : lines) {
-			if (line.contains(VelocityMigrationConstants.VELOCITY_PARSE)) {
-				String newLine = line.replace(
-					VelocityMigrationConstants.VELOCITY_PARSE, "<#include");
+		for (int i = 0; i < lines.length; i++) {
+			String newLine = lines[i];
+
+			if (newLine.contains(
+					VelocityMigrationConstants.VELOCITY_MACRO_START) &&
+				VelocityMigrationUtil.isVelocityStatement(
+					newLine, VelocityMigrationConstants.VELOCITY_MACRO_START)) {
 
 				newLine = VelocityMigrationUtil.removeFirstParenthesis(newLine);
+				newLine = StringUtil.replace(
+					newLine, VelocityMigrationConstants.VELOCITY_MACRO_START,
+					VelocityMigrationConstants.FREEMARKER_MACRO_START);
 				newLine = StringUtil.replaceLast(
-					newLine, CharPool.CLOSE_PARENTHESIS,
-					CharPool.SPACE +
-						VelocityMigrationConstants.FREEMARKER_TAG_END);
+					newLine, CharPool.CLOSE_PARENTHESIS, CharPool.GREATER_THAN);
 
-				content = StringUtil.replace(content, line, newLine);
+				VelocityMigrationUtil.replaceStatementEnd(
+					i, lines, VelocityMigrationConstants.VELOCITY_MACRO_START);
+
+				lines[i] = newLine;
 			}
 		}
 
-		return content;
+		return com.liferay.petra.string.StringUtil.merge(
+			lines, StringPool.NEW_LINE);
 	}
 
 }
