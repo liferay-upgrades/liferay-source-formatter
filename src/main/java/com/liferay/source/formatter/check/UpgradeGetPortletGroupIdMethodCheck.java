@@ -14,59 +14,56 @@
 
 package com.liferay.source.formatter.check;
 
-import com.liferay.petra.string.CharPool;
 import com.liferay.portal.kernel.util.StringUtil;
-import com.liferay.source.formatter.check.util.JavaSourceUtil;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * @author Nícolas Moura
+ * @author Tamyris Bernardo
  */
-public class UpgradeJavaExtractTextMethodCheck extends BaseFileCheck {
+public class UpgradeGetPortletGroupIdMethodCheck extends BaseFileCheck {
 
 	@Override
 	protected String doProcess(
 			String fileName, String absolutePath, String content)
 		throws Exception {
 
-		if (!fileName.endsWith(".java")) {
+		if (!fileName.endsWith(".java") && !fileName.endsWith(".jsp") &&
+			!fileName.endsWith(".jspf") && !fileName.endsWith(".ftl")) {
+
 			return content;
 		}
 
 		String newContent = content;
 
-		boolean replaced = false;
+		Matcher matcher = _getPortletGroupIdPattern.matcher(content);
 
-		Matcher extractTextMatcher = _extractTextPattern.matcher(content);
+		while (matcher.find()) {
+			String methodCall = matcher.group(0);
+			String variableName = matcher.group(1);
 
-		while (extractTextMatcher.find()) {
-			String methodCall = JavaSourceUtil.getMethodCall(
-				content, extractTextMatcher.start());
+			if (fileName.endsWith(".java")) {
+				if (!hasClassOrVariableName(
+						"ThemeDisplay", newContent, methodCall)) {
+
+					continue;
+				}
+			}
+			else if (!variableName.equals("themeDisplay")) {
+				continue;
+			}
 
 			newContent = StringUtil.replace(
 				newContent, methodCall,
 				StringUtil.replace(
-					methodCall, "HtmlUtil.extractText(",
-					"_htmlParser.extractText("));
-
-			replaced = true;
-		}
-
-		if (replaced) {
-			newContent = JavaSourceUtil.addImports(
-				newContent, "com.liferay.portal.kernel.util.HtmlParser",
-				"org.osgi.service.component.annotations.Reference");
-			newContent = StringUtil.replaceLast(
-				newContent, CharPool.CLOSE_CURLY_BRACE,
-				"\n\t@Reference\n\tprivate HtmlParser _htmlParser;\n}");
+					methodCall, ".getPortletGroupId()", ".getScopeGroupId()"));
 		}
 
 		return newContent;
 	}
 
-	private static final Pattern _extractTextPattern = Pattern.compile(
-		"HtmlUtil\\.extractText\\(");
+	private static final Pattern _getPortletGroupIdPattern = Pattern.compile(
+		"(\\w+)\\.getPortletGroupId\\(\\)");
 
 }

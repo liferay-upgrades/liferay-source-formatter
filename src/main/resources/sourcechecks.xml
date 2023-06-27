@@ -602,6 +602,10 @@
 			<category name="Styling" />
 			<description name="Applies rules to enforce consistency in code style." />
 		</check>
+		<check name="JavaUpgradeModelPermissionsCheck">
+			<category name="Upgrade" />
+			<description name="Replace setGroupPermissions and setGuestPermissions by new implementation" />
+		</check>
 		<check name="JavaUpgradeServiceTrackerListCheck">
 			<category name="Upgrade" />
 			<description name="Replace the number of generic type arguments in ServiceTrackerList" />
@@ -664,6 +668,7 @@
 			<description name="Performs several checks on classes with `@Component` annotation." />
 			<property name="checkConfigurationPidAttribute" value="true" />
 			<property name="checkConfigurationPolicyAttribute" value="false" />
+			<property name="checkHasMultipleConfigurationPids" value="false" />
 			<property name="checkHasMultipleServiceTypes" value="false" />
 			<property name="checkMismatchedServiceAttribute" value="false" />
 			<property name="checkSelfRegistration" value="false" />
@@ -1388,6 +1393,11 @@
 			<category name="Bug Prevention" />
 			<description name="Checks that there is no HTML markup in language keys." />
 		</check>
+		<check name="PropertiesLanguageKeysContextCheck">
+			<category name="Bug Prevention" />
+			<description name="Checks if the language keys include a word of context to indicate specific meaning." />
+			<property name="enabled" value="false" />
+		</check>
 		<check name="PropertiesLanguageKeysOrderCheck">
 			<category name="Styling" />
 			<description name="Sort language keys in `Language.properties` file." />
@@ -1575,6 +1585,10 @@
 			<description name="Checks if the property value `-includeresource` or `Include-Resource` exists and removes it" />
 			<weight>1</weight>
 		</check>
+		<check name="UpgradeGetPortletGroupIdMethodCheck">
+			<category name="Upgrade" />
+			<description name="Run code migration of the method 'getPortletGroupId' to 'getScopeGroupId'" />
+		</check>
 		<check name="UpgradeGradleIncludeResourceCheck">
 			<category name="Upgrade" />
 			<description name="Replaces with `compileInclude` the configuration attribute for dependencies in `build.gradle` that are listed at `Include-Resource` property at `bnd.bnd` associated file." />
@@ -1591,6 +1605,10 @@
 		<check name="UpgradeJavaExtractTextMethodCheck">
 			<category name="Upgrade" />
 			<description name="Replaces the references of the method `HtmlUtil.extractText(` with the method `extractText(` of `HtmlParser` class" />
+		</check>
+		<check name="UpgradeJavaMultiVMPoolUtilCheck">
+			<category name="Upgrade" />
+			<description name="Replaces the references of the MultiVMPoolUtil class and also its methods usages." />
 		</check>
 		<check name="UpgradeJavaServiceReferenceAnnotationCheck">
 			<category name="Upgrade" />
