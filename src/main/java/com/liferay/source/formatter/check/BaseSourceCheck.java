@@ -1,15 +1,6 @@
 /**
- * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
- *
- * This library is free software; you can redistribute it and/or modify it under
- * the terms of the GNU Lesser General Public License as published by the Free
- * Software Foundation; either version 2.1 of the License, or (at your option)
- * any later version.
- *
- * This library is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
- * details.
+ * SPDX-FileCopyrightText: (c) 2000 Liferay, Inc. https://liferay.com
+ * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
 package com.liferay.source.formatter.check;
@@ -55,7 +46,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.dom4j.Document;
-import org.dom4j.DocumentException;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 
@@ -337,9 +327,8 @@ public abstract class BaseSourceCheck implements SourceCheck {
 	}
 
 	protected Document getCustomSQLDocument(
-			String fileName, String absolutePath,
-			Document portalCustomSQLDocument)
-		throws DocumentException {
+		String fileName, String absolutePath,
+		Document portalCustomSQLDocument) {
 
 		if (isPortalSource() && !isModulesFile(absolutePath)) {
 			return portalCustomSQLDocument;
@@ -494,7 +483,7 @@ public abstract class BaseSourceCheck implements SourceCheck {
 
 	protected synchronized Document getPortalCustomSQLDocument(
 			String absolutePath)
-		throws DocumentException, IOException {
+		throws IOException {
 
 		if (_portalCustomSQLDocument != null) {
 			return _portalCustomSQLDocument;
@@ -518,6 +507,10 @@ public abstract class BaseSourceCheck implements SourceCheck {
 		Document customSQLDefaultDocument = SourceUtil.readXML(
 			portalCustomSQLDefaultContent);
 
+		if (customSQLDefaultDocument == null) {
+			return null;
+		}
+
 		Element customSQLDefaultRootElement =
 			customSQLDefaultDocument.getRootElement();
 
@@ -534,6 +527,10 @@ public abstract class BaseSourceCheck implements SourceCheck {
 
 			Document customSQLDocument = SourceUtil.readXML(
 				customSQLFileContent);
+
+			if (customSQLDocument == null) {
+				continue;
+			}
 
 			Element customSQLRootElement = customSQLDocument.getRootElement();
 
@@ -637,7 +634,8 @@ public abstract class BaseSourceCheck implements SourceCheck {
 	}
 
 	protected boolean hasClassOrVariableName(
-		String className, String content, String methodCall) {
+		String className, String content, String fileContent,
+		String methodCall) {
 
 		String variable = getVariableName(methodCall);
 
@@ -646,7 +644,7 @@ public abstract class BaseSourceCheck implements SourceCheck {
 		}
 
 		String variableTypeName = getVariableTypeName(
-			content, content, variable.trim(), true);
+			content, fileContent, variable.trim(), true);
 
 		if (variableTypeName.startsWith(className)) {
 			return true;
