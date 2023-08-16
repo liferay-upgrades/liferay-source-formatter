@@ -1,3 +1,9 @@
+import com.github.fracpete.rsync4j.RSync
+
+import java.nio.file.Files
+import java.nio.file.Path
+import java.nio.file.Paths
+
 apply plugin: "application"
 apply plugin: "com.liferay.source.formatter"
 apply plugin: "java"
@@ -41,8 +47,6 @@ dependencies {
 	compile group: "com.liferay.portal", name: "com.liferay.util.java", version: "latest.release"
 	compile group: "org.apache.felix", name: "org.apache.felix.http.servlet-api", version: "1.1.2"
 	compile group: "org.apache.maven", name: "maven-plugin-api", transitive: false, version: "3.0.4"
-
-	compile group: "com.github.fracpete", name: "rsync4j-all", version: "3.2.7-1"
 }
 
 repositories {
@@ -61,41 +65,71 @@ application {
 	mainClassName = "com.liferay.source.formatter.SourceFormatter"
 }
 
-task pullCode
-task pushCode
+//======================================================================
+// Custom tasks
+//======================================================================
 
-pullCode {
-	group "dev"
-	dependsOn("compileJava")
-	description "Pulls code from liferay-portal"
-	doLast {
+abstract class SyncCodeTask extends DefaultTask {
+	Path getRepoDir() {
 		def repoDir = project.findProperty('liferay.portal.repo.dir')
-		if (repoDir == null || repoDir.trim().length() == 0) {
-			throw new IllegalArgumentException("please supply path to 'liferay.portal.repo.dir' in 'gradle.properties'")
+		if (repoDir == null) {
+			throw new IllegalArgumentException("Please supply path to 'liferay.portal.repo.dir' in 'gradle.properties'")
 		}
+		return Paths.get((String) repoDir)
+	}
 
-		javaexec {
-			classpath = sourceSets.main.runtimeClasspath
-			main = "com.liferay.dev.script.RSyncCode"
-			args = ["pull", repoDir]
-		}
+	RSync createRSync() {
+		return new RSync()
+			.exclude("**/com/liferay/dev")
+			.recursive(true)
+			.delete(true)
+			.deleteExcluded(false)
+			.quiet(true)
 	}
 }
 
-pushCode {
-	group "dev"
-	dependsOn("compileJava")
-	description "Pushes changes to liferay-portal"
-	doLast {
-		def repoDir = project.findProperty('liferay.portal.repo.dir')
-		if (repoDir == null || repoDir.trim().length() == 0) {
-			throw new IllegalArgumentException("please supply path to 'liferay.portal.repo.dir' in 'gradle.properties'")
+class PullCodeTask extends SyncCodeTask {
+	@TaskAction
+	def pullCode() {
+		def repoDirPath = getRepoDir()
+		def destinationDirPath = Paths.get("./src")
+		def sourceFormatterDirPath = repoDirPath.resolve("modules/util/source-formatter")
+
+		if (!Files.exists(destinationDirPath)) {
+			destinationDirPath.toFile().mkdirs()
 		}
 
-		javaexec {
-			classpath = sourceSets.main.runtimeClasspath
-			main = "com.liferay.dev.script.RSyncCode"
-			args = ["push", repoDir]
-		}
+		createRSync()
+			.source(String.valueOf(sourceFormatterDirPath.resolve("src/main")))
+			.destination(destinationDirPath.toString())
+			.execute()
 	}
+}
+
+class PushCodeTask extends SyncCodeTask {
+	@TaskAction
+	def pushCode() {
+		def repoDirPath = getRepoDir()
+		def destinationDirPath = repoDirPath.resolve("modules/util/source-formatter/src")
+		def sourceDirPath = Paths.get("./src/main")
+
+		if (!Files.exists(destinationDirPath)) {
+			destinationDirPath.toFile().mkdirs()
+		}
+
+		createRSync()
+			.source(sourceDirPath.toString())
+			.destination(destinationDirPath.toString())
+			.execute()
+	}
+}
+
+tasks.register('pullCode', PullCodeTask) {
+	group 'dev'
+	description "Pulls code from liferay-portal"
+}
+
+tasks.register('pushCode', PushCodeTask) {
+	group 'dev'
+	description "Pushes changes to liferay-portal"
 }
