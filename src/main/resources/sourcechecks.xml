@@ -718,6 +718,11 @@
 			<category name="Bug Prevention" />
 			<description name="Finds methods with `@Ignore` annotation in test classes." />
 		</check>
+		<check name="JavaInjectAnnotationsCheck">
+			<category name="Bug Prevention" />
+			<description name="Performs several checks on classes with `@Inject` annotations." />
+			<property name="enabled" value="false" />
+		</check>
 		<check name="JavaInternalPackageCheck">
 			<category name="Bug Prevention" />
 			<description name="Performs several checks on class in `internal` package." />
@@ -1710,6 +1715,10 @@
 		<check name="UpgradeJavaMultiVMPoolUtilCheck">
 			<category name="Upgrade" />
 			<description name="Replaces the references of the MultiVMPoolUtil class and also its methods usages." />
+		</check>
+		<check name="UpgradeJavaPhoneLocalServiceUtilCheck">
+			<category name="Upgrade" />
+			<description name="Fill the new parameter `ServiceContext` of the method `addPhone` of class `PhoneLocalServiceUtil`." />
 		</check>
 		<check name="UpgradeJavaPortletSharedSearchSettingsCheck">
 			<category name="Upgrade" />
