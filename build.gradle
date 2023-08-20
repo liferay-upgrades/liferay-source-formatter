@@ -62,12 +62,5 @@ application {
 	mainClassName = "com.liferay.source.formatter.SourceFormatter"
 }
 
-tasks.register('pullCode', PullSyncCodeTask) {
-	group 'dev'
-	description "Pushes changes to liferay-portal"
-}
-
-tasks.register('pushCode', PushSyncCodeTask) {
-	group 'dev'
-	description "Pushes changes to liferay-portal"
-}
+tasks.register('pullCode', PullSyncCodeTask)
+tasks.register('pushCode', PushSyncCodeTask)
