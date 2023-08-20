@@ -6,8 +6,8 @@ gradle.properties
 **/*.iws
 
 !/gradle/wrapper/gradle-wrapper.jar
-/.gradle
-/.idea
-/bin
-/build
-/target
+**/.gradle
+**/.idea
+**/bin
+**/build
+**/target

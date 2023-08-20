@@ -1,8 +1,5 @@
-import com.github.fracpete.rsync4j.RSync
-
-import java.nio.file.Files
-import java.nio.file.Path
-import java.nio.file.Paths
+import com.liferay.dev.PullSyncCodeTask
+import com.liferay.dev.PushSyncCodeTask
 
 apply plugin: "application"
 apply plugin: "com.liferay.source.formatter"
@@ -65,71 +62,12 @@ application {
 	mainClassName = "com.liferay.source.formatter.SourceFormatter"
 }
 
-//======================================================================
-// Custom tasks
-//======================================================================
-
-abstract class SyncCodeTask extends DefaultTask {
-	Path getRepoDir() {
-		def repoDir = project.findProperty('liferay.portal.repo.dir')
-		if (repoDir == null) {
-			throw new IllegalArgumentException("Please supply path to 'liferay.portal.repo.dir' in 'gradle.properties'")
-		}
-		return Paths.get((String) repoDir)
-	}
-
-	RSync createRSync() {
-		return new RSync()
-		.exclude("**/com/liferay/dev")
-		.recursive(true)
-		.delete(true)
-		.deleteExcluded(false)
-		.quiet(true)
-	}
-}
-
-class PullCodeTask extends SyncCodeTask {
-	@TaskAction
-	def pullCode() {
-		def repoDirPath = getRepoDir()
-		def destinationDirPath = Paths.get("./src")
-		def sourceFormatterDirPath = repoDirPath.resolve("modules/util/source-formatter")
-
-		if (!Files.exists(destinationDirPath)) {
-			destinationDirPath.toFile().mkdirs()
-		}
-
-		createRSync()
-		.source(String.valueOf(sourceFormatterDirPath.resolve("src/main")))
-		.destination(destinationDirPath.toString())
-		.execute()
-	}
-}
-
-class PushCodeTask extends SyncCodeTask {
-	@TaskAction
-	def pushCode() {
-		def repoDirPath = getRepoDir()
-		def destinationDirPath = repoDirPath.resolve("modules/util/source-formatter/src")
-		def sourceDirPath = Paths.get("./src/main")
-
-		if (!Files.exists(destinationDirPath)) {
-			destinationDirPath.toFile().mkdirs()
-		}
-
-		createRSync()
-		.source(sourceDirPath.toString())
-		.destination(destinationDirPath.toString())
-		.execute()
-	}
-}
-
-tasks.register('pullCode', PullCodeTask) {
+tasks.register('pullCode', PullSyncCodeTask) {
 	group 'dev'
-	description "Pulls code from liferay-portal"
+	description "Pushes changes to liferay-portal"
 }
 
-tasks.register('pushCode', PushCodeTask) {
+tasks.register('pushCode', PushSyncCodeTask) {
 	group 'dev'
 	description "Pushes changes to liferay-portal"
 }
