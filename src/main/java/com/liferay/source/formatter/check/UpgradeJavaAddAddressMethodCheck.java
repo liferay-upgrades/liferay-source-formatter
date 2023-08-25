@@ -1,5 +1,5 @@
 /**
- * SPDX-FileCopyrightText: (c) 2023 Liferay, Inc. https://liferay.com
+ * SPDX-FileCopyrightText: (c) 2000 Liferay, Inc. https://liferay.com
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
@@ -20,7 +20,7 @@ import java.util.regex.Pattern;
 /**
  * @author Tamyris Bernardo
  */
-public class UpgradeJavaLayoutServicesCheck extends BaseUpgradeCheck {
+public class UpgradeJavaAddAddressMethodCheck extends BaseUpgradeCheck {
 
 	@Override
 	protected String format(
@@ -40,8 +40,7 @@ public class UpgradeJavaLayoutServicesCheck extends BaseUpgradeCheck {
 
 			String javaMethodContent = javaMethod.getContent();
 
-			Matcher matcher = _addOrUpdateLayoutPattern.matcher(
-				javaMethodContent);
+			Matcher matcher = _addAdressPattern.matcher(javaMethodContent);
 
 			while (matcher.find()) {
 				String methodCall = JavaSourceUtil.getMethodCall(
@@ -49,42 +48,39 @@ public class UpgradeJavaLayoutServicesCheck extends BaseUpgradeCheck {
 
 				String variableName = getVariableName(methodCall);
 
-				if (!variableName.contains("LayoutLocalServiceUtil") &&
-					!variableName.contains("LayoutServiceUtil") &&
+				if (!variableName.contains("AddressLocalServiceUtil") &&
+					!variableName.contains("AddressServiceUtil") &&
 					!hasClassOrVariableName(
-						"LayoutLocalService", newContent, newContent,
-						methodCall) &&
+						"AddressLocalService", content, content, methodCall) &&
 					!hasClassOrVariableName(
-						"LayoutService", newContent, newContent, methodCall)) {
+						"AddressService", content, content, methodCall)) {
 
 					continue;
 				}
 
 				String message = StringBundler.concat(
-					"Unable to format methods addLayout and updateLayout from ",
-					"LayoutService, LayoutLocalService, LayoutServiceUtil and ",
-					"LayoutLocalServiceUtil. Fill the new parameters ",
-					"manually, see LPS-188828 and LPS-190401");
+					"Unable to format method addAddress from ",
+					"AddressLocalService, AddressLocalServiceUtil, ",
+					"AddressService and AddressServiceUtil. Fill the new ",
+					"parameters manually, see LPS-193462");
 
 				List<String> parameterList = JavaSourceUtil.getParameterList(
 					methodCall);
 
 				String newMethod = null;
 
-				if (methodCall.contains(".addLayout")) {
+				String lastParameter = parameterList.get(
+					parameterList.size() - 1);
+
+				if (!lastParameter.equals("serviceContext")) {
 					String[] parameterTypes = {
-						"long", "long", "boolean", "long", "long", "long",
-						"Map<java.util.Locale, String>",
-						"Map<java.util.Locale, String>",
-						"Map<java.util.Locale, String>",
-						"Map<java.util.Locale, String>",
-						"Map<java.util.Locale, String>", "String", "String",
-						"boolean", "boolean", "Map<java.util.Locale, String>",
-						"ServiceContext"
+						"long", "String", "long", "String", "String", "String",
+						"String", "String", "long", "long", "long", "boolean",
+						"boolean"
 					};
 
 					if (!hasValidParameters(
-							17, fileName, javaMethodContent, message,
+							13, fileName, javaMethodContent, message,
 							parameterList, parameterTypes)) {
 
 						continue;
@@ -92,37 +88,39 @@ public class UpgradeJavaLayoutServicesCheck extends BaseUpgradeCheck {
 
 					newMethod = JavaSourceUtil.addMethodNewParameters(
 						JavaSourceUtil.getIndent(methodCall),
-						new int[] {parameterList.size() - 1}, matcher.group(),
-						new String[] {"0"}, parameterList);
+						new int[] {
+							0, 4, 5, parameterList.size() + 3,
+							parameterList.size() + 4
+						},
+						matcher.group(),
+						new String[] {
+							null, null, null, null,
+							"ServiceContextThreadLocal.getServiceContext()"
+						},
+						parameterList);
 
 					newContent = StringUtil.replace(
 						content, methodCall, newMethod);
 				}
-				else if (methodCall.contains(".updateLayout")) {
+				else {
 					String[] parameterTypes = {
-						"long", "boolean", "long", "long",
-						"Map<java.util.Locale, String>",
-						"Map<java.util.Locale, String>",
-						"Map<java.util.Locale, String>",
-						"Map<java.util.Locale, String>",
-						"Map<java.util.Locale, String>", "String", "boolean",
-						"Map<java.util.Locale, String>", "boolean", "byte[]",
-						"ServiceContext"
+						"long", "String", "long", "String", "String", "String",
+						"String", "String", "long", "long", "long", "boolean",
+						"boolean", "ServiceContext"
 					};
 
 					if (!hasValidParameters(
-							15, fileName, javaMethodContent, message,
+							14, fileName, javaMethodContent, message,
 							parameterList, parameterTypes)) {
 
 						continue;
 					}
 
-					int index = parameterList.size() - 1;
-
 					newMethod = JavaSourceUtil.addMethodNewParameters(
 						JavaSourceUtil.getIndent(methodCall),
-						new int[] {index, index, index}, matcher.group(),
-						new String[] {"0", "0", "0"}, parameterList);
+						new int[] {0, 4, 5, parameterList.size() + 2},
+						matcher.group(), new String[] {null, null, null, null},
+						parameterList);
 
 					newContent = StringUtil.replace(
 						content, methodCall, newMethod);
@@ -133,7 +131,14 @@ public class UpgradeJavaLayoutServicesCheck extends BaseUpgradeCheck {
 		return newContent;
 	}
 
-	private static final Pattern _addOrUpdateLayoutPattern = Pattern.compile(
-		"\\t*\\w+\\.(?:updateLayout|addLayout)\\(");
+	@Override
+	protected String[] getNewImports() {
+		return new String[] {
+			"com.liferay.portal.kernel.service.ServiceContextThreadLocal"
+		};
+	}
+
+	private static final Pattern _addAdressPattern = Pattern.compile(
+		"\\t*\\w+\\.addAddress\\(");
 
 }

@@ -13,33 +13,24 @@ import java.util.regex.Pattern;
 /**
  * @author Tamyris Bernardo
  */
-public class UpgradeGetClassNamesMethodCheck
+public class UpgradeJSPFieldSetGroupCheck
 	extends BaseUpgradeMatcherReplacementCheck {
 
 	@Override
 	protected String formatMatcherIteration(
 		String content, String newContent, Matcher matcher) {
 
-		String methodStart = matcher.group();
-
-		if (!hasClassOrVariableName("Indexer", content, content, methodStart)) {
-			return content;
-		}
-
-		return StringUtil.replace(
-			newContent, methodStart,
-			StringUtil.replace(
-				methodStart, "getClassNames", "getSearchClassNames"));
+		return StringUtil.removeSubstring(newContent, matcher.group());
 	}
 
 	@Override
 	protected Pattern getPattern() {
-		return Pattern.compile("\\w+\\.getClassNames\\(");
+		return Pattern.compile("\\t*<[^;]?liferay-frontend\\:fieldset-group>");
 	}
 
 	@Override
 	protected String[] getValidExtensions() {
-		return new String[] {"java", "jspf"};
+		return new String[] {"jsp"};
 	}
 
 }
