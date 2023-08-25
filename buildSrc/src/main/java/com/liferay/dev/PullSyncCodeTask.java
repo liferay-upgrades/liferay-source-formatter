@@ -13,8 +13,8 @@ public class PullSyncCodeTask extends BaseSyncCodeTask {
 	@Input
 	@Override
 	public String getDescription() {
-		return "Syncs code from your `liferay-portal` repository to this " +
-			"project";
+		return "Synchronizes code from your 'liferay-portal' repository to " +
+			"this project";
 	}
 
 	@Override

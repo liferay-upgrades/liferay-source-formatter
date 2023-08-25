@@ -13,7 +13,7 @@ public class PushSyncCodeTask extends BaseSyncCodeTask {
 	@Input
 	@Override
 	public String getDescription() {
-		return "Syncs code from this project to your `liferay-portal` " +
+		return "Synchronizes code from this project to your 'liferay-portal' " +
 			"repository";
 	}
 
