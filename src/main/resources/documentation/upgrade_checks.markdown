@@ -21,7 +21,9 @@ UpgradeGetPortletGroupIdMethodCheck | .bnd, .ftl, .gradle, .java, .jsp, .jspf or
 UpgradeGradleIncludeResourceCheck | .bnd, .ftl, .gradle, .java, .jsp, .jspf or .vm | Replaces with `compileInclude` the configuration attribute for dependencies in `build.gradle` that are listed at `Include-Resource` property at `bnd.bnd` associated file. |
 UpgradeJSPFieldSetGroupCheck | .bnd, .ftl, .gradle, .java, .jsp, .jspf or .vm | Run code to remove 'fieldset-group' tag |
 UpgradeJavaAddAddressMethodCheck | .bnd, .ftl, .gradle, .java, .jsp, .jspf or .vm | Fill the new parameter of the method 'addAddress' of AddressLocalService, AddressLocalServiceUtil, AddressService and AddressServiceUtil |
+UpgradeJavaAddCategoryParameterCheck | .bnd, .ftl, .gradle, .java, .jsp, .jspf or .vm | Fill the new parameter of the method 'addCategory' of 'AssetCategoryLocalService' and 'AssetCategoryLocalServiceUtil' classes |
 UpgradeJavaAddFDSTableSchemaFieldCheck | .bnd, .ftl, .gradle, .java, .jsp, .jspf or .vm | Replace method addFDSTableSchemaFieldCheck by add |
+UpgradeJavaAddFileEntryParameterCheck | .bnd, .ftl, .gradle, .java, .jsp, .jspf or .vm | Fill the new parameter of the method 'addFileEntry' of 'DLAppLocalServiceUtil' and 'DLAppLocalService' |
 UpgradeJavaAddFolderParameterCheck | .bnd, .ftl, .gradle, .java, .jsp, .jspf or .vm | Fill the new parameter of the method `addFolder` of `JournalFolderService`, `JournalFolderLocalService`, and `JournalFolderLocalServiceUtil` classes |
 UpgradeJavaAssetEntryAssetCategoriesCheck | .bnd, .ftl, .gradle, .java, .jsp, .jspf or .vm | Replaces methods referring to class `AssetEntryAssetCategory` in class `AssetCategoryLocalService` with equivalent methods in class `AssetEntryAssetCategoryRelLocalService`. |
 UpgradeJavaCheck | .bnd, .ftl, .gradle, .java, .jsp, .jspf or .vm | Performs upgrade checks for `java` files |
@@ -30,6 +32,7 @@ UpgradeJavaCommerceCountryServiceCheck | .bnd, .ftl, .gradle, .java, .jsp, .jspf
 UpgradeJavaCommerceRegionCheck | .bnd, .ftl, .gradle, .java, .jsp, .jspf or .vm | Replaces the old methods of class `CommerceRegion` with the new equivalents in the `Region` class. |
 UpgradeJavaCookieKeysCheck | .bnd, .ftl, .gradle, .java, .jsp, .jspf or .vm | CookieKeys class was replaced by CookiesManagerUtil and CookieConstants |
 UpgradeJavaCookieUtilCheck | .bnd, .ftl, .gradle, .java, .jsp, .jspf or .vm | Replace CookieUtilCheck.get by CookiesManagerUtil.getCookieValue and reorder parameters |
+UpgradeJavaDLFolderMethodCheck | .bnd, .ftl, .gradle, .java, .jsp, .jspf or .vm | Fill the new parameter of the method addFolder of DLFolderLocalService, DLFolderLocalServiceUtil, DLFolderService and DLFolderServiceUtil |
 UpgradeJavaExtractTextMethodCheck | .bnd, .ftl, .gradle, .java, .jsp, .jspf or .vm | Replaces the references of the method `HtmlUtil.extractText(` with the method `extractText(` of `HtmlParser` class |
 UpgradeJavaFDSActionProviderCheck | .bnd, .ftl, .gradle, .java, .jsp, .jspf or .vm | Reorder parameters in the getDropdownItems method of the FDSDataProvider interface |
 UpgradeJavaFDSDataProviderCheck | .bnd, .ftl, .gradle, .java, .jsp, .jspf or .vm | Reorder parameters in the getItems and getItemsCount methods of the FDSDataProvider interface |
@@ -47,9 +50,12 @@ UpgradeJavaPortletSharedSearchSettingsCheck | .bnd, .ftl, .gradle, .java, .jsp, 
 UpgradeJavaSearchVocabulariesMethodCheck | .bnd, .ftl, .gradle, .java, .jsp, .jspf or .vm | Fill in the new parameters of the method `searchVocabularies` of 'AssetVocabularyService' and 'AssetVocabularyLocalService' |
 UpgradeJavaServiceReferenceAnnotationCheck | .bnd, .ftl, .gradle, .java, .jsp, .jspf or .vm | Run code migration to replace '@ServiceReference' by '@Reference' |
 UpgradeJavaUpdateCommerceAddressCheck | .bnd, .ftl, .gradle, .java, .jsp, .jspf or .vm | Replace parameter in updateCommerceAddress method by other parameters list |
+UpgradeJavaUpdateFileEntryMethodCheck | .bnd, .ftl, .gradle, .java, .jsp, .jspf or .vm | Fill in the new parameters of the method 'updateFileEntry' of 'DLAppLocalService' and 'DLAppLocalServiceUtil' |
+UpgradeJavaUserLocalServiceUtilCheck | .bnd, .ftl, .gradle, .java, .jsp, .jspf or .vm | Replace parameters of addUser and updateStatus methods in UserServices |
 UpgradePortletFTLCheck | .bnd, .ftl, .gradle, .java, .jsp, .jspf or .vm | Include the CSS classes 'cadmin' and include for impression of 'right cadmin' in 'portlet.ftl' file |
 UpgradeRejectedExecutionHandlerCheck | .bnd, .ftl, .gradle, .java, .jsp, .jspf or .vm | Replace Liferay's RejectedExecutionHandler with Java's RejectedExecutionHandler |
 UpgradeRemovedAPICheck | .java | Finds cases where calls are made to removed API after an upgrade. |
+UpgradeSCSSImportsCheck | .bnd, .ftl, .gradle, .java, .jsp, .jspf or .vm | Replace compat/mixins by clay/cadmin-variables |
 UpgradeSetResultsSetTotalMethodCheck | .bnd, .ftl, .gradle, .java, .jsp, .jspf or .vm | Run code migration of method searchContainer.setResults to the searchContainer.setResultsAndTotal and delete searchContainer.setTotal |
 UpgradeVelocityCommentMigrationCheck | .bnd, .ftl, .gradle, .java, .jsp, .jspf or .vm | Run code migration of comments from a Velocity file to a Freemarker file with the syntax replacements |
 UpgradeVelocityFileImportMigrationCheck | .bnd, .ftl, .gradle, .java, .jsp, .jspf or .vm | Run code migration of file import from a Velocity file to a Freemarker file with the syntax replacements |
