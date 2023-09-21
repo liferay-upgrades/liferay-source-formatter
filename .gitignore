@@ -11,3 +11,7 @@ gradle.properties
 **/bin
 **/build
 **/target
+
+**/.classpath
+**/.project
+**/.settings
