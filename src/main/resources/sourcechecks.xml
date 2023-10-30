@@ -605,10 +605,6 @@
 			<category name="Styling" />
 			<description name="Applies rules to enforce consistency in code style." />
 		</check>
-		<check name="JavaUpgradeFetchCPDefinitionByCProductExternalReferenceCodeCheck">
-			<category name="Upgrade" />
-			<description name="Reorder parameters in the fetchCPDefinitionByCProductExternalReferenceCode method" />
-		</check>
 		<check name="JavaUpgradeModelPermissionsCheck">
 			<category name="Upgrade" />
 			<description name="Replace setGroupPermissions and setGuestPermissions by new implementation" />
@@ -1357,6 +1353,10 @@
 			<category name="Performance" />
 			<description name="Finds missing comment with JIRA project when using `Pause`." />
 		</check>
+		<check name="PoshiPropertiesOrderCheck">
+			<category name="Styling" />
+			<description name="Sorts the values of properties in `.testcase` file." />
+		</check>
 		<check name="PoshiSmokeTestCheck">
 			<category name="Bug Prevention" />
 			<description name="Checks for missing and unnecessary `property ci.retries.disabled = true` in smoke test." />
@@ -1604,13 +1604,14 @@
 			<description name="Checks if the property value `-includeresource` or `Include-Resource` exists and removes it" />
 			<weight>1</weight>
 		</check>
+		<check name="UpgradeCatchAllCheck">
+			<category name="Upgrade" />
+			<description name="Performs replacements on Liferay's outdated code" />
+			<weight>1</weight>
+		</check>
 		<check name="UpgradeDLUtilCheck">
 			<category name="Upgrade" />
 			<description name="Replace the getGroupIds method of class `DLUtil` by getCurrentAndAncestorSiteGroupIds of class `PortalUtil`." />
-		</check>
-		<check name="UpgradeGetClassNamesMethodCheck">
-			<category name="Upgrade" />
-			<description name="Run code migration of method from 'getClassNames' to 'getSearchClassNames'" />
 		</check>
 		<check name="UpgradeGetImagePreviewURLMethodCheck">
 			<category name="Upgrade" />
@@ -1630,27 +1631,6 @@
 			<description name="Replace constants of CommerceAccountPortletKeys by constants of AccountPortletKeys" />
 			<weight>2</weight>
 		</check>
-		<check name="UpgradeJavaAddAddressMethodCheck">
-			<category name="Upgrade" />
-			<description name="Fill the new parameter of the method 'addAddress' of AddressLocalService, AddressLocalServiceUtil, AddressService and AddressServiceUtil" />
-		</check>
-		<check name="UpgradeJavaAddCategoryParameterCheck">
-			<category name="Upgrade" />
-			<description name="Fill the new parameter of the method 'addCategory' of 'AssetCategoryLocalService' and 'AssetCategoryLocalServiceUtil' classes" />
-		</check>
-		<check name="UpgradeJavaAddFDSTableSchemaFieldCheck">
-			<category name="Upgrade" />
-			<description name="Replace method addFDSTableSchemaFieldCheck by add" />
-			<weight>1</weight>
-		</check>
-		<check name="UpgradeJavaAddFileEntryParameterCheck">
-			<category name="Upgrade" />
-			<description name="Fill the new parameter of the method 'addFileEntry' of 'DLAppLocalServiceUtil' and 'DLAppLocalService'" />
-		</check>
-		<check name="UpgradeJavaAddFolderParameterCheck">
-			<category name="Upgrade" />
-			<description name="Fill the new parameter of the method `addFolder` of `JournalFolderService`, `JournalFolderLocalService`, and `JournalFolderLocalServiceUtil` classes" />
-		</check>
 		<check name="UpgradeJavaAssetEntryAssetCategoriesCheck">
 			<category name="Upgrade" />
 			<description name="Replaces methods referring to class `AssetEntryAssetCategory` in class `AssetCategoryLocalService` with equivalent methods in class `AssetEntryAssetCategoryRelLocalService`." />
@@ -1663,33 +1643,18 @@
 			<category name="Upgrade" />
 			<description name="Replace the setPortlet method with getPortlet" />
 		</check>
-		<check name="UpgradeJavaCaptchaUtilCheck">
-			<category name="Upgrade" />
-			<description name="Replaces the usages of `CaptchaUti.serveImage(resourceRequest, resourceResponse)` with `CaptchaUti.serveImage(httpServletRequest, httpServletResponse)`" />
-		</check>
 		<check name="UpgradeJavaCheck">
 			<category name="Upgrade" />
 			<description name="Performs upgrade checks for `java` files" />
 			<weight>3</weight>
 		</check>
-		<check name="UpgradeJavaCommerceCountryCheck">
-			<category name="Upgrade" />
-			<description name="Replaces the old methods of class `CommerceCountry` with the new equivalents in the `Country` class." />
-			<weight>1</weight>
-		</check>
-		<check name="UpgradeJavaCommerceCountryServiceCheck">
-			<category name="Upgrade" />
-			<description name="Replaces the old methods of class `CommerceCountryService` with the new equivalents in the `CountryService` class." />
-			<weight>1</weight>
-		</check>
 		<check name="UpgradeJavaCommerceOrderItemServicesCheck">
 			<category name="Upgrade" />
 			<description name="Fill the new parameters of the method `addCommerceOrderItem` and `deleteCommerceOrderItems` of `CommerceOrderItemLocalService`, `CommerceOrderItemLocalServiceUtil`, `CommerceOrderItemService` and `CommerceOrderItemServiceUtil` classes" />
 		</check>
-		<check name="UpgradeJavaCommerceRegionCheck">
+		<check name="UpgradeJavaCommerceOrderValidatorCheck">
 			<category name="Upgrade" />
-			<description name="Replaces the old methods of class `CommerceRegion` with the new equivalents in the `Region` class." />
-			<weight>1</weight>
+			<description name="Replace the parameter Int for BigDecimal of method validate of 'CommerceOrderValidator' interface" />
 		</check>
 		<check name="UpgradeJavaCookieKeysCheck">
 			<category name="Upgrade" />
@@ -1698,14 +1663,6 @@
 		<check name="UpgradeJavaCookieUtilCheck">
 			<category name="Upgrade" />
 			<description name="Replace CookieUtilCheck.get by CookiesManagerUtil.getCookieValue and reorder parameters" />
-		</check>
-		<check name="UpgradeJavaDLFolderMethodCheck">
-			<category name="Upgrade" />
-			<description name="Fill the new parameter of the method addFolder of DLFolderLocalService, DLFolderLocalServiceUtil, DLFolderService and DLFolderServiceUtil" />
-		</check>
-		<check name="UpgradeJavaExtractTextMethodCheck">
-			<category name="Upgrade" />
-			<description name="Replaces the references of the method `HtmlUtil.extractText(` with the method `extractText(` of `HtmlParser` class" />
 		</check>
 		<check name="UpgradeJavaFacetedSearcherCheck">
 			<category name="Upgrade" />
@@ -1744,10 +1701,6 @@
 			<description name="Replace getLayoutDisplayPageProvider by getLayoutDisplayPageProviderByClassName" />
 			<weight>2</weight>
 		</check>
-		<check name="UpgradeJavaGetLeftCategoryIdMethodCheck">
-			<category name="Upgrade" />
-			<description name="Replace the AssetCategory's method `getLeftCategoryId` by `getCategoryId` " />
-		</check>
 		<check name="UpgradeJavaIndexerCheck">
 			<category name="Upgrade" />
 			<description name="Replace Indexer by Indexer&lt;?&gt;" />
@@ -1756,17 +1709,9 @@
 			<category name="Upgrade" />
 			<description name="Replace `ListUtil.fromArray` by `new ArrayList' when the parameter is to 'LanguageUtil.getAvailableLocales'" />
 		</check>
-		<check name="UpgradeJavaLayoutServicesCheck">
-			<category name="Upgrade" />
-			<description name="Fill the new parameters of the method `addLayout` and `updateLayout` of `LayoutServiceUtil`, `LayoutService`, `LayoutLocalService` and `LayoutLocalServiceUtil` classes" />
-		</check>
 		<check name="UpgradeJavaMultiVMPoolUtilCheck">
 			<category name="Upgrade" />
 			<description name="Replaces the references of the MultiVMPoolUtil class and also its methods usages." />
-		</check>
-		<check name="UpgradeJavaPhoneLocalServiceUtilCheck">
-			<category name="Upgrade" />
-			<description name="Fill the new parameter `ServiceContext` of the method `addPhone` of class `PhoneLocalServiceUtil`." />
 		</check>
 		<check name="UpgradeJavaPortletIdMethodCheck">
 			<category name="Upgrade" />
@@ -1779,10 +1724,6 @@
 		<check name="UpgradeJavaSchedulerEntryImplConstructorCheck">
 			<category name="Upgrade" />
 			<description name="Replace constructors that use the empty constructor of the SchedulerEntryImpl class." />
-		</check>
-		<check name="UpgradeJavaSearchVocabulariesMethodCheck">
-			<category name="Upgrade" />
-			<description name="Fill in the new parameters of the method `searchVocabularies` of 'AssetVocabularyService' and 'AssetVocabularyLocalService'" />
 		</check>
 		<check name="UpgradeJavaServiceReferenceAnnotationCheck">
 			<category name="Upgrade" />
@@ -1807,6 +1748,10 @@
 		<check name="UpgradeJSPFieldSetGroupCheck">
 			<category name="Upgrade" />
 			<description name="Run code to remove 'fieldset-group' tag" />
+		</check>
+		<check name="UpgradePortletDisplayCheck">
+			<category name="Upgrade" />
+			<description name="Replaces 'portletDisplay.getPortletInstanceConfiguration' with 'ConfigurationProviderUtil.getPortletInstanceConfiguration'" />
 		</check>
 		<check name="UpgradePortletFTLCheck">
 			<category name="Upgrade" />
@@ -1918,6 +1863,10 @@
 		<check name="XMLIndentationCheck">
 			<category name="Styling" />
 			<description name="Finds incorrect indentation in `.xml` files." />
+		</check>
+		<check name="XMLInstanceWrappersFileCheck">
+			<category name="Styling" />
+			<description name="Checks the order of instance-wrappers in `instance_wrappers.xml` file." />
 		</check>
 		<check name="XMLLog4jFileCheck">
 			<category name="Styling" />

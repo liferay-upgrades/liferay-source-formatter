@@ -51,7 +51,7 @@ GroovyImportsCheck | .groovy | Sorts and groups imports in `.groovy` files. |
 HTMLEmptyLinesCheck | .html or .path | Finds missing and unnecessary empty lines. |
 HTMLWhitespaceCheck | .html or .path | Finds missing and unnecessary whitespace in `.html` files. |
 [IfStatementCheck](check/if_statement_check.markdown#ifstatementcheck) | .java, .jsp, .jspf, .jspx, .tag, .tpl or .vm | Finds empty if-statements and consecutive if-statements with identical bodies |
-InstanceInitializerCheck | .java | Checks the order of variable assignments and set* calls in the instance initializer. |
+[InstanceInitializerCheck](check/instance_initializer_check.markdown#instanceinitializercheck) | .java | Performs several checks on class instance initializer. |
 InstanceofOrderCheck | .java, .jsp, .jspf, .jspx, .tag, .tpl or .vm | Check the order of `instanceof` calls. |
 JSONStylingCheck | .ipynb, .json or .npmbridgerc | Applies rules to enforce consistency in code style. |
 [JSONUtilCheck](check/json_util_check.markdown#jsonutilcheck) | .java, .jsp, .jspf, .jspx, .tag, .tpl or .vm | Checks for utilization of class `JSONUtil`. |
@@ -104,6 +104,7 @@ MarkdownFileExtensionCheck | .markdown or .md | Finds `markdown` files with `.md
 MarkdownStylingCheck | .markdown or .md | Applies rules to enforce consistency in code style. |
 MarkdownWhitespaceCheck | .markdown or .md | Finds missing and unnecessary whitespace in `.markdown` files. |
 MethodCallsOrderCheck | .java, .jsp, .jspf, .jspx, .tag, .tpl or .vm | Sorts method calls for certain object (for example, `put` calls in `java.util.HashMap`). |
+MethodEqualsCheck | .java, .jsp, .jspf, .jspx, .tag, .tpl or .vm | Finds cases where `Objects.equals` should be used. |
 [MethodParamPadCheck](https://checkstyle.sourceforge.io/config_whitespace.html#MethodParamPad) | .java, .jsp, .jspf, .jspx, .tag, .tpl or .vm | Checks the padding between the identifier of a method definition, constructor definition, method call, or constructor invocation; and the left parenthesis of the parameter list. |
 [MissingEmptyLineCheck](check/missing_empty_line_check.markdown#missingemptylinecheck) | .java, .jsp, .jspf, .jspx, .tag, .tpl or .vm | Checks for missing line breaks around variable declarations. |
 MissingParenthesesCheck | .java, .jsp, .jspf, .jspx, .tag, .tpl or .vm | Finds missing parentheses in conditional statement. |
@@ -125,6 +126,7 @@ PlusStatementCheck | .java, .jsp, .jspf, .jspx, .tag, .tpl or .vm | Performs sev
 PoshiAntCommandParametersOrderCheck | .function, .jar, .lar, .macro, .path, .testcase, .war or .zip | Sorts parameters in AntCommand call in Poshi Script files. |
 PoshiImportsCheck | .function, .jar, .lar, .macro, .path, .testcase, .war or .zip | Sorts and groups imports in Poshi Script files. |
 PoshiIndentationCheck | .function, .jar, .lar, .macro, .path, .testcase, .war or .zip | Finds incorrect indentation in Poshi Script files. |
+PoshiPropertiesOrderCheck | .function, .jar, .lar, .macro, .path, .testcase, .war or .zip | Sorts the values of properties in `.testcase` file. |
 PoshiStylingCheck | .function, .jar, .lar, .macro, .path, .testcase, .war or .zip | Applies rules to enforce consistency in code style. |
 PoshiVariableNameCheck | .function, .jar, .lar, .macro, .path, .testcase, .war or .zip | Checks variable names for correct use of `camelCase`. |
 PoshiWhitespaceCheck | .function, .jar, .lar, .macro, .path, .testcase, .war or .zip | Finds missing and unnecessary whitespace. |
@@ -173,6 +175,7 @@ XMLFriendlyURLRoutesFileCheck | .action, .function, .jelly, .jrxml, .macro, .pom
 XMLHBMFileCheck | .action, .function, .jelly, .jrxml, .macro, .pom, .project, .properties, .svg, .testcase, .toggle, .tpl, .wsdl, .xml or .xsd | Checks the order of imports in `*-hbm.xml` file. |
 XMLImportsCheck | .action, .function, .jelly, .jrxml, .macro, .pom, .project, .properties, .svg, .testcase, .toggle, .tpl, .wsdl, .xml or .xsd | Sorts and groups imports in `.xml` files. |
 XMLIndentationCheck | .action, .function, .jelly, .jrxml, .macro, .pom, .project, .properties, .svg, .testcase, .tld, .toggle, .tpl, .wsdl, .xml or .xsd | Finds incorrect indentation in `.xml` files. |
+XMLInstanceWrappersFileCheck | .action, .function, .jelly, .jrxml, .macro, .pom, .project, .properties, .svg, .testcase, .toggle, .tpl, .wsdl, .xml or .xsd | Checks the order of instance-wrappers in `instance_wrappers.xml` file. |
 XMLIvyFileCheck | .action, .function, .jelly, .jrxml, .macro, .pom, .project, .properties, .svg, .testcase, .toggle, .tpl, .wsdl, .xml or .xsd | Checks the order of dependencies in `ivy.xml` file. |
 XMLLog4jFileCheck | .action, .function, .jelly, .jrxml, .macro, .pom, .project, .properties, .svg, .testcase, .toggle, .tpl, .wsdl, .xml or .xsd | Checks the order of categories in `*-log4j.xml` file. |
 XMLLookAndFeelFileCheck | .action, .function, .jelly, .jrxml, .macro, .pom, .project, .properties, .svg, .testcase, .toggle, .tpl, .wsdl, .xml or .xsd | Checks the order of attributes in `*--look-and-feel.xml` file. |

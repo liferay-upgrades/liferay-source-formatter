@@ -252,8 +252,11 @@
 			<message key="starting.uppercase.required" value="''{0}'' should start with an uppercase character for {1} ''{2}''" />
 		</module>
 		<module name="com.liferay.source.formatter.checkstyle.check.ChainingCheck">
+			<property name="applyToTypeCast" value="true" />
 			<property name="category" value="Styling" />
 			<property name="description" value="Checks that method chaining can be used when possible." />
+			<message key="chaining.avoid.parentheses" value="Avoid chaining on expressions with parentheses" />
+			<message key="chaining.avoid.type.cast" value="Avoid chaining on Type Cast" />
 			<message key="chaining.required" value="Chaining on ''{0}'' is preferred" />
 			<message key="response.unsorted" value="Method calls between ''Response.status'' and ''Response.build'' should be sorted" />
 		</module>
@@ -412,10 +415,13 @@
 		</module>
 		<module name="com.liferay.source.formatter.checkstyle.check.InstanceInitializerCheck">
 			<property name="category" value="Styling" />
-			<property name="description" value="Checks the order of variable assignments and set* calls in the instance initializer." />
-			<message key="assign.incorrect.order" value="The variable assignment for ''{0}'' should come before the variable assignment for ''{1}''" />
+			<property name="description" value="Performs several checks on class instance initializer." />
 			<message key="assign.move.before.method.call" value="The variable assignment for ''{0}'' should come before the method calling ''{1}''" />
-			<message key="method.call.incorrect.order" value="The method calling ''{0}'' should come before the method calling ''{1}''" />
+			<message key="assign.order.incorrect" value="The variable assignment for ''{0}'' should come before the variable assignment for ''{1}''" />
+			<message key="assign.use.instead" value="Directly assign value to ''{0}'' instead of calling ''{1}''" />
+			<message key="if.statement.inline" value="Inline if-statement inside ''{0}''" />
+			<message key="method.call.order.incorrect" value="The method calling ''{0}'' should come before the method calling ''{1}''" />
+			<message key="set.method.use.instead" value="Use ''{0}({1})'' with inlined if-statement instead" />
 		</module>
 		<module name="com.liferay.source.formatter.checkstyle.check.InstanceofOrderCheck">
 			<property name="category" value="Styling" />
@@ -518,6 +524,11 @@
 			<property name="description" value="Checks that there are no unnecessary map iterations." />
 			<message key="entry.set.use" value="Use Map.entrySet() to retrieve values" />
 		</module>
+		<module name="com.liferay.source.formatter.checkstyle.check.MethodEqualsCheck">
+			<property name="category" value="Styling" />
+			<property name="description" value="Finds cases where `Objects.equals` should be used." />
+			<message key="objects.equals.use" value="Use ''Objects.equals'' instead of calling ''equals'' on method" />
+		</module>
 		<module name="com.liferay.source.formatter.checkstyle.check.MethodNamingCheck">
 			<property name="category" value="Naming Conventions" />
 			<property name="checkSearchMethodNames" value="false" />
@@ -614,6 +625,13 @@
 			<property name="description" value="Verifies that when an operator has a literal string or a number as one of the operands, it is always on the right hand side." />
 			<message key="left.argument.literal.or.num" value="''{0}'' should be on the right hand side of the operator" />
 		</module>
+		<module name="com.liferay.source.formatter.checkstyle.check.OSGiCommandsCheck">
+			<property name="category" value="Bug Prevention" />
+			<property name="description" value="Perform several checks on `*OSGiCommands` classes" />
+			<message key="bad.class.name" value="The names of clases that implement OSGi commands must end with ''OSGiCommands''" />
+			<message key="bad.osgi.reference" value="OSGi references to `*OSGiCommands` classes are not allowed" />
+			<message key="missing.command.function" value="OSGi command ''{0}'' is missing a method that implements it" />
+		</module>
 		<module name="com.liferay.source.formatter.checkstyle.check.OSGiResourceBuilderCheck">
 			<property name="category" value="Styling" />
 			<property name="description" value="Avoid using *Resource.builder." />
@@ -675,6 +693,7 @@
 			<message key="default.unbind.redundant" value="No need to specify default ''unbind'' method. See https://osgi.org/javadoc/r4v43/cmpn/org/osgi/service/component/annotations/Reference.html#unbind()" />
 			<message key="dynamic.policy.missing" value="When using ''cardinality = ReferenceCardinality.OPTIONAL'' and ''policyOption = ReferencePolicyOption.GREEDY'', always use ''policy = ReferencePolicy.DYNAMIC'' as well" />
 			<message key="reference.move" value="Move @Reference from method ''{0}'' to field ''{1}''" />
+			<message key="snapshot.use" value="Use Snapshot instead of ''cardinality = ReferenceCardinality.OPTIONAL'', see LPS-184625" />
 			<message key="target.value.incorrect" value="Do not use ''target = {0}''" />
 			<message key="unbind.dynamic.policy.missing" value="Always specify a valid ''unbind'' method when using ''policy = ReferencePolicy.DYNAMIC'' policy. See https://osgi.org/javadoc/r4v43/cmpn/org/osgi/service/component/annotations/Reference.html#unbind()" />
 			<message key="unbind.static.policy.missing" value="Specify ''unbind'' method. Use ''unbind = {0}'' when ''unbind'' method is not needed. See https://osgi.org/javadoc/r4v43/cmpn/org/osgi/service/component/annotations/Reference.html#unbind()" />

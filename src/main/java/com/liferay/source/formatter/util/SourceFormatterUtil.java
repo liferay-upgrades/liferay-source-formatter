@@ -202,6 +202,10 @@ public class SourceFormatterUtil {
 	}
 
 	public static File getFile(String baseDirName, String fileName, int level) {
+		if (Validator.isBlank(baseDirName)) {
+			baseDirName = "./";
+		}
+
 		for (int i = 0; i < level; i++) {
 			File file = new File(baseDirName + fileName);
 
@@ -411,7 +415,7 @@ public class SourceFormatterUtil {
 
 		ProcessBuilder processBuilder = new ProcessBuilder(allArgs);
 
-		if (baseDirName != null) {
+		if (!Validator.isBlank(baseDirName)) {
 			processBuilder.directory(new File(baseDirName));
 		}
 
@@ -731,8 +735,8 @@ public class SourceFormatterUtil {
 
 				if (_gitTopLevelFolder == null) {
 					List<String> lines = git(
-						Arrays.asList("rev-parse", "--show-toplevel"), null,
-						null, false);
+						Arrays.asList("rev-parse", "--show-toplevel"),
+						baseDirName, null, false);
 
 					_gitTopLevelFolder = new File(lines.get(0));
 				}
