@@ -24,6 +24,7 @@ import com.liferay.source.formatter.parser.JavaTerm;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -39,6 +40,15 @@ public class UpgradeCatchAllCheck extends BaseFileCheck {
 
 		for (int i = 0; i < jsonArray.length(); i++) {
 			JSONObject jsonObject = jsonArray.getJSONObject(i);
+
+			String[] validExtensions = JSONUtil.toStringArray(
+				jsonObject.getJSONArray("validExtensions"));
+
+			if ((validExtensions.length > 0) &&
+				!ArrayUtil.contains(validExtensions, "java")) {
+
+				continue;
+			}
 
 			String from = jsonObject.getString("from");
 
@@ -278,7 +288,7 @@ public class UpgradeCatchAllCheck extends BaseFileCheck {
 			String to = jsonObject.getString("to");
 
 			if (from.contains(StringPool.OPEN_PARENTHESIS)) {
-				newContent = _formatParameters(
+				newContent = _formatMethodCall(
 					fileName, from, newContent, jsonObject, matcher, newContent,
 					to);
 			}
@@ -336,7 +346,7 @@ public class UpgradeCatchAllCheck extends BaseFileCheck {
 				String to = jsonObject.getString("to");
 
 				if (from.contains(StringPool.OPEN_PARENTHESIS)) {
-					newContent = _formatParameters(
+					newContent = _formatMethodCall(
 						fileName, from, javaMethodContent, jsonObject, matcher,
 						newContent, to);
 				}
@@ -356,7 +366,7 @@ public class UpgradeCatchAllCheck extends BaseFileCheck {
 		return newContent;
 	}
 
-	private String _formatParameters(
+	private String _formatMethodCall(
 		String fileName, String from, String javaMethodContent,
 		JSONObject jsonObject, Matcher matcher, String newContent, String to) {
 
@@ -372,13 +382,15 @@ public class UpgradeCatchAllCheck extends BaseFileCheck {
 			return newContent;
 		}
 
+		Set<String> keys = jsonObject.keySet();
+
 		if ((fileName.endsWith(".java") &&
 			 !jsonObject.getBoolean("skipParametersValidation") &&
 			 !hasParameterTypes(
 				 javaMethodContent, newContent, fileName,
 				 ArrayUtil.toStringArray(parameterNames),
 				 ArrayUtil.toStringArray(parameterTypes))) ||
-			to.isEmpty()) {
+			!keys.contains("to")) {
 
 			addMessage(fileName, _getMessage(jsonObject));
 
@@ -386,6 +398,27 @@ public class UpgradeCatchAllCheck extends BaseFileCheck {
 
 			return newContent;
 		}
+
+		if (to.isEmpty()) {
+			String newJavaMethodContent = StringUtil.removeFirst(
+				javaMethodContent, methodCall);
+
+			String line = getLine(
+				newJavaMethodContent,
+				getLineNumber(newJavaMethodContent, matcher.start()));
+
+			return StringUtil.replaceFirst(
+				newContent, javaMethodContent,
+				StringUtil.removeFirst(
+					newJavaMethodContent, line + CharPool.NEW_LINE));
+		}
+
+		return _formatParameters(methodCall, newContent, parameterNames, to);
+	}
+
+	private String _formatParameters(
+		String methodCall, String newContent, List<String> parameterNames,
+		String to) {
 
 		String newMethodCall = to.substring(
 			0, to.indexOf(CharPool.OPEN_PARENTHESIS) + 1);

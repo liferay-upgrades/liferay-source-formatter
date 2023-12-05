@@ -1,5 +1,53 @@
 [
 	{
+		"from": "CookieKeys.COMMERCE_CONTINUE_AS_GUEST",
+		"issueKey": "LPS-159679",
+		"newImports": [
+			"com.liferay.portal.kernel.cookies.constants.CookiesConstants"
+		],
+		"to": "CookiesConstants.NAME_COMMERCE_CONTINUE_AS_GUEST"
+	},
+	{
+		"from": "CookieKeys.ID",
+		"issueKey": "LPS-159679",
+		"newImports": [
+			"com.liferay.portal.kernel.cookies.constants.CookiesConstants"
+		],
+		"to": "CookiesConstants.NAME_ID"
+	},
+	{
+		"from": "CookieKeys.getCookie(HttpServletRequest, String)",
+		"issueKey": "LPS-159679",
+		"newImports": [
+			"com.liferay.portal.kernel.cookies.CookiesManagerUtil"
+		],
+		"to": "CookiesManagerUtil.getCookieValue(param#1#, param#0#)"
+	},
+	{
+		"from": "CookieKeys.SCREEN_NAME",
+		"issueKey": "LPS-159679",
+		"newImports": [
+			"com.liferay.portal.kernel.cookies.constants.CookiesConstants"
+		],
+		"to": "CookiesConstants.NAME_USER_UUID"
+	},
+	{
+		"from": "CookieUtil.get(HttpServletRequest, String)",
+		"issueKey": "LPS-159681",
+		"newImports": [
+			"com.liferay.portal.kernel.cookies.CookiesManagerUtil"
+		],
+		"to": "CookiesManagerUtil.getCookieValue(param#1#, param#0#)"
+	},
+	{
+		"from": "CookieUtil.get(HttpServletRequest, String, boolean)",
+		"issueKey": "LPS-159681",
+		"newImports": [
+			"com.liferay.portal.kernel.cookies.CookiesManagerUtil"
+		],
+		"to": "CookiesManagerUtil.getCookieValue(param#1#, param#0#, param#2#)"
+	},
+	{
 		"classNames": [
 			"JournalFolderLocalService",
 			"JournalFolderLocalServiceUtil"
@@ -203,7 +251,9 @@
 	{
 		"from": "DLUtil.getGroupIds(ThemeDisplay)",
 		"issueKey": "LPS-192396",
-		"newImports": "com.liferay.portal.kernel.util.PortalUtil",
+		"newImports": [
+			"com.liferay.portal.kernel.util.PortalUtil"
+		],
 		"to": "PortalUtil.getCurrentAndAncestorSiteGroupIds(param#0#.getScopeGroupId())",
 		"validExtensions": [
 			"java",
@@ -368,6 +418,29 @@
 	},
 	{
 		"classNames": [
+			"PortletDisplay"
+		],
+		"from": "getPortletInstanceConfiguration(Class<T>)",
+		"issueKey": "LPS-195850",
+		"newImports": [
+			"com.liferay.portal.configuration.module.configuration.ConfigurationProviderUtil",
+			"com.liferay.portal.kernel.service.ServiceContextThreadLocal"
+		],
+		"to": "ConfigurationProviderUtil.getPortletInstanceConfiguration(param#0#, ServiceContextThreadLocal.getServiceContext().getThemeDisplay())"
+	},
+	{
+		"from": "portletDisplay.getPortletInstanceConfiguration(Class<T>)",
+		"issueKey": "LPS-195850",
+		"newImports": [
+			"com.liferay.portal.configuration.module.configuration.ConfigurationProviderUtil"
+		],
+		"to": "ConfigurationProviderUtil.getPortletInstanceConfiguration(param#0#, themeDisplay)",
+		"validExtensions": [
+			"jsp"
+		]
+	},
+	{
+		"classNames": [
 			"CaptchaUtil"
 		],
 		"from": "serveImage(ResourceRequest, ResourceResponse)",
@@ -376,6 +449,14 @@
 			"com.liferay.portal.kernel.util.PortalUtil"
 		],
 		"to": "serveImage(PortalUtil.getHttpServletRequest(param#0#), PortalUtil.getHttpServletResponse(param#1#))"
+	},
+	{
+		"classNames": [
+			"AssetCategoryLocalService",
+			"AssetCategoryLocalServiceUtil"
+		],
+		"from": "fetchAssetCategoryByExternalReferenceCode(long, String)",
+		"issueKey": "LPS-196608"
 	},
 	{
 		"classNames": [
@@ -603,11 +684,75 @@
 	},
 	{
 		"classNames": [
-			"AssetVocabularyLocalService",
-			"AssetVocabularyLocalServiceUtil"
+			"Contact"
 		],
-		"from": "fetchAssetVocabularyByExternalReferenceCode(long, String)",
-		"issueKey": "LPS-198292"
+		"from": "getPrefixId",
+		"issueKey": "LPS-197984",
+		"to": "getPrefixListTypeId"
+	},
+	{
+		"classNames": [
+			"Organization"
+		],
+		"from": "getStatusId",
+		"issueKey": "LPS-197984",
+		"to": "getStatusListTypeId"
+	},
+	{
+		"classNames": [
+			"Contact"
+		],
+		"from": "getSuffixId",
+		"issueKey": "LPS-197984",
+		"to": "getSuffixListTypeId"
+	},
+	{
+		"classNames": [
+			"Address",
+			"EmailAddress",
+			"OrgLabor",
+			"Phone",
+			"Website"
+		],
+		"from": "getTypeId",
+		"issueKey": "LPS-197984",
+		"to": "getListTypeId"
+	},
+	{
+		"classNames": [
+			"Contact"
+		],
+		"from": "setPrefixId",
+		"issueKey": "LPS-197984",
+		"to": "setPrefixListTypeId"
+	},
+	{
+		"classNames": [
+			"Organization"
+		],
+		"from": "setStatusId",
+		"issueKey": "LPS-197984",
+		"to": "setStatusListTypeId"
+	},
+	{
+		"classNames": [
+			"Contact"
+		],
+		"from": "setSuffixId",
+		"issueKey": "LPS-197984",
+		"to": "setSuffixListTypeId"
+	},
+	{
+		"classNames": [
+			"Address",
+			"EmailAddress",
+			"OrgLabor",
+			"Phone",
+			"Website"
+		],
+		"from": "setTypeId",
+		"issueKey": "LPS-197984",
+		"to": "setListTypeId"
 	},
 	{
 		"classNames": [
@@ -620,11 +765,67 @@
 	},
 	{
 		"classNames": [
+			"AssetVocabularyLocalService",
+			"AssetVocabularyLocalServiceUtil"
+		],
+		"from": "fetchAssetVocabularyByExternalReferenceCode(long, String)",
+		"issueKey": "LPS-198292"
+	},
+	{
+		"classNames": [
+			"DefaultFragmentRendererContext"
+		],
+		"from": "setSegmentsExperienceIds(long[])",
+		"issueKey": "LPS-198401",
+		"to": ""
+	},
+	{
+		"classNames": [
+			"DefaultFragmentRendererContext"
+		],
+		"from": "setFieldValues(Map<String, Object>)",
+		"issueKey": "LPS-198402",
+		"to": ""
+	},
+	{
+		"classNames": [
 			"CPDefinitionLinkLocalService",
 			"CPDefinitionLinkLocalServiceUtil"
 		],
 		"from": "addCPDefinitionLinkByCProductId(long, long, double, String, ServiceContext)",
 		"issueKey": "LPS-198610",
 		"to": "addCPDefinitionLinkByCProductId(param#0#, param#1#, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, true, param#2#, param#3#, param#4#)"
+	},
+	{
+		"classNames": [
+			"CalendarBookingLocalService",
+			"CalendarBookingLocalServiceUtil",
+			"CalendarBookingService",
+			"CalendarBookingServiceUtil"
+		],
+		"from": "search(long, long[], long[], long[], long, String, long, long, boolean, int[], int, int, OrderByComparator<CalendarBooking>)",
+		"issueKey": "LPS-202779",
+		"to": "search(param#0#, param#1#, param#2#, param#3#, param#4#, param#5#, param#6#, param#7#, null, param#8#, param#9#, param#10#, param#11#, param#12#)"
+	},
+	{
+		"from": "PortletDisplayTemplateManager.DISPLAY_STYLE_PREFIX",
+		"issueKey": "LPS-202918",
+		"to": "PortletDisplayTemplateConstants.DISPLAY_STYLE_PREFIX"
+	},
+	{
+		"from": "PortletDisplayTemplateManager.ENTRIES",
+		"issueKey": "LPS-202918",
+		"to": "PortletDisplayTemplateConstants.ENTRIES"
+	},
+	{
+		"classNames": [
+			"DLAppLocalService",
+			"DLAppLocalServiceUtil",
+			"DLAppService",
+			"DLAppServiceUtil"
+		],
+		"from": "addFolder(long, long, long, String, String, ServiceContext)",
+		"issueKey": "LPS-202927",
+		"to": "addFolder(null, param#0#, param#1#, param#2#, param#3#, param#4#, param#5#)"
 	}
 ]
