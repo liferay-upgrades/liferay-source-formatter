@@ -65,16 +65,17 @@ public class VariableNameCheck extends BaseCheck {
 			return;
 		}
 
-		if (firstChildDetailAST.getType() != TokenTypes.DOT) {
-			String typeName = getTypeName(typeDetailAST, false);
+		String typeName = getTypeName(typeDetailAST, false);
 
-			if (!typeName.contains("[")) {
+		if (!typeName.contains("[")) {
+			if (firstChildDetailAST.getType() != TokenTypes.DOT) {
 				_checkCountVariableName(detailAST, name, typeName);
-				_checkExceptionVariableName(detailAST, name, typeName);
 				_checkInstanceVariableName(detailAST, name, typeName);
 				_checkTypeName(detailAST, name, typeName);
 				_checkTypo(detailAST, name, typeName, true);
 			}
+
+			_checkExceptionVariableName(detailAST, name, typeName);
 		}
 
 		DetailAST parentDetailAST = getParentWithTokenType(
@@ -384,23 +385,38 @@ public class VariableNameCheck extends BaseCheck {
 	private void _checkExceptionVariableName(
 		DetailAST detailAST, String name, String typeName) {
 
+		if (!StringUtil.endsWith(getAbsolutePath(), "ExceptionMapper.java")) {
+			return;
+		}
+
 		DetailAST parentDetailAST = detailAST.getParent();
 
 		if ((parentDetailAST.getType() == TokenTypes.LITERAL_CATCH) ||
-			(detailAST.getType() != TokenTypes.PARAMETER_DEF) ||
-			!typeName.endsWith("Exception")) {
+			(detailAST.getType() != TokenTypes.PARAMETER_DEF)) {
 
 			return;
 		}
 
-		String absolutePath = getAbsolutePath();
+		String[] names = StringUtil.split(typeName, StringPool.PERIOD);
 
-		if (absolutePath.endsWith("ExceptionMapper.java")) {
-			String expectedName = getExpectedVariableName(typeName);
+		if (names.length > 2) {
+			return;
+		}
 
-			if (!name.equals(expectedName)) {
-				log(detailAST, MSG_RENAME_VARIABLE, name, expectedName);
-			}
+		typeName = names[0];
+
+		if (!StringUtil.endsWith(typeName, "Exception")) {
+			return;
+		}
+
+		if (names.length == 2) {
+			typeName = names[1];
+		}
+
+		String expectedVariableName = getExpectedVariableName(typeName);
+
+		if (!name.equals(expectedVariableName)) {
+			log(detailAST, MSG_RENAME_VARIABLE, name, expectedVariableName);
 		}
 	}
 
@@ -719,21 +735,21 @@ public class VariableNameCheck extends BaseCheck {
 		String trimmedTypeName = StringUtil.replaceLast(
 			typeName, typeNameTrailingDigits, StringPool.BLANK);
 
-		String expectedName = getExpectedVariableName(trimmedTypeName);
+		String expectedVariableName = getExpectedVariableName(trimmedTypeName);
 
-		if (StringUtil.equals(trimmedName, expectedName)) {
+		if (StringUtil.equals(trimmedName, expectedVariableName)) {
 			return;
 		}
 
 		if (StringUtil.equalsIgnoreCase(trimmedName, trimmedTypeName)) {
-			for (int i = expectedName.length() - 1; i >= 0; i--) {
+			for (int i = expectedVariableName.length() - 1; i >= 0; i--) {
 				char c1 = trimmedName.charAt(i);
 
-				if (c1 == expectedName.charAt(i)) {
+				if (c1 == expectedVariableName.charAt(i)) {
 					continue;
 				}
 
-				if (i < (expectedName.length() - 1)) {
+				if (i < (expectedVariableName.length() - 1)) {
 					char c2 = trimmedName.charAt(i + 1);
 
 					if (Character.isUpperCase(c1) &&
@@ -747,7 +763,8 @@ public class VariableNameCheck extends BaseCheck {
 			log(
 				detailAST, _MSG_TYPO_VARIABLE, variableName,
 				StringBundler.concat(
-					leadingUnderline, expectedName, nameTrailingDigits));
+					leadingUnderline, expectedVariableName,
+					nameTrailingDigits));
 
 			return;
 		}
