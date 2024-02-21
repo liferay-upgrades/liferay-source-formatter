@@ -103,6 +103,7 @@ GradleMissingJarManifestTaskCheck | [Bug Prevention](bug_prevention_checks.markd
 GradlePropertiesCheck | [Bug Prevention](bug_prevention_checks.markdown#bug-prevention-checks) | .gradle | Validates property values in gradle build files. |
 GradleProvidedDependenciesCheck | [Bug Prevention](bug_prevention_checks.markdown#bug-prevention-checks) | .gradle | Validates the scope of dependencies in build gradle files. |
 [GradleRequiredDependenciesCheck](check/gradle_required_dependencies_check.markdown#gradlerequireddependenciescheck) | [Bug Prevention](bug_prevention_checks.markdown#bug-prevention-checks) | .gradle | Validates the dependencies in `/required-dependencies/required-dependencies/build.gradle`. |
+GradleRestClientDependenciesCheck | [Bug Prevention](bug_prevention_checks.markdown#bug-prevention-checks) | .gradle | Validates the project dependencies `.*-rest-client` can only be used for `testIntegrationImplementation`. |
 GradleStylingCheck | [Styling](styling_checks.markdown#styling-checks) | .gradle | Applies rules to enforce consistency in code style. |
 [GradleTaskCreationCheck](check/gradle_task_creation_check.markdown#gradletaskcreationcheck) | [Styling](styling_checks.markdown#styling-checks) | .gradle | Checks that a task is declared on a separate line before the closure. |
 GradleTestDependencyVersionCheck | [Bug Prevention](bug_prevention_checks.markdown#bug-prevention-checks) | .gradle | Checks the version for dependencies in gradle build files. |
@@ -453,6 +454,7 @@ ThreadNameCheck | [Naming Conventions](naming_conventions_checks.markdown#naming
 TransactionalTestRuleCheck | [Bug Prevention](bug_prevention_checks.markdown#bug-prevention-checks) | .java | Finds usage of `TransactionalTestRule` in `*StagedModelDataHandlerTest`. |
 TryWithResourcesCheck | [Performance](performance_checks.markdown#performance-checks) | .java | Ensures using Try-With-Resources statement to properly close the resource. |
 [TypeNameCheck](https://checkstyle.sourceforge.io/checks/naming/typename.html) | [Naming Conventions](naming_conventions_checks.markdown#naming-conventions-checks) | .java | Checks that type names conform to a specified pattern. |
+URLInputStreamCheck | [Bug Prevention](bug_prevention_checks.markdown#bug-prevention-checks) | .java | Checks usages of `URL.openStream()`. |
 [UnicodePropertiesBuilderCheck](check/builder_check.markdown#buildercheck) | [Miscellaneous](miscellaneous_checks.markdown#miscellaneous-checks) | .java | Checks that `UnicodePropertiesBuilder` is used when possible. |
 [UnnecessaryAssignCheck](check/unnecessary_assign_check.markdown#unnecessaryassigncheck) | [Performance](performance_checks.markdown#performance-checks) | .java | Finds unnecessary assign statements (when it is either reassigned or returned right after). |
 UnnecessaryMethodCallCheck | [Styling](styling_checks.markdown#styling-checks) | .java | Finds unnecessary method calls. |

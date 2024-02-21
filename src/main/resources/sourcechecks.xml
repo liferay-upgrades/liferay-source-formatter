@@ -306,6 +306,10 @@
 			<category name="Bug Prevention" />
 			<description name="Validates the dependencies in `/required-dependencies/required-dependencies/build.gradle`." />
 		</check>
+		<check name="GradleRestClientDependenciesCheck">
+			<category name="Bug Prevention" />
+			<description name="Validates the project dependencies `.*-rest-client` can only be used for `testIntegrationImplementation`." />
+		</check>
 		<check name="GradleStylingCheck">
 			<category name="Styling" />
 			<description name="Applies rules to enforce consistency in code style." />
@@ -670,6 +674,7 @@
 			<property name="checkMismatchedServiceAttribute" value="false" />
 			<property name="checkResourceImpl" value="false" />
 			<property name="checkSelfRegistration" value="false" />
+			<property name="checkUsesInternalService" value="false" />
 		</check>
 		<check name="JavaDeprecatedJavadocCheck">
 			<category name="Javadoc" />

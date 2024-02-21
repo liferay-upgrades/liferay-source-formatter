@@ -272,7 +272,7 @@
 			<property name="enabled" value="false" />
 			<message key="company.local.service.use.for.loop" value="Use ''CompanyLocalService.{0}'' when iterating over ''{1}''" />
 			<message key="company.local.service.use.sql" value="Use ''CompanyLocalService.forEachCompany'' instead of SQL" />
-			<message key="portal.instances.use" value="Use ''PortalInstances.getCompanyIdsBySQL'' instead to fetch company IDs" />
+			<message key="portal.instances.use" value="Use ''PortalInstancePool.getCompanyIds'' instead to fetch company IDs" />
 		</module>
 		<module name="com.liferay.source.formatter.checkstyle.check.ComponentAnnotationCheck">
 			<property name="category" value="Bug Prevention" />
@@ -340,6 +340,7 @@
 		<module name="com.liferay.source.formatter.checkstyle.check.DatabaseMetaDataCheck">
 			<property name="category" value="Bug Prevention" />
 			<property name="description" value="Checks usages of `java.sql.DatabaseMetaData`." />
+			<property name="enabled" value="false" />
 			<message key="replace.get.index.info" value="Use the method ''com.liferay.portal.kernel.dao.db.DB#getIndexResult()'' instead of ''{0}.getIndexInfo()''" />
 		</module>
 		<module name="com.liferay.source.formatter.checkstyle.check.DeprecatedAPICheck">
@@ -926,6 +927,12 @@
 			<message key="constructor.not.found" value="Constructor for ''{0}'' no longer exists, or the signature has changed, in version ''{1}''" />
 			<message key="method.not.found" value="Method ''{0}'' no longer exists, or the signature has changed, in class ''{1}'' for version ''{2}''" />
 			<message key="variable.not.found" value="Variable ''{0}'' no longer exists in class ''{1}'' for version ''{2}''" />
+		</module>
+		<module name="com.liferay.source.formatter.checkstyle.check.URLInputStreamCheck">
+			<property name="category" value="Bug Prevention" />
+			<property name="description" value="Checks usages of `URL.openStream()`." />
+			<property name="enabled" value="false" />
+			<message key="replace.usage" value="Use method ''{0}'' instead of ''{1}''" />
 		</module>
 		<module name="com.liferay.source.formatter.checkstyle.check.ValidatorIsNullCheck">
 			<property name="category" value="Bug Prevention" />
