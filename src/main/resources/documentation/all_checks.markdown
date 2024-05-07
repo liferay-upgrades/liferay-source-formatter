@@ -10,6 +10,7 @@ ArquillianCheck | [Bug Prevention](bug_prevention_checks.markdown#bug-prevention
 [ArrayCheck](check/array_check.markdown#arraycheck) | [Performance](performance_checks.markdown#performance-checks) | .java, .jsp, .jspf, .jspx, .tag, .tpl or .vm | Checks if performance can be improved by using different methods that can be used by collections. |
 [ArrayTypeStyleCheck](https://checkstyle.sourceforge.io/checks/misc/arraytypestyle.html) | [Styling](styling_checks.markdown#styling-checks) | .java, .jsp, .jspf, .jspx, .tag, .tpl or .vm | Checks the style of array type definitions. |
 [AssertEqualsCheck](check/assert_equals_check.markdown#assertequalscheck) | [Styling](styling_checks.markdown#styling-checks) | .java | Checks that additional information is provided when calling `Assert.assertEquals`. |
+AssertFailCheck | [Bug Prevention](bug_prevention_checks.markdown#bug-prevention-checks) | .java | Checks that calls to `Assert.fail` can be only used inside a try block as the last statement. |
 AssignAsUsedCheck | [Performance](performance_checks.markdown#performance-checks) | .java | Finds cases where an assign statement can be inlined or moved closer to where it is used. |
 [AvoidNestedBlocksCheck](https://checkstyle.sourceforge.io/checks/blocks/avoidnestedblocks.html) | [Styling](styling_checks.markdown#styling-checks) | .java, .jsp, .jspf, .jspx, .tag, .tpl or .vm | Finds nested blocks (blocks that are used freely in the code). |
 [AvoidStarImportCheck](https://checkstyle.sourceforge.io/checks/imports/avoidstarimport.html) | [Bug Prevention](bug_prevention_checks.markdown#bug-prevention-checks) | .java | Checks that there are no import statements that use the * notation. |
@@ -70,6 +71,7 @@ EmptyConstructorCheck | [Bug Prevention](bug_prevention_checks.markdown#bug-prev
 EnumConstantDividerCheck | [Styling](styling_checks.markdown#styling-checks) | .java | Find unnecessary empty lines between enum constants. |
 EnumConstantOrderCheck | [Styling](styling_checks.markdown#styling-checks) | .java | Checks the order of enum constants. |
 EqualClauseIfStatementsCheck | [Styling](styling_checks.markdown#styling-checks) | .java | Finds consecutive if-statements with identical clauses. |
+[EqualsHashCodeCheck](https://checkstyle.sourceforge.io/checks/coding/equalshashcode.html) | [Bug Prevention](bug_prevention_checks.markdown#bug-prevention-checks) | .java | Checks that classes that either override `equals()` or `hashCode()` also overrides the other. |
 [ExceptionCheck](check/exception_check.markdown#exceptioncheck) | [Performance](performance_checks.markdown#performance-checks) | .java | Finds private methods that throw unnecessary exception. |
 [ExceptionMessageCheck](check/message_check.markdown#messagecheck) | [Styling](styling_checks.markdown#styling-checks) | .java, .jsp, .jspf, .jspx, .tag, .tpl or .vm | Validates messages that are passed to exceptions. |
 ExceptionPrintStackTraceCheck | [Bug Prevention](bug_prevention_checks.markdown#bug-prevention-checks) | .java | Avoid using printStackTrace. |
@@ -91,6 +93,7 @@ FullyQualifiedNameCheck | [Miscellaneous](miscellaneous_checks.markdown#miscella
 [GetterUtilCheck](check/getter_util_check.markdown#getterutilcheck) | [Styling](styling_checks.markdown#styling-checks) | .java, .jsp, .jspf, .jspx, .tag, .tpl or .vm | Finds cases where the default value is passed to `GetterUtil.get*` or `ParamUtil.get*`. |
 GradleBlockOrderCheck | [Styling](styling_checks.markdown#styling-checks) | .gradle | Sorts logic in gradle build files. |
 GradleBodyCheck | [Styling](styling_checks.markdown#styling-checks) | .gradle | Applies rules to enforce consistency in the body of gradle build files. |
+GradleCommerceDependenciesCheck | [Bug Prevention](bug_prevention_checks.markdown#bug-prevention-checks) | .gradle | Checks the modules that are outside of Commerce are not allowed to depend on Commerce modules. |
 [GradleDependenciesCheck](check/gradle_dependencies_check.markdown#gradledependenciescheck) | [Performance](performance_checks.markdown#performance-checks) | .gradle | Checks that modules are not depending on other modules. |
 [GradleDependencyArtifactsCheck](check/gradle_dependency_artifacts_check.markdown#gradledependencyartifactscheck) | [Bug Prevention](bug_prevention_checks.markdown#bug-prevention-checks) | .gradle | Checks that value `default` is not used for attribute `version`. |
 GradleDependencyConfigurationCheck | [Bug Prevention](bug_prevention_checks.markdown#bug-prevention-checks) | .gradle | Validates the scope of dependencies in build gradle files. |
@@ -99,7 +102,9 @@ GradleExportedPackageDependenciesCheck | [Bug Prevention](bug_prevention_checks.
 GradleImportsCheck | [Styling](styling_checks.markdown#styling-checks) | .gradle | Sorts and groups imports in `.gradle` files. |
 GradleIndentationCheck | [Styling](styling_checks.markdown#styling-checks) | .gradle | Finds incorrect indentation in gradle build files. |
 GradleJavaVersionCheck | [Bug Prevention](bug_prevention_checks.markdown#bug-prevention-checks) | .gradle | Checks values of properties `sourceCompatibility` and `targetCompatibility` in gradle build files. |
+GradleMissingDependenciesForUpgradeJava21Check | [Bug Prevention](bug_prevention_checks.markdown#bug-prevention-checks) | .gradle | Checks missing dependencies for upgrade Java 21 in gradle build files. |
 GradleMissingJarManifestTaskCheck | [Bug Prevention](bug_prevention_checks.markdown#bug-prevention-checks) | .gradle | Finds missing `jarManifest` task when using `jarPatched` task in gradle build files. |
+GradlePetraModuleDependenciesCheck | [Bug Prevention](bug_prevention_checks.markdown#bug-prevention-checks) | .gradle | Checks that dependencies in `petra` moudule can only contains `petra` dependencies. |
 GradlePropertiesCheck | [Bug Prevention](bug_prevention_checks.markdown#bug-prevention-checks) | .gradle | Validates property values in gradle build files. |
 GradleProvidedDependenciesCheck | [Bug Prevention](bug_prevention_checks.markdown#bug-prevention-checks) | .gradle | Validates the scope of dependencies in build gradle files. |
 [GradleRequiredDependenciesCheck](check/gradle_required_dependencies_check.markdown#gradlerequireddependenciescheck) | [Bug Prevention](bug_prevention_checks.markdown#bug-prevention-checks) | .gradle | Validates the dependencies in `/required-dependencies/required-dependencies/build.gradle`. |
@@ -130,6 +135,7 @@ JSONPackageJSONBNDVersionCheck | [Bug Prevention](bug_prevention_checks.markdown
 JSONPackageJSONCheck | [Bug Prevention](bug_prevention_checks.markdown#bug-prevention-checks) | .ipynb, .json or .npmbridgerc | Checks content of `package.json` files. |
 JSONPackageJSONDependencyVersionCheck | [Bug Prevention](bug_prevention_checks.markdown#bug-prevention-checks) | .ipynb, .json or .npmbridgerc | Checks the version for dependencies in `package.json` files. |
 JSONPageFileCheck | [Styling](styling_checks.markdown#styling-checks) | .ipynb, .json or .npmbridgerc | Sorts by `roleName` in `page.json` files. |
+JSONPortletResponseUtilCheck | [Styling](styling_checks.markdown#styling-checks) | .java | Checks if `JSONPortletResponseUtil.writeJSON ` should come before method calling `hideDefaultSuccessMessage`. |
 JSONResourcePermissionsFileCheck | [Styling](styling_checks.markdown#styling-checks) | .ipynb, .json or .npmbridgerc | Sorts by `resourceName` and `roleName` in `resource-permissions.json` files. |
 JSONStylingCheck | [Styling](styling_checks.markdown#styling-checks) | .ipynb, .json or .npmbridgerc | Applies rules to enforce consistency in code style. |
 JSONUpgradeLiferayThemePackageJSONCheck | [Upgrade](upgrade_checks.markdown#upgrade-checks) | .ipynb, .json or .npmbridgerc | Upgrade the `package.json` of a Liferay Theme to make it compatible with Liferay 7.4 |
@@ -288,13 +294,14 @@ JavaTransactionBoundaryCheck | [Bug Prevention](bug_prevention_checks.markdown#b
 [JavaUnsafeCastingCheck](check/java_unsafe_casting_check.markdown#javaunsafecastingcheck) | [Bug Prevention](bug_prevention_checks.markdown#bug-prevention-checks) | .java | Checks for potential ClassCastException. |
 [JavaUnusedSourceFormatterChecksCheck](check/java_unused_source_formatter_checks_check.markdown#javaunusedsourceformattercheckscheck) | [Miscellaneous](miscellaneous_checks.markdown#miscellaneous-checks) | .java | Finds `*Check` classes that are not configured. |
 [JavaUpgradeAlterCheck](check/java_upgrade_alter_check.markdown#javaupgradealtercheck) | [Bug Prevention](bug_prevention_checks.markdown#bug-prevention-checks) | .java | Performs several checks on `alter` calls in Upgrade classes. |
+JavaUpgradeAlterColumnCallsOrderCheck | [Styling](styling_checks.markdown#styling-checks) | .java | Sorts method calls for altering table columns. |
 [JavaUpgradeClassCheck](check/java_upgrade_class_check.markdown#javaupgradeclasscheck) | [Bug Prevention](bug_prevention_checks.markdown#bug-prevention-checks) | .java | Performs several checks on Upgrade classes. |
 JavaUpgradeConnectionCheck | [Bug Prevention](bug_prevention_checks.markdown#bug-prevention-checks) | .java | Finds cases where `DataAccess.getConnection` is used (instead of using the available global variable `connection`). |
 [JavaUpgradeDropTableCheck](check/java_upgrade_drop_table_check.markdown#javaupgradedroptablecheck) | [Bug Prevention](bug_prevention_checks.markdown#bug-prevention-checks) | .java | Finds cases where `DROP_TABLE_IF_EXISTS` should be used (instead of `drop table if exists`). |
-JavaUpgradeEmptyLinesCheck | [Styling](styling_checks.markdown#styling-checks) | .java | Finds missing and unnecessary empty lines in Upgrade classes. |
+JavaUpgradeEmptyLinesCheck | [Styling](styling_checks.markdown#styling-checks) | .java | Finds missing and unnecessary empty lines in upgrade classes. |
 [JavaUpgradeIndexCheck](check/java_upgrade_index_check.markdown#javaupgradeindexcheck) | [Bug Prevention](bug_prevention_checks.markdown#bug-prevention-checks) | .java | Finds cases where the service builder indexes are updated manually in Upgrade classes. This is not needed because Liferay takes care of it. |
+JavaUpgradeMissingTestCheck | [Bug Prevention](bug_prevention_checks.markdown#bug-prevention-checks) | .java | Finds missing integration tests for upgrade classes. |
 JavaUpgradeModelPermissionsCheck | [Upgrade](upgrade_checks.markdown#upgrade-checks) | .java | Replace setGroupPermissions and setGuestPermissions by new implementation |
-JavaUpgradeProcessFactoryCheck | [Styling](styling_checks.markdown#styling-checks) | .java | Sorts and groups method calls. |
 JavaUpgradeVersionCheck | [Bug Prevention](bug_prevention_checks.markdown#bug-prevention-checks) | .java | Verifies that the correct upgrade versions are used in classes that implement `UpgradeStepRegistrator`. |
 JavaVariableTypeCheck | [Bug Prevention](bug_prevention_checks.markdown#bug-prevention-checks) | .java | Performs several checks on the modifiers on variables. |
 JavaVerifyUpgradeConnectionCheck | [Bug Prevention](bug_prevention_checks.markdown#bug-prevention-checks) | .java | Finds cases where `DataAccess.getConnection` is used (instead of using the available global variable `connection`). |
@@ -309,6 +316,7 @@ LPS42924Check | [Bug Prevention](bug_prevention_checks.markdown#bug-prevention-c
 [LambdaCheck](check/lambda_check.markdown#lambdacheck) | [Styling](styling_checks.markdown#styling-checks) | .java, .jsp, .jspf, .jspx, .tag, .tpl or .vm | Checks that `lambda` statements are as simple as possible. |
 LanguageKeysCheck | [Bug Prevention](bug_prevention_checks.markdown#bug-prevention-checks) | .java, .js or .jsx | Finds missing language keys in `Language.properties`. |
 LibraryVulnerabilitiesCheck | [Bug Prevention](bug_prevention_checks.markdown#bug-prevention-checks) | .gradle, .gradle, .gradle, .gradle, .json, .json, .properties, .properties, .xml or .xml | Checks the introduction of libraries and third party components with known vulnerabilities |
+ListStylingCheck | [Styling](styling_checks.markdown#styling-checks) | .list | Applies rules to enforce consistency in code style. |
 [ListUtilCheck](check/list_util_check.markdown#listutilcheck) | [Styling](styling_checks.markdown#styling-checks) | .java, .jsp, .jspf, .jspx, .tag, .tpl or .vm | Checks for utilization of class `ListUtil`. |
 LiteralStringEqualsCheck | [Styling](styling_checks.markdown#styling-checks) | .java, .jsp, .jspf, .jspx, .tag, .tpl or .vm | Finds cases where `Objects.equals` should be used. |
 [LocalFinalVariableNameCheck](https://checkstyle.sourceforge.io/checks/naming/localfinalvariablename.html) | [Naming Conventions](naming_conventions_checks.markdown#naming-conventions-checks) | .java, .jsp, .jspf, .jspx, .tag, .tpl or .vm | Checks that local final variable names conform to a specified pattern. |
@@ -320,6 +328,8 @@ LogParametersCheck | [Bug Prevention](bug_prevention_checks.markdown#bug-prevent
 [MVCCommandNameCheck](check/mvc_command_name_check.markdown#mvccommandnamecheck) | [Naming Conventions](naming_conventions_checks.markdown#naming-conventions-checks) | .java | Checks for consistent naming for values of `mvc.command.name`. |
 [MapBuilderCheck](check/builder_check.markdown#buildercheck) | [Miscellaneous](miscellaneous_checks.markdown#miscellaneous-checks) | .java, .jsp, .jspf, .jspx, .tag, .tpl or .vm | Checks that `ConcurrentHashMapBuilder`, `HashMapBuilder`, `LinkedHashMapBuilder` or `TreeMapBuilder` is used when possible. |
 [MapIterationCheck](check/map_iteration_check.markdown#mapiterationcheck) | [Performance](performance_checks.markdown#performance-checks) | .java, .jsp, .jspf, .jspx, .tag, .tpl or .vm | Checks that there are no unnecessary map iterations. |
+MarkdownBreakingChangesAmendmentsFileCheck | [Styling](styling_checks.markdown#styling-checks) | .markdown or .md | Checks that breaking changes amendments should contain the schematized breaking changes in `BREAKING_CHANGES_AMENDMENTS.markdown` file. |
+MarkdownEmptyLinesCheck | [Styling](styling_checks.markdown#styling-checks) | .markdown or .md | Finds missing and unnecessary empty lines. |
 MarkdownFileExtensionCheck | [Styling](styling_checks.markdown#styling-checks) | .markdown or .md | Finds `markdown` files with `.md` extension (use `.markdown`). |
 MarkdownSourceFormatterDocumentationCheck | [Documentation](documentation_checks.markdown#documentation-checks) | .markdown or .md | Validates the header of Source Formatter documentation files. |
 MarkdownSourceFormatterReadmeCheck | [Documentation](documentation_checks.markdown#documentation-checks) | .markdown or .md | Generates Source Formatter documentation index files. |
@@ -410,6 +420,7 @@ PythonClassesAndMethodsOrderCheck | [Styling](styling_checks.markdown#styling-ch
 PythonImportsCheck | [Styling](styling_checks.markdown#styling-checks) | .py | Sorts and groups imports in `.py` files. |
 PythonStylingCheck | [Styling](styling_checks.markdown#styling-checks) | .py | Applies rules to enforce consistency in code style. |
 PythonWhitespaceCheck | [Styling](styling_checks.markdown#styling-checks) | .py | Finds missing and unnecessary whitespace. |
+RESTDTOSetCallCheck | [Performance](performance_checks.markdown#performance-checks) | .java | Ensures using set calls with `UnsafeSupplier` parameter for REST DTO. |
 RedundantBranchingStatementCheck | [Performance](performance_checks.markdown#performance-checks) | .java | Finds unnecessary branching (`break`, `continue` or `return`) statements. |
 [RedundantLogCheck](check/redundant_log_check.markdown#redundantlogcheck) | [Performance](performance_checks.markdown#performance-checks) | .java | Finds unnecessary logs. |
 ReferenceAnnotationCheck | [Bug Prevention](bug_prevention_checks.markdown#bug-prevention-checks) | .java | Performs several checks on classes with @Reference annotation. |

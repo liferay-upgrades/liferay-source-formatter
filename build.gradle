@@ -63,5 +63,17 @@ application {
 	mainClassName = "com.liferay.source.formatter.SourceFormatter"
 }
 
+jar {
+	manifest {
+		attributes 'Main-Class': 'com.liferay.source.formatter.SourceFormatter'
+	}
+
+	duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+
+	from {
+		configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+	}
+}
+
 tasks.register('pullCode', PullSyncCodeTask)
 tasks.register('pushCode', PushSyncCodeTask)

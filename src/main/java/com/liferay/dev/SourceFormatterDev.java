@@ -4,12 +4,20 @@ import com.liferay.portal.tools.GitException;
 import com.liferay.source.formatter.SourceFormatter;
 import com.liferay.source.formatter.SourceFormatterArgs;
 
+import com.liferay.source.formatter.check.BaseFileCheck;
 import com.puppycrawl.tools.checkstyle.api.CheckstyleException;
+
+import java.util.Arrays;
 
 public class SourceFormatterDev {
 
 	public static void main(String[] args) throws Exception {
-		SourceFormatterArgs sourceFormatterArgs = _getSourceFormatterArgs(true);
+		SourceFormatterArgs sourceFormatterArgs = _getSourceFormatterArgs(false);
+
+		sourceFormatterArgs.setBaseDirName("/Users/c02fh7y7md6r/Repos/sales-tax");
+		sourceFormatterArgs.setCheckCategoryNames(Arrays.asList("Upgrade"));
+		sourceFormatterArgs.setCheckNames(Arrays.asList("GradleUpgradeReleaseDXPCheck", "UpgradeCatchAllCheck"));
+		sourceFormatterArgs.setJavaParserEnabled(true);
 
 		try {
 			SourceFormatter sourceFormatter = new SourceFormatter(

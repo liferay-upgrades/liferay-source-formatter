@@ -1,5 +1,5 @@
 /**
- * SPDX-FileCopyrightText: (c) 2000 Liferay, Inc. https://liferay.com
+ * SPDX-FileCopyrightText: (c) 2024 Liferay, Inc. https://liferay.com
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
@@ -10,9 +10,9 @@ import java.io.IOException;
 import java.util.List;
 
 /**
- * @author Hugo Huijser
+ * @author Alan Huang
  */
-public class UpgradeSourceProcessor extends BaseSourceProcessor {
+public class ListSourceProcessor extends BaseSourceProcessor {
 
 	@Override
 	protected List<String> doGetFileNames() throws IOException {
@@ -24,9 +24,6 @@ public class UpgradeSourceProcessor extends BaseSourceProcessor {
 		return _INCLUDES;
 	}
 
-	private static final String[] _INCLUDES = {
-		"**/*.bnd", "**/*.ftl", "**/*.gradle", "**/*.java", "**/*.json",
-		"**/*.jsp", "**/*.jspf", "**/*.scss", "**/*.vm"
-	};
+	private static final String[] _INCLUDES = {"**/*.list"};
 
 }
