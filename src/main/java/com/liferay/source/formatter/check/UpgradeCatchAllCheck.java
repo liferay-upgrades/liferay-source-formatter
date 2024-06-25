@@ -140,19 +140,25 @@ public class UpgradeCatchAllCheck extends BaseFileCheck {
 
 		for (String newParameterName : newParameterNames) {
 			if (newParameterName.contains(prefix)) {
-				int index = GetterUtil.getInteger(
-					newParameterName.substring(
-						newParameterName.indexOf(CharPool.POUND) + 1,
-						newParameterName.lastIndexOf(CharPool.POUND)));
+				List<Integer> indexes = new ArrayList<>();
 
-				interpolatedNewParameterNames.add(
-					StringUtil.replace(
+				Matcher matcher = _parameterNamePattern.matcher(
+					newParameterName);
+
+				while (matcher.find()) {
+					int index = GetterUtil.getInteger(matcher.group(1));
+
+					indexes.add(index);
+				}
+
+				for (int index : indexes) {
+					newParameterName = StringUtil.replace(
 						newParameterName, prefix + index + CharPool.POUND,
-						parameterNames.get(index)));
+						parameterNames.get(index));
+				}
 			}
-			else {
-				interpolatedNewParameterNames.add(newParameterName);
-			}
+
+			interpolatedNewParameterNames.add(newParameterName);
 		}
 
 		return interpolatedNewParameterNames;
@@ -239,7 +245,9 @@ public class UpgradeCatchAllCheck extends BaseFileCheck {
 				StringUtil.replace(regex, CharPool.PERIOD, "\\.\\s*"));
 		}
 
-		if (Character.isUpperCase(from.charAt(0))) {
+		if (Character.isUpperCase(from.charAt(0)) ||
+			StringUtil.startsWith(from, "new")) {
+
 			String[] classNames = JSONUtil.toStringArray(
 				jsonObject.getJSONArray("classNames"));
 
@@ -645,8 +653,11 @@ public class UpgradeCatchAllCheck extends BaseFileCheck {
 		return true;
 	}
 
-	private static final String _CONSTRUCTOR_REGEX = "(:?[A-Z][a-z]+)+\\(.*\\)";
+	private static final String _CONSTRUCTOR_REGEX =
+		"n?e?w? ?(:?[A-Z][a-z]*)+\\(.*\\)";
 
+	private static final Pattern _parameterNamePattern = Pattern.compile(
+		"\\w+#(\\d+)#");
 	private static boolean _testMode;
 
 	private boolean _newMessage;
