@@ -239,6 +239,12 @@
 			<property name="description" value="Checks for correct use of `com.liferay.arquillian.extension.junit.bridge.junit.Arquillian`." />
 			<message key="import.invalid" value="Use import ''com.liferay.arquillian.extension.junit.bridge.junit.Arquillian'' instead of ''org.jboss.arquillian.junit.Arquillian'', see LPS-68945" />
 		</module>
+		<module name="com.liferay.source.formatter.checkstyle.check.ArrayUtilCheck">
+			<property name="category" value="Styling" />
+			<property name="description" value="Checks for utilization of class `ArrayUtil`." />
+			<property name="enabled" value="false" />
+			<message key="array.util.is.empty.use" value="Use ''ArrayUtil.isEmpty({0})'' to simplify code" />
+		</module>
 		<module name="com.liferay.source.formatter.checkstyle.check.AssertEqualsCheck">
 			<property name="category" value="Styling" />
 			<property name="description" value="Checks that additional information is provided when calling `Assert.assertEquals`." />
@@ -275,6 +281,12 @@
 			<message key="chaining.avoid.type.cast" value="Avoid chaining on Type Cast" />
 			<message key="chaining.required" value="Chaining on ''{0}'' is preferred" />
 			<message key="response.unsorted" value="Method calls between ''Response.status'' and ''Response.build'' should be sorted" />
+		</module>
+		<module name="com.liferay.source.formatter.checkstyle.check.ClassNameIdCheck">
+			<property name="category" value="Bug Prevention" />
+			<property name="description" value="Avoid caching noncompany scoped class name IDs." />
+			<property name="enabled" value="false" />
+			<message key="variable.name.avoid" value="Avoid using variable name ''{0}'', see LPD-29718" />
 		</module>
 		<module name="com.liferay.source.formatter.checkstyle.check.CompanyIterationCheck">
 			<property name="category" value="Bug Prevention" />
@@ -758,6 +770,13 @@
 			<property name="enabled" value="false" />
 			<message key="if.statement.inline" value="Use ''{0}(UnsafeSupplier)'' with inlined if-statement" />
 			<message key="set.method.use.instead" value="Use ''{0}(UnsafeSupplier)'' instead" />
+		</module>
+		<module name="com.liferay.source.formatter.checkstyle.check.ReturnVariableDeclarationAsUsedCheck">
+			<property name="category" value="Miscellaneous" />
+			<property name="description" value="Finds cases where a variable declaration should be moved." />
+			<property name="enabled" value="false" />
+			<message key="empty.line.missing.after.variable.definition" value="There should be an empty line after variable definition on line ''{0}''" />
+			<message key="variable.declaration.move" value="Move the variable declaration for ''{0}'' on line ''{1}''" />
 		</module>
 		<module name="com.liferay.source.formatter.checkstyle.check.SelfReferenceCheck">
 			<property name="category" value="Bug Prevention" />

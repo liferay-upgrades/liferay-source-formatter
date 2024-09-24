@@ -9,6 +9,7 @@ AppendCheck | [Styling](styling_checks.markdown#styling-checks) | .java, .jsp, .
 ArquillianCheck | [Bug Prevention](bug_prevention_checks.markdown#bug-prevention-checks) | .java | Checks for correct use of `com.liferay.arquillian.extension.junit.bridge.junit.Arquillian`. |
 [ArrayCheck](check/array_check.markdown#arraycheck) | [Performance](performance_checks.markdown#performance-checks) | .java, .jsp, .jspf, .jspx, .tag, .tpl or .vm | Checks if performance can be improved by using different methods that can be used by collections. |
 [ArrayTypeStyleCheck](https://checkstyle.sourceforge.io/checks/misc/arraytypestyle.html) | [Styling](styling_checks.markdown#styling-checks) | .java, .jsp, .jspf, .jspx, .tag, .tpl or .vm | Checks the style of array type definitions. |
+ArrayUtilCheck | [Styling](styling_checks.markdown#styling-checks) | .java, .jsp, .jspf, .jspx, .tag, .tpl or .vm | Checks for utilization of class `ArrayUtil`. |
 [AssertEqualsCheck](check/assert_equals_check.markdown#assertequalscheck) | [Styling](styling_checks.markdown#styling-checks) | .java | Checks that additional information is provided when calling `Assert.assertEquals`. |
 AssertFailCheck | [Bug Prevention](bug_prevention_checks.markdown#bug-prevention-checks) | .java | Checks that calls to `Assert.fail` can be only used inside a try block as the last statement. |
 AssignAsUsedCheck | [Performance](performance_checks.markdown#performance-checks) | .java | Finds cases where an assign statement can be inlined or moved closer to where it is used. |
@@ -38,12 +39,15 @@ BNDStylingCheck | [Styling](styling_checks.markdown#styling-checks) | .bnd | App
 [BNDWebContextPathCheck](check/bnd_web_context_path_check.markdown#bndwebcontextpathcheck) | [Bug Prevention](bug_prevention_checks.markdown#bug-prevention-checks) | .bnd | Checks if the property value for `Web-ContextPath` matches the module directory. |
 BNDWhitespaceCheck | [Styling](styling_checks.markdown#styling-checks) | .bnd | Finds missing and unnecessary whitespace in `.bnd` files. |
 CDNCheck | [Bug Prevention](bug_prevention_checks.markdown#bug-prevention-checks) | | Checks the URL in `artifact.properties` files. |
+CIMergeAndGitRepoFileCheck | [Bug Prevention](bug_prevention_checks.markdown#bug-prevention-checks) | .gitrepo or ci-merge | Checks that `ci-merge` and `.gitrepo` files can not be added or modified. |
 CQLKeywordCheck | [Bug Prevention](bug_prevention_checks.markdown#bug-prevention-checks) | .cql | Checks that Cassandra keywords are upper case. |
+CSPComplianceCheck | [Bug Prevention](bug_prevention_checks.markdown#bug-prevention-checks) | .ftl, .jsp, .jspf, .jspx, .tag, .tpl or .vm | Checks code to prevent common CSP related pitfalls. |
 CSSCommentsCheck | [Styling](styling_checks.markdown#styling-checks) | .css or .scss | Validates comments in `.css` files. |
 CSSImportsCheck | [Styling](styling_checks.markdown#styling-checks) | .css or .scss | Sorts and groups imports in `.css` files. |
 CSSPropertiesOrderCheck | [Styling](styling_checks.markdown#styling-checks) | .css or .scss | Sorts properties in `.css` files. |
 [CamelCaseNameCheck](check/camel_case_name_check.markdown#camelcasenamecheck) | [Naming Conventions](naming_conventions_checks.markdown#naming-conventions-checks) | .java, .jsp, .jspf, .jspx, .tag, .tpl or .vm | Checks variable names for correct use of `CamelCase`. |
 ChainingCheck | [Styling](styling_checks.markdown#styling-checks) | .java, .jsp, .jspf, .jspx, .tag, .tpl or .vm | Checks that method chaining can be used when possible. |
+ClassNameIdCheck | [Bug Prevention](bug_prevention_checks.markdown#bug-prevention-checks) | .java | Avoid caching noncompany scoped class name IDs. |
 [CodeownersFileLocationCheck](check/codeowners_file_location_check.markdown#codeownersfilelocationcheck) | [Bug Prevention](bug_prevention_checks.markdown#bug-prevention-checks) | CODEOWNERS | Checks that `CODEOWNERS` files are located in `.github` directory. |
 CodeownersWhitespaceCheck | [Styling](styling_checks.markdown#styling-checks) | CODEOWNERS | Finds missing and unnecessary whitespace in `CODEOWNERS` files. |
 [CompanyIterationCheck](check/company_iteration_check.markdown#companyiterationcheck) | [Bug Prevention](bug_prevention_checks.markdown#bug-prevention-checks) | .java, .jsp, .jspf, .jspx, .tag, .tpl or .vm | Checks that `CompanyLocalService.forEachCompany` or `CompanyLocalService.forEachCompanyId` is used when iterating over companies. |
@@ -91,6 +95,7 @@ FilterStringWhitespaceCheck | [Bug Prevention](bug_prevention_checks.markdown#bu
 FullyQualifiedNameCheck | [Miscellaneous](miscellaneous_checks.markdown#miscellaneous-checks) | .java | Finds cases where a Fully Qualified Name is used instead of importing a class. |
 [GenericTypeCheck](check/generic_type_check.markdown#generictypecheck) | [Bug Prevention](bug_prevention_checks.markdown#bug-prevention-checks) | .java, .jsp, .jspf, .jspx, .tag, .tpl or .vm | Checks that generics are always specified to provide compile-time checking and removing the risk of `ClassCastException` during runtime. |
 [GetterUtilCheck](check/getter_util_check.markdown#getterutilcheck) | [Styling](styling_checks.markdown#styling-checks) | .java, .jsp, .jspf, .jspx, .tag, .tpl or .vm | Finds cases where the default value is passed to `GetterUtil.get*` or `ParamUtil.get*`. |
+GoogleFontsCheck | [Miscellaneous](miscellaneous_checks.markdown#miscellaneous-checks) | | Checks that we do not use Google fonts. |
 GradleBlockOrderCheck | [Styling](styling_checks.markdown#styling-checks) | .gradle | Sorts logic in gradle build files. |
 GradleBodyCheck | [Styling](styling_checks.markdown#styling-checks) | .gradle | Applies rules to enforce consistency in the body of gradle build files. |
 GradleCommerceDependenciesCheck | [Bug Prevention](bug_prevention_checks.markdown#bug-prevention-checks) | .gradle | Checks the modules that are outside of Commerce are not allowed to depend on Commerce modules. |
@@ -213,6 +218,7 @@ JavaDuplicateVariableCheck | [Miscellaneous](miscellaneous_checks.markdown#misce
 [JavaElseStatementCheck](check/java_else_statement_check.markdown#javaelsestatementcheck) | [Miscellaneous](miscellaneous_checks.markdown#miscellaneous-checks) | .java | Finds unnecessary `else` statements (when the `if` statement ends with a `return` statement). |
 JavaEmptyLineAfterSuperCallCheck | [Miscellaneous](miscellaneous_checks.markdown#miscellaneous-checks) | .java | Finds missing empty line after a `super` call. |
 JavaEmptyLinesCheck | [Styling](styling_checks.markdown#styling-checks) | .java | Finds missing and unnecessary empty lines. |
+JavaEntityModelToEntityFieldsMapCallCheck | [Styling](styling_checks.markdown#styling-checks) | .java | Sorts parameters in EntityModel.toEntityFieldsMap call. |
 JavaExceptionCheck | [Naming Conventions](naming_conventions_checks.markdown#naming-conventions-checks) | .java | Checks that variable names of exceptions in `catch` statements follow naming conventions. |
 JavaFeatureFlagManagerUtilCheck | [Bug Prevention](bug_prevention_checks.markdown#bug-prevention-checks) | .java | Finds cases where `FeatureFlagManagerUtil.isEnabled` should be used. |
 JavaFinalVariableCheck | [Styling](styling_checks.markdown#styling-checks) | .java | Finds cases of unneeded `final` modifiers for variables and parameters. |
@@ -291,6 +297,7 @@ JavaTaglibMethodCheck | [Bug Prevention](bug_prevention_checks.markdown#bug-prev
 JavaTermDividersCheck | [Styling](styling_checks.markdown#styling-checks) | .java | Finds missing or unnecessary empty lines between javaterms. |
 JavaTermOrderCheck | [Styling](styling_checks.markdown#styling-checks) | .java | Checks the order of javaterms. |
 JavaTermStylingCheck | [Styling](styling_checks.markdown#styling-checks) | .java | Applies rules to enforce consistency in code style. |
+JavaTestInfoAnnotationCheck | [Styling](styling_checks.markdown#styling-checks) | .java | Sorts the values in `@TestInfo` annotation. |
 [JavaTestMethodAnnotationsCheck](check/java_test_method_annotations_check.markdown#javatestmethodannotationscheck) | [Naming Conventions](naming_conventions_checks.markdown#naming-conventions-checks) | .java | Checks if methods with test annotations follow the naming conventions. |
 JavaTransactionBoundaryCheck | [Bug Prevention](bug_prevention_checks.markdown#bug-prevention-checks) | .java | Finds direct `add*` or `get*` calls in `*ServiceImpl` (those should use the `*service` global variable instead). |
 [JavaUnsafeCastingCheck](check/java_unsafe_casting_check.markdown#javaunsafecastingcheck) | [Bug Prevention](bug_prevention_checks.markdown#bug-prevention-checks) | .java | Checks for potential ClassCastException. |
@@ -434,6 +441,7 @@ ReferenceAnnotationCheck | [Bug Prevention](bug_prevention_checks.markdown#bug-p
 ResourceImplCheck | [Bug Prevention](bug_prevention_checks.markdown#bug-prevention-checks) | .java | Performs several checks on `*ResourceImpl` classes (except `Base*ResourceImpl` classes). |
 ResourcePermissionCheck | [Bug Prevention](bug_prevention_checks.markdown#bug-prevention-checks) | .java | Performs several checks on `*ResourcePermission` classes. |
 [ResourcePermissionFactoryCheck](check/resource_permission_factory_check.markdown#resourcepermissionfactorycheck) | [Performance](performance_checks.markdown#performance-checks) | .java | Checks usage of `*ResourcePermissionFactory` classes. |
+ReturnVariableDeclarationAsUsedCheck | [Miscellaneous](miscellaneous_checks.markdown#miscellaneous-checks) | .java | Finds cases where a variable declaration should be moved. |
 SQLEmptyLinesCheck | [Styling](styling_checks.markdown#styling-checks) | .sql | Finds missing and unnecessary empty lines. |
 [SQLLongNamesCheck](check/sql_long_names_check.markdown#sqllongnamescheck) | [Bug Prevention](bug_prevention_checks.markdown#bug-prevention-checks) | .sql | Checks for table and column names that exceed 30 characters. |
 SQLStylingCheck | [Styling](styling_checks.markdown#styling-checks) | .sql | Applies rules to enforce consistency in code style. |
@@ -459,6 +467,7 @@ TFBlockOrderCheck | [Styling](styling_checks.markdown#styling-checks) | .tf | Ch
 TLDElementOrderCheck | [Styling](styling_checks.markdown#styling-checks) | .tld | Checks the order of attributes in `.tld` file. |
 TLDStylingCheck | [Styling](styling_checks.markdown#styling-checks) | .tld | Applies rules to enforce consistency in code style. |
 TLDTypeCheck | [Bug Prevention](bug_prevention_checks.markdown#bug-prevention-checks) | .tld | Ensures the fully qualified name is used for types in `.tld` file. |
+TSConfigFileCheck | [Bug Prevention](bug_prevention_checks.markdown#bug-prevention-checks) | .ts or .tsx | Finds missing `test.properties` files. |
 TXTEmptyLinesCheck | [Styling](styling_checks.markdown#styling-checks) | .txt | Finds missing and unnecessary empty lines. |
 TXTStylingCheck | [Styling](styling_checks.markdown#styling-checks) | .txt | Applies rules to enforce consistency in code style. |
 TernaryOperatorCheck | [Styling](styling_checks.markdown#styling-checks) | .java, .jsp, .jspf, .jspx, .tag, .tpl or .vm | Finds use of ternary operator in `java` files (use if statement instead). |
@@ -512,10 +521,12 @@ UpgradeJavaLocalServiceImplCheck | [Upgrade](upgrade_checks.markdown#upgrade-che
 UpgradeJavaMultiVMPoolUtilCheck | [Upgrade](upgrade_checks.markdown#upgrade-checks) | .bnd, .ftl, .gradle, .java, .json, .jsp, .jspf, .scss or .vm | Replaces the references of the MultiVMPoolUtil class and also its methods usages. |
 UpgradeJavaPortletIdMethodCheck | [Upgrade](upgrade_checks.markdown#upgrade-checks) | .bnd, .ftl, .gradle, .java, .json, .jsp, .jspf, .scss or .vm | Replace the 'document.get(Field.PORTLET_ID)' by the new interface 'PortletProviderUtil.getPortletId'. |
 UpgradeJavaPortletSharedSearchSettingsCheck | [Upgrade](upgrade_checks.markdown#upgrade-checks) | .bnd, .ftl, .gradle, .java, .json, .jsp, .jspf, .scss or .vm | Replaces the Optional return type of the methods `getParameterValues` and `getPortletPreferences` of `PortletSharedSearchSettings` class. |
+UpgradeJavaProductDTOConverterReferenceCheck | [Upgrade](upgrade_checks.markdown#upgrade-checks) | .bnd, .ftl, .gradle, .java, .json, .jsp, .jspf, .scss or .vm | Updates references of `ProductDTOConverter` to `DTOConverter` |
 UpgradeJavaSchedulerEntryImplConstructorCheck | [Upgrade](upgrade_checks.markdown#upgrade-checks) | .bnd, .ftl, .gradle, .java, .json, .jsp, .jspf, .scss or .vm | Replace constructors that use the empty constructor of the SchedulerEntryImpl class. |
 UpgradeJavaScreenContributorClassCheck | [Upgrade](upgrade_checks.markdown#upgrade-checks) | .bnd, .ftl, .gradle, .java, .json, .jsp, .jspf, .scss or .vm | Replace class `PortalSettingsConfigurationScreenContributor` by `ConfigurationScreenWrapper` and create an inner class. |
 UpgradeJavaServiceImplCheck | [Upgrade](upgrade_checks.markdown#upgrade-checks) | .bnd, .ftl, .gradle, .java, .json, .jsp, .jspf, .scss or .vm | Add Component annotation to `*ServiceImpl.java` file. |
 UpgradeJavaServiceReferenceAnnotationCheck | [Upgrade](upgrade_checks.markdown#upgrade-checks) | .bnd, .ftl, .gradle, .java, .json, .jsp, .jspf, .scss or .vm | Run code migration to replace '@ServiceReference' by '@Reference'. |
+UpgradeJavaSortFieldNameTranslatorCheck | [Upgrade](upgrade_checks.markdown#upgrade-checks) | .bnd, .ftl, .gradle, .java, .json, .jsp, .jspf, .scss or .vm | Upgrade class that implements SortFieldNameTranslator. |
 UpgradeJavaStorageTypeAwareCheck | [Upgrade](upgrade_checks.markdown#upgrade-checks) | .bnd, .ftl, .gradle, .java, .json, .jsp, .jspf, .scss or .vm | Run code to delete StorageTypeAware interface. |
 UpgradePortletFTLCheck | [Upgrade](upgrade_checks.markdown#upgrade-checks) | .bnd, .ftl, .gradle, .java, .json, .jsp, .jspf, .scss or .vm | Include the CSS classes 'cadmin' and include for impression of 'right cadmin' in 'portlet.ftl' file. |
 [UpgradeProcessCheck](check/upgrade_process_check.markdown#upgradeprocesscheck) | [Performance](performance_checks.markdown#performance-checks) | .java | Performs several checks on `*UpgradeProcess` classes. |

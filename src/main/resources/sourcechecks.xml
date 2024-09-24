@@ -6,6 +6,11 @@
 			<category name="Bug Prevention" />
 			<description name="Checks the URL in `artifact.properties` files." />
 		</check>
+		<check name="GoogleFontsCheck">
+			<category name="Miscellaneous" />
+			<description name="Checks that we do not use Google fonts." />
+			<property name="enabled" value="false" />
+		</check>
 		<check name="IncorrectFileLocationCheck">
 			<category name="Bug Prevention" />
 			<description name="Checks that `/src/*/java/` only contains `.java` files." />
@@ -131,6 +136,13 @@
 			<description name="Checks if the property value for `Web-ContextPath` matches the module directory." />
 		</check>
 	</source-processor>
+	<source-processor name="CIMergeAndGitRepoSourceProcessor">
+		<check name="CIMergeAndGitRepoFileCheck">
+			<category name="Bug Prevention" />
+			<description name="Checks that `ci-merge` and `.gitrepo` files can not be added or modified." />
+			<property name="enabled" value="false" />
+		</check>
+	</source-processor>
 	<source-processor name="CodeownersSourceProcessor">
 		<check name="CodeownersFileLocationCheck">
 			<category name="Bug Prevention" />
@@ -205,6 +217,10 @@
 		</check>
 	</source-processor>
 	<source-processor name="FTLSourceProcessor">
+		<check name="CSPComplianceCheck">
+			<category name="Bug Prevention" />
+			<description name="Checks code to prevent common CSP related pitfalls." />
+		</check>
 		<check name="FTLEmptyLinesCheck">
 			<category name="Styling" />
 			<description name="Finds missing and unnecessary empty lines." />
@@ -480,6 +496,10 @@
 		<check name="JavaEmptyLinesCheck">
 			<category name="Styling" />
 			<description name="Finds missing and unnecessary empty lines." />
+		</check>
+		<check name="JavaEntityModelToEntityFieldsMapCallCheck">
+			<category name="Styling" />
+			<description name="Sorts parameters in EntityModel.toEntityFieldsMap call." />
 		</check>
 		<check name="JavaExceptionCheck">
 			<category name="Naming Conventions" />
@@ -823,6 +843,10 @@
 			<category name="Bug Prevention" />
 			<description name="Checks that a `*Tag` class has a `set*` and `get*` or `is*` method for each attribute." />
 		</check>
+		<check name="JavaTestInfoAnnotationCheck">
+			<category name="Styling" />
+			<description name="Sorts the values in `@TestInfo` annotation." />
+		</check>
 		<check name="JavaTestMethodAnnotationsCheck">
 			<category name="Naming Conventions" />
 			<description name="Checks if methods with test annotations follow the naming conventions." />
@@ -1058,6 +1082,10 @@
 		<check name="ArrayCheck">
 			<category name="Performance" />
 			<description name="Checks if performance can be improved by using different methods that can be used by collections." />
+		</check>
+		<check name="CSPComplianceCheck">
+			<category name="Bug Prevention" />
+			<description name="Checks code to prevent common CSP related pitfalls." />
 		</check>
 		<check name="EmptyCollectionCheck">
 			<category name="Styling" />
@@ -1677,6 +1705,13 @@
 			<property name="allowTrailingEmptyLines" value="true" />
 			<property name="enabled" value="false" />
 		</check>
+
+		<!-- Liferay Source Checks -->
+
+		<check name="TSConfigFileCheck">
+			<category name="Bug Prevention" />
+			<description name="Finds missing `test.properties` files." />
+		</check>
 	</source-processor>
 	<source-processor name="TXTSourceProcessor">
 		<check name="TXTEmptyLinesCheck">
@@ -1809,6 +1844,10 @@
 			<category name="Upgrade" />
 			<description name="Replaces the Optional return type of the methods `getParameterValues` and `getPortletPreferences` of `PortletSharedSearchSettings` class." />
 		</check>
+		<check name="UpgradeJavaProductDTOConverterReferenceCheck">
+			<category name="Upgrade" />
+			<description name="Updates references of `ProductDTOConverter` to `DTOConverter`" />
+		</check>
 		<check name="UpgradeJavaSchedulerEntryImplConstructorCheck">
 			<category name="Upgrade" />
 			<description name="Replace constructors that use the empty constructor of the SchedulerEntryImpl class." />
@@ -1824,6 +1863,10 @@
 		<check name="UpgradeJavaServiceReferenceAnnotationCheck">
 			<category name="Upgrade" />
 			<description name="Run code migration to replace '@ServiceReference' by '@Reference'." />
+		</check>
+		<check name="UpgradeJavaSortFieldNameTranslatorCheck">
+			<category name="Upgrade" />
+			<description name="Upgrade class that implements SortFieldNameTranslator." />
 		</check>
 		<check name="UpgradeJavaStorageTypeAwareCheck">
 			<category name="Upgrade" />
