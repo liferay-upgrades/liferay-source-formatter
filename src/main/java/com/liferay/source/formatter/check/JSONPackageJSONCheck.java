@@ -7,19 +7,16 @@ package com.liferay.source.formatter.check;
 
 import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
-import com.liferay.portal.json.JSONArrayImpl;
 import com.liferay.portal.json.JSONObjectImpl;
 import com.liferay.portal.kernel.json.JSONArray;
 import com.liferay.portal.kernel.json.JSONException;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.json.JSONUtil;
-import com.liferay.portal.kernel.util.Validator;
 import com.liferay.source.formatter.check.comparator.PropertyValueComparator;
+import com.liferay.source.formatter.check.util.JsonSourceUtil;
 import com.liferay.source.formatter.util.FileUtil;
 
-import java.util.Collections;
 import java.util.Comparator;
-import java.util.List;
 import java.util.Objects;
 
 /**
@@ -74,7 +71,9 @@ public class JSONPackageJSONCheck extends BaseFileCheck {
 		if (absolutePath.endsWith("commerce-theme-minium/package.json") ||
 			absolutePath.endsWith("commerce-theme-speedwell/package.json") ||
 			absolutePath.endsWith("frontend-theme-admin/package.json") ||
+			absolutePath.endsWith("frontend-theme-ai-hub/package.json") ||
 			absolutePath.endsWith("frontend-theme-classic/package.json") ||
+			absolutePath.endsWith("frontend-theme-cms/package.json") ||
 			absolutePath.endsWith("frontend-theme-dialect/package.json") ||
 			absolutePath.endsWith("frontend-theme-styled/package.json") ||
 			absolutePath.endsWith("frontend-theme-unstyled/package.json")) {
@@ -102,7 +101,7 @@ public class JSONPackageJSONCheck extends BaseFileCheck {
 		String fileName, JSONObject jsonObject, String entryName) {
 
 		if (!jsonObject.isNull(entryName)) {
-			addMessage(fileName, "Entry '" + entryName + "' is not allowed");
+			addMessage(fileName, "Entry \"" + entryName + "\" is not allowed");
 		}
 	}
 
@@ -115,10 +114,13 @@ public class JSONPackageJSONCheck extends BaseFileCheck {
 			return content;
 		}
 
-		String testMatch = jestJSONObject.getString("testMatch");
+		JSONArray testMatchJSONArray = jestJSONObject.getJSONArray("testMatch");
 
-		if (Validator.isNotNull(testMatch)) {
-			jestJSONObject.put("testMatch", _sortTestMatch(testMatch));
+		if (testMatchJSONArray != null) {
+			jestJSONObject.put(
+				"testMatch",
+				JsonSourceUtil.sortJSONArray(
+					testMatchJSONArray, new TestMatchComparator()));
 		}
 
 		jsonObject.put("jest", jestJSONObject);
@@ -133,7 +135,7 @@ public class JSONPackageJSONCheck extends BaseFileCheck {
 		if (scriptsJSONObject.isNull(key)) {
 			if (requiredScript) {
 				addMessage(
-					fileName, "Missing entry '" + key + "' in 'scripts'");
+					fileName, "Missing entry \"" + key + "\" in \"scripts\"");
 			}
 
 			return;
@@ -153,48 +155,32 @@ public class JSONPackageJSONCheck extends BaseFileCheck {
 			addMessage(
 				fileName,
 				StringBundler.concat(
-					"Value '", value, "' for entry '", key,
-					"' should end with '", allowedValues[0], "'"));
+					"Value \"", value, "\" for entry \"", key,
+					"\" should end with \"", allowedValues[0], "\""));
 
 			return;
 		}
 
 		StringBundler sb = new StringBundler((allowedValues.length * 4) + 5);
 
-		sb.append("Value '");
+		sb.append("Value \"");
 		sb.append(value);
-		sb.append("' for entry '");
+		sb.append("\" for entry \"");
 		sb.append(key);
 		sb.append(
-			"' should end with (or be exactly) one of the following values: ");
+			"\" should end with (or be exactly) one of the following values: ");
 
 		for (int i = 0; i < allowedValues.length; i++) {
 			if (i > 0) {
 				sb.append(", ");
 			}
 
-			sb.append(StringPool.APOSTROPHE);
+			sb.append(StringPool.QUOTE);
 			sb.append(allowedValues[i]);
-			sb.append(StringPool.APOSTROPHE);
+			sb.append(StringPool.QUOTE);
 		}
 
 		addMessage(fileName, sb.toString());
-	}
-
-	private JSONArray _sortTestMatch(String testMatch) throws JSONException {
-		JSONArray testMatchJSONArray = new JSONArrayImpl(testMatch);
-
-		List<Object> objects = JSONUtil.toObjectList(testMatchJSONArray);
-
-		Collections.sort(objects, new TestMatchComparator());
-
-		testMatchJSONArray = new JSONArrayImpl();
-
-		for (Object object : objects) {
-			testMatchJSONArray.put(object);
-		}
-
-		return testMatchJSONArray;
 	}
 
 	private class TestMatchComparator implements Comparator<Object> {

@@ -5,9 +5,9 @@
 
 package com.liferay.source.formatter.check;
 
+import com.liferay.petra.io.unsync.UnsyncBufferedReader;
+import com.liferay.petra.io.unsync.UnsyncStringReader;
 import com.liferay.petra.string.StringBundler;
-import com.liferay.portal.kernel.io.unsync.UnsyncBufferedReader;
-import com.liferay.portal.kernel.io.unsync.UnsyncStringReader;
 import com.liferay.portal.kernel.util.StringUtil;
 
 import java.io.IOException;
@@ -97,7 +97,7 @@ public class FTLWhitespaceCheck extends WhitespaceCheck {
 
 		content = sb.toString();
 
-		if (content.endsWith("\n")) {
+		if (content.endsWith("\n") && !fileName.endsWith("_js.ftl")) {
 			content = content.substring(0, content.length() - 1);
 		}
 

@@ -5,10 +5,10 @@
 
 package com.liferay.source.formatter.check;
 
+import com.liferay.petra.io.unsync.UnsyncBufferedReader;
+import com.liferay.petra.io.unsync.UnsyncStringReader;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
-import com.liferay.portal.kernel.io.unsync.UnsyncBufferedReader;
-import com.liferay.portal.kernel.io.unsync.UnsyncStringReader;
 import com.liferay.source.formatter.util.SourceFormatterUtil;
 
 import java.io.IOException;
@@ -79,7 +79,7 @@ public class PropertiesLanguageKeysCheck extends BaseFileCheck {
 					value.matches("(?s).*<([a-zA-Z0-9]+)[^>]*>.*?<\\/\\1>.*")) {
 
 					addMessage(
-						fileName, "Remove HTML markup for '" + key + "'",
+						fileName, "Remove HTML markup for \"" + key + "\"",
 						getLineNumber(content, content.indexOf(line)));
 				}
 

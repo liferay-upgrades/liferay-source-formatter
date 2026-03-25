@@ -5,11 +5,11 @@
 
 package com.liferay.source.formatter.check;
 
+import com.liferay.petra.io.unsync.UnsyncBufferedReader;
+import com.liferay.petra.io.unsync.UnsyncStringReader;
 import com.liferay.petra.string.CharPool;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.portal.json.JSONObjectImpl;
-import com.liferay.portal.kernel.io.unsync.UnsyncBufferedReader;
-import com.liferay.portal.kernel.io.unsync.UnsyncStringReader;
 import com.liferay.portal.kernel.json.JSONArray;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.util.Tuple;
@@ -141,8 +141,9 @@ public class JSPUpgradeRemovedTagsCheck extends BaseTagAttributesCheck {
 			addMessage(
 				fileName,
 				StringBundler.concat(
-					"Taglib '", taglibName, "' no longer exists in version '",
-					upgradeToVersion, "'"),
+					"Taglib \"", taglibName,
+					"\" no longer exists in version \"", upgradeToVersion,
+					"\""),
 				lineNumber);
 		}
 
@@ -152,8 +153,9 @@ public class JSPUpgradeRemovedTagsCheck extends BaseTagAttributesCheck {
 			addMessage(
 				fileName,
 				StringBundler.concat(
-					"Tag '", tag.getFullName(),
-					"' no longer exists in version '", upgradeToVersion, "'"),
+					"Tag \"", tag.getFullName(),
+					"\" no longer exists in version \"", upgradeToVersion,
+					"\""),
 				lineNumber);
 		}
 
@@ -170,9 +172,9 @@ public class JSPUpgradeRemovedTagsCheck extends BaseTagAttributesCheck {
 					addMessage(
 						fileName,
 						StringBundler.concat(
-							"Attribute '", upgradeFromTagAttribute,
-							"' no longer exists for tag '", tag.getFullName(),
-							"' in version '", upgradeToVersion, "'"),
+							"Attribute \"", upgradeFromTagAttribute,
+							"\" no longer exists for tag \"", tag.getFullName(),
+							"\" in version \"", upgradeToVersion, "\""),
 						lineNumber);
 				}
 			}

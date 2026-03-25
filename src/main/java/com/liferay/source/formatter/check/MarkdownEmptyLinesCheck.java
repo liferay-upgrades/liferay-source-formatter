@@ -5,10 +5,10 @@
 
 package com.liferay.source.formatter.check;
 
+import com.liferay.petra.io.unsync.UnsyncBufferedReader;
+import com.liferay.petra.io.unsync.UnsyncStringReader;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
-import com.liferay.portal.kernel.io.unsync.UnsyncBufferedReader;
-import com.liferay.portal.kernel.io.unsync.UnsyncStringReader;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 
@@ -67,7 +67,7 @@ public class MarkdownEmptyLinesCheck extends BaseFileCheck {
 				}
 
 				if (!absolutePath.endsWith(
-						"readme/BREAKING_CHANGES_AMENDMENTS.markdown") &&
+						"readme/BREAKING_CHANGES_AMENDMENTS.md") &&
 					codeBlock) {
 
 					sb.append(line);

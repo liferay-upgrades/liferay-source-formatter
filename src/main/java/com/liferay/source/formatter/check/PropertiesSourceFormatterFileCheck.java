@@ -60,7 +60,7 @@ public class PropertiesSourceFormatterFileCheck extends BaseFileCheck {
 	private void _checkCheckstylePropertiesGroupAndOrder(
 		String fileName, String content, String prefix) {
 
-		String properties = _getProperites(content, prefix);
+		String properties = _getProperties(content, prefix);
 
 		if (properties == null) {
 			return;
@@ -94,8 +94,8 @@ public class PropertiesSourceFormatterFileCheck extends BaseFileCheck {
 				addMessage(
 					fileName,
 					StringBundler.concat(
-						"Property '", propertyKey,
-						"' should not be in the group for '", prefix, "*'"));
+						"Property \"", propertyKey,
+						"\" should not be in the group for \"", prefix, "*\""));
 
 				return;
 			}
@@ -106,8 +106,8 @@ public class PropertiesSourceFormatterFileCheck extends BaseFileCheck {
 				addMessage(
 					fileName,
 					StringBundler.concat(
-						"Incorrect order of properties: '", propertyKey,
-						"' should come before '", previousPropertyKey, "'"));
+						"Incorrect order of properties: \"", propertyKey,
+						"\" should come before \"", previousPropertyKey, "\""));
 
 				return;
 			}
@@ -172,9 +172,9 @@ public class PropertiesSourceFormatterFileCheck extends BaseFileCheck {
 				addMessage(
 					fileName,
 					StringBundler.concat(
-						"Incorrect order of properties: '", propertyKey,
-						"' should come before '", previousPropertyKey,
-						"', see the order in ", rootDirName,
+						"Incorrect order of properties: \"", propertyKey,
+						"\" should come before \"", previousPropertyKey,
+						"\", see the order in ", rootDirName,
 						"/source-formatter.properties"));
 
 				return;
@@ -189,7 +189,7 @@ public class PropertiesSourceFormatterFileCheck extends BaseFileCheck {
 	private void _checkSourceCheckPropertiesGroupAndOrder(
 		String fileName, String content, String prefix) {
 
-		String properties = _getProperites(content, prefix);
+		String properties = _getProperties(content, prefix);
 
 		if (properties == null) {
 			return;
@@ -287,8 +287,8 @@ public class PropertiesSourceFormatterFileCheck extends BaseFileCheck {
 					addMessage(
 						fileName,
 						StringBundler.concat(
-							"Property value '", propertyFileName,
-							"' points to file or directory that does not ",
+							"Property value \"", propertyFileName,
+							"\" points to file or directory that does not ",
 							"exist"));
 				}
 			}
@@ -331,7 +331,7 @@ public class PropertiesSourceFormatterFileCheck extends BaseFileCheck {
 		return checkstyleCheckNames;
 	}
 
-	private String _getProperites(String content, String prefix) {
+	private String _getProperties(String content, String prefix) {
 		int x = content.indexOf(StringPool.FOUR_SPACES + prefix);
 
 		if (x == -1) {

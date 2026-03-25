@@ -15,6 +15,28 @@
 	},
 	{
 		"classNames": [
+			"AccountGroupRelLocalService",
+			"AccountGroupRelLocalServiceUtil",
+			"AccountGroupRelService",
+			"AccountGroupRelServiceUtil"
+		],
+		"from": "deleteCommerceAccountGroupRels(String paramName, long paramName)",
+		"issueKey": "LPD-7743",
+		"to": "deleteAccountGroupRels(param#0#, new long[] {param#1#s})"
+	},
+	{
+		"classNames": [
+			"AccountGroupLocalService",
+			"AccountGroupLocalServiceUtil",
+			"AccountGroupService",
+			"AccountGroupServiceUtil"
+		],
+		"from": "fetchByExternalReferenceCode(long paramName, String paramName)",
+		"issueKey": "LPD-7748",
+		"to": "fetchAccountGroupByExternalReferenceCode(param#1#, param#0#)"
+	},
+	{
+		"classNames": [
 			"Product"
 		],
 		"from": "getConfiguration",
@@ -31,12 +53,76 @@
 		"to": "fetchCommerceCatalogByExternalReferenceCode(param#1#, param#0#)"
 	},
 	{
+		"classNames": [
+			"BaseProductResourceImpl"
+		],
+		"classStructurePattern": true,
+		"issueKey": "LPD-7753",
+		"methodsToFormat": [
+			{
+				"from": "@Override\n\tpublic Response deleteProduct(Long id)",
+				"to": "@Override\n\tpublic void deleteProduct(Long id)"
+			},
+			{
+				"from": "@Override\n\tpublic Response deleteProductByExternalReferenceCode(\n\t\t\tString externalReferenceCode)",
+				"to": "@Override\n\tpublic void deleteProductByExternalReferenceCode(\n\t\t\tString externalReferenceCode)"
+			}
+		]
+	},
+	{
 		"from": "regex:serviceLocator[\\n\\s]*\\.[\\n\\s]*findService\\([\\n\\s]*\"com\\.liferay\\.dynamic\\.data\\.mapping\\.storage\\.StorageEngine\"\\)",
 		"issueKey": "LPD-7762",
 		"skipParametersValidation": true,
 		"to": "staticUtil[\"com.liferay.dynamic.data.mapping.kernel.StorageEngineManagerUtil\"]",
 		"validExtensions": [
 			"ftl"
+		]
+	},
+	{
+		"classNames": [
+			"BaseModelListener"
+		],
+		"classStructurePattern": true,
+		"issueKey": "LPD-7865",
+		"methodsToFormat": [
+			{
+				"from": "regex:\\((?<paramType>[\\S]*?)\\s*(?<paramName>[\\S]*?)\\)(?<methodContent>\\s*\\{[\\s\\S]*?)(?<methodCall>super.onAfterUpdate|onBeforeUpdate)\\([\\S]*?\\);",
+				"to": "(${paramType} ${paramName})${methodContent}${methodCall}((${paramType})${paramName}.clone(), ${paramName});"
+			},
+			{
+				"from": "regex:(?<methodDeclaration>public\\s*void\\s*(onAfterUpdate|onBeforeUpdate))\\((?<paramType>[\\S]*)\\s*(?<paramName>[\\S]*)\\)",
+				"to": "${methodDeclaration}(${paramType} original${paramName}, ${paramType} ${paramName})"
+			},
+			{
+				"from": "regex:(?<methodDeclaration>public\\s*void\\s*(onAfterUpdate|onBeforeUpdate)\\(\\w\\s*(?<paramOriginalModel>\\S*),\\s*\\w\\s*(?<paramModel>\\S*)\\)\\s*)(?<methodContent>\\{(?:(?!public|private|protected|@|\\}\\s*$)[\\s\\S])*?)(?<methodCall>super.onAfterUpdate|onBeforeUpdate)\\(\\(\\w\\)[\\s\\S]*?\\);",
+				"to": "${methodDeclaration}${methodContent}${methodCall}(${paramOriginalModel}, ${paramModel});"
+			}
+		]
+	},
+	{
+		"classNames": [
+			"BasePanelApp"
+		],
+		"classStructurePattern": true,
+		"issueKey": "LPD-7870",
+		"methodsToFormat": [
+			{
+				"from": "regex:@Override\\s*@Reference\\s*\\(\\s*target\\s*=\\s*(?<target>\"[\\s\\S]*?\"\\)\"),[\\s\\S]*?\\)\\s*public\\s+void\\s+setPortlet\\(Portlet\\s+portlet\\)\\s*\\{[\\s\\S]*?\\}",
+				"to": "@Reference(\n\t\ttarget = ${target}\n\t)\n\tprivate Portlet _portlet;\n\n\t@Override\n\tpublic Portlet getPortlet() {\n\t\treturn _portlet;\n\t}"
+			}
+		]
+	},
+	{
+		"classNames": [
+			"FDSActionProvider"
+		],
+		"classStructurePattern": true,
+		"issueKey": "LPD-7879",
+		"methodsToFormat": [
+			{
+				"from": "@Override\n\tpublic List<DropdownItem> getDropdownItems(\n\t\t\tHttpServletRequest httpServletRequest, long groupId, Object model)",
+				"to": "@Override\n\tpublic List<DropdownItem> getDropdownItems(\n\t\t\tlong groupId, HttpServletRequest httpServletRequest, Object model)"
+			}
 		]
 	},
 	{
@@ -90,18 +176,71 @@
 	},
 	{
 		"classNames": [
+			"AutoBatchPreparedStatementUtil"
+		],
+		"from": "autoBatch(PreparedStatement preparedStatement)",
+		"hasMessage": true,
+		"issueKey": "LPD-8010"
+	},
+	{
+		"from": "regex:(?<prefixMethodName>AutoBatchPreparedStatementUtil\\.autoBatch\\(\\s*)(?<variableName>\\w+)\\.prepareStatement\\((?<messageVariable>[\\s\\S]*?)\\)\\)",
+		"issueKey": "LPD-8010",
+		"to": "${prefixMethodName}${variableName},${messageVariable})"
+	},
+	{
+		"classNames": [
+			"InfoCollectionProvider"
+		],
+		"classStructurePattern": true,
+		"issueKey": "LPD-8016",
+		"methodsToFormat": [
+			{
+				"from": "regex:@Override\n\t(?<methodSignature>public List<Resource> getInfoList\\(\\n\\s+InfoListProviderContext infoListProviderContext\\))",
+				"to": "${methodSignature}"
+			},
+			{
+				"from": "regex:@Override\n\t(?<methodSignature>public List<Resource> getInfoList\\(\\n*\\s*InfoListProviderContext infoListProviderContext, Pagination pagination,\\n*\\s*Sort sort\\))",
+				"to": "${methodSignature}"
+			},
+			{
+				"from": "regex:@Override\n\t(?<methodSignature>public int getInfoListCount\\(\\n*\\s*InfoListProviderContext infoListProviderContext\\))",
+				"to": "${methodSignature}"
+			}
+		],
+		"newImports": [
+			"com.liferay.info.collection.provider.CollectionQuery"
+		],
+		"newMethods": [
+			"@Override\n\tpublic InfoPage<Resource> getCollectionInfoPage(\n\t\tCollectionQuery collectionQuery) {\n\n\t\tList<Resource> resources = getResources();\n\n\t\tif (resources.size() <= 0) {\n\t\t\treturn InfoPage.of(Collections.emptyList());\n\t\t}\n\n\t\treturn InfoPage.of(resources);\n\t}"
+		]
+	},
+	{
+		"classNames": [
 			"HttpServletRequest"
 		],
-		"from": "regex:\t*[a-zA-Z0-9_]+\\.setAttribute\\(InfoDisplayWebKeys\\.INFO_ITEM_FIELD_VALUES_PROVIDER,.*?\\);\n",
+		"from": "regex:\t*(?s)\\b\\w+\\s*\\.setAttribute\\s*\\(\\s*InfoDisplayWebKeys\\s*\\.INFO_ITEM_FIELD_VALUES_PROVIDER\\s*,.*?\\);\n",
 		"issueKey": "LPD-8022",
 		"skipParametersValidation": true,
 		"to": ""
+	},
+	{
+		"from": "new InfoItemFormVariation(String paramName, InfoLocalizedValue<String> paramName)",
+		"hasMessage": true,
+		"issueKey": "LPD-8024"
 	},
 	{
 		"from": "LayoutFriendlyURLComposite(Layout paramName, String paramName)",
 		"issueKey": "LPD-8025",
 		"skipParametersValidation": true,
 		"to": "LayoutFriendlyURLComposite(param#0#, param#1#, false)"
+	},
+	{
+		"classNames": [
+			"TemplateManagerUtil"
+		],
+		"from": "destroy(ClassLoader paramName)",
+		"issueKey": "LPD-8036",
+		"to": ""
 	},
 	{
 		"classNames": [
@@ -116,12 +255,34 @@
 			"Http",
 			"HttpUtil"
 		],
-		"from": "regex:(http|_http|HttpUtil)\\.(?<methodName>addParameter|decodePath|decodeURL|encodeParameters|encodePath|fixPath|getCompleteURL|getDomain|getIpAddress|getParameter|getParameterMap|getPath|getProtocol|getQueryString|getRequestURL|getURI|hasDomain|hasProtocol|isForwarded|isSecure|normalizePath|parameterMapFromString|protocolize|removeDomain|removeParameter|removePathParameters|removeProtocol|sanitizeHeader|setParameter|shortenURL)",
+		"from": "regex:(\\w+)\\.(?<methodName>addParameter|decodePath|decodeURL|encodeParameters|encodePath|fixPath|getCompleteURL|getDomain|getIpAddress|getParameter|getParameterMap|getPath|getProtocol|getQueryString|getRequestURL|getURI|hasDomain|hasProtocol|isForwarded|isSecure|normalizePath|parameterMapFromString|parameterMapToString|protocolize|removeDomain|removeParameter|removePathParameters|removeProtocol|sanitizeHeader|setParameter|shortenURL)",
 		"issueKey": "LPD-8040",
 		"newImports": [
 			"com.liferay.portal.kernel.util.HttpComponentsUtil"
 		],
 		"to": "HttpComponentsUtil.${methodName}"
+	},
+	{
+		"classNames": [
+			"BaseJSPProductNavigationControlMenuEntry"
+		],
+		"classStructurePattern": true,
+		"issueKey": "LPD-8041",
+		"methodsToFormat": [
+			{
+				"from": "regex:@Override\\s*@Reference\\s*\\(\\s*target\\s*=\\s*\"(?<target>[^\"]*)\",[\\s\\S]*?\\)\\s*public\\s+void\\s+setServletContext\\(ServletContext\\s+servletContext\\)\\s*\\{[\\s\\S]*?\\}",
+				"to": "@Reference(\n\t\ttarget = \"${target}\"\n\t)\n\tprivate ServletContext _servletContext;\n\n\t@Override\n\tpublic ServletContext getServletContext() {\n\t\treturn _servletContext;\n\t}"
+			}
+		]
+	},
+	{
+		"classNames": [
+			"SchedulerEntry"
+		],
+		"issueKey": "LPD-8091",
+		"removeImplements": [
+			"StorageTypeAware"
+		]
 	},
 	{
 		"from": "new CalendarBookingStartTimeComparator()",
@@ -2318,6 +2479,86 @@
 		"to": "CPTaxCategoryNameComparator.getInstance(param#0#)"
 	},
 	{
+		"from": "regex:(?<variableName>\\w+)\\.(?<prefixMethodName>isInTrashExplicitly|isInTrashImplicitly)\\(\\)",
+		"issueKey": "LPD-27178",
+		"newImports": [
+			"com.liferay.trash.TrashHelper"
+		],
+		"newReference": "TrashHelper _trashHelper",
+		"to": "_trashHelper.${prefixMethodName}(${variableName})"
+	},
+	{
+		"from": "XMLUtil.formatXML(String param)",
+		"issueKey": "LPD-27744",
+		"newImports": [
+			"com.liferay.portal.kernel.xml.SAXReaderUtil"
+		],
+		"to": "SAXReaderUtil.read(param#0#).formattedString()"
+	},
+	{
+		"classNames": [
+			"GroupURLProvider"
+		],
+		"classStructurePattern": true,
+		"issueKey": "LPD-27748",
+		"methodsToFormat": [
+			{
+				"from": "regex:\\s*?@Override\\s*?public\\s*?String\\s*?getDisplayURL\\([\\s\\S]*?\\)\\s*\\{[\\s\\S]*?\\}",
+				"to": ""
+			},
+			{
+				"from": "regex:@Override\\s*?(?<methodDeclaration>public String getGroupAdministrationURL)",
+				"to": "${methodDeclaration}"
+			},
+			{
+				"from": "regex:@Override\\s*?(?<methodDeclaration>public String getGroupLayoutsURL)",
+				"to": "${methodDeclaration}"
+			},
+			{
+				"from": "regex:@Override\\s*?(?<methodDeclaration>public String getGroupURL)",
+				"to": "${methodDeclaration}"
+			},
+			{
+				"from": "regex:\\s*?@Override\\s*?public\\s*?int\\s*getLayoutsCount\\([\\s\\S]*?\\)\\s*\\{[\\s\\S]*?\\}",
+				"to": ""
+			},
+			{
+				"from": "regex:@Override\\n\\t(?<methodDeclaration>public String getLiveGroupURL)",
+				"to": "${methodDeclaration}"
+			}
+		]
+	},
+	{
+		"classNames": [
+			"IndexerPostProcessor"
+		],
+		"classStructurePattern": true,
+		"issueKey": "LPD-27752",
+		"methodsToFormat": [
+			{
+				"from": "regex:@Override\\n\\t(?<methodSignature>public void postProcessContextQuery\\(\\n*\\s*BooleanQuery contextQuery, SearchContext searchContext\\))",
+				"to": "@Override\n\tpublic void postProcessContextBooleanFilter(\n\t\t\tBooleanFilter booleanFilter, SearchContext searchContext)"
+			},
+			{
+				"from": "regex:@Override\\n\\t(?<methodSignature>public void postProcessSearchQuery\\(\\n*\\s*BooleanQuery searchQuery, SearchContext searchContext\\))",
+				"to": "@Override\n\tpublic void postProcessSearchQuery(\n\t\t\tBooleanQuery searchQuery, BooleanFilter booleanFilter,\n\t\t\tSearchContext searchContext)"
+			}
+		]
+	},
+	{
+		"classNames": [
+			"BaseJSPDynamicInclude"
+		],
+		"classStructurePattern": true,
+		"issueKey": "LPD-28057",
+		"methodsToFormat": [
+			{
+				"from": "regex:@Override\\s*@Reference\\s*\\(\\s*target\\s*=\\s*\"(?<target>[^\"]*)\",[\\s\\S]*?\\)\\s*public\\s+void\\s+setServletContext\\(ServletContext\\s+servletContext\\)\\s*\\{[\\s\\S]*?\\}",
+				"to": "@Reference(\n\t\ttarget = \"${target}\"\n\t)\n\tprivate ServletContext _servletContext;\n\n\t@Override\n\tpublic ServletContext getServletContext() {\n\t\treturn _servletContext;\n\t}"
+			}
+		]
+	},
+	{
 		"from": "new CommercePriceEntryUOMCreateDateComparator()",
 		"issueKey": "LPD-28067",
 		"skipParametersValidation": true,
@@ -2823,6 +3064,32 @@
 	},
 	{
 		"classNames": [
+			"UserLocalServiceWrapper"
+		],
+		"classStructurePattern": true,
+		"issueKey": "LPD-28357",
+		"methodsToFormat": [
+			{
+				"from": "regex:@Override\\s+public void (?<methodName>addGroupUser|addGroupUsers)(?<methodDeclaration>[^{]+?)\\{(?<methodContent>[\\s\\S]*?)(?<methodReturn>(?<!return\\s)super\\.\\1\\s*\\([^)]*\\);)",
+				"to": "@Override\n\tpublic boolean ${methodName}${methodDeclaration}{${methodContent}return ${methodReturn}"
+			}
+		]
+	},
+	{
+		"classNames": [
+			"StrutsAction"
+		],
+		"classStructurePattern": true,
+		"issueKey": "LPD-28369",
+		"methodsToFormat": [
+			{
+				"from": "@Override\n\tpublic String execute(\n\t\tStrutsAction originalStrutsAction,\n\t\tHttpServletRequest httpServletRequest,\n\t\tHttpServletResponse httpServletResponse)",
+				"to": "public String execute(\n\t\t\tStrutsAction originalStrutsAction,\n\t\t\tHttpServletRequest httpServletRequest,\n\t\t\tHttpServletResponse httpServletResponse)"
+			}
+		]
+	},
+	{
+		"classNames": [
 			"CompanyLocalService",
 			"CompanyLocalServiceUtil"
 		],
@@ -3192,6 +3459,27 @@
 	},
 	{
 		"classNames": [
+			"JournalArticle"
+		],
+		"from": "setDDMStructureKey(String paramName)",
+		"hasMessage": true,
+		"issueKey": "LPD-30559"
+	},
+	{
+		"classNames": [
+			"PDFProcessor"
+		],
+		"classStructurePattern": true,
+		"issueKey": "LPD-30560",
+		"newImports": [
+			"com.liferay.document.library.kernel.processor.PDFProcessorUtil"
+		],
+		"newMethods": [
+			"@Override\n\tpublic void generatePreviews() {\n\t\treturn PDFProcessorUtil.getPDFProcessor().generatePreviews();\n\t}"
+		]
+	},
+	{
+		"classNames": [
 			"UserLocalService",
 			"UserLocalServiceUtil",
 			"UserService",
@@ -3221,6 +3509,11 @@
 		"to": "getFederatedSearchKey"
 	},
 	{
+		"from": "regex:((Optional<(?<type>String|PortletPreferences))>(?<space>\\s+)(?<declaredVariableName>\\w+)(?<equalSign>\\s*=\\s*))?(?<variableName>\\w+)\\.(?<methodName>getParameter|getPortletPreferences)(Optional|71)",
+		"issueKey": "LPD-31994",
+		"to": "${type}${space}${declaredVariableName}${equalSign}${variableName}.${methodName}"
+	},
+	{
 		"classNames": [
 			"Group",
 			"LayoutSet"
@@ -3228,6 +3521,113 @@
 		"from": "getVirtualHostname",
 		"issueKey": "LPD-31998",
 		"to": "getVirtualHostnames().firstKey"
+	},
+	{
+		"from": "MailEngine.send(InternetAddress paramName, InternetAddress paramName, String paramName, String paramName, boolean paramName)",
+		"issueKey": "LPD-32001",
+		"newImports": [
+			"com.liferay.mail.kernel.model.MailMessage",
+			"com.liferay.mail.kernel.service.MailServiceUtil"
+		],
+		"to": "MailServiceUtil.sendEmail(new MailMessage(param#0#, param#1#, param#2#, param#3#, param#4#))"
+	},
+	{
+		"classNames": [
+			"MentionsUserFinder"
+		],
+		"classStructurePattern": true,
+		"issueKey": "LPD-34770",
+		"newMethods": [
+			"@Override\n\tpublic List<User> getUsers(\n\t\t\tlong companyId, long groupId, long userId, String query,\n\t\t\tSocialInteractionsConfiguration socialInteractionsConfiguration)\n\t\tthrows PortalException {\n\n\t\treturn getUsers(\n\t\t\tcompanyId, userId, query,\n\t\t\tsocialInteractionsConfiguration);\n\t}"
+		]
+	},
+	{
+		"classNames": [
+			"AccountEntryLocalService",
+			"AccountEntryLocalServiceUtil",
+			"AccountEntryService",
+			"AccountEntryServiceUtil"
+		],
+		"from": "deleteCommerceAccounts",
+		"issueKey": "LPD-34771",
+		"to": "deleteAccountEntriesByCompanyId"
+	},
+	{
+		"classNames": [
+			"AccountEntryLocalService",
+			"AccountEntryLocalServiceUtil",
+			"AccountEntryService",
+			"AccountEntryServiceUtil"
+		],
+		"from": "getPersonalAccountEntry",
+		"issueKey": "LPD-34771",
+		"to": "fetchPersonAccountEntry"
+	},
+	{
+		"classNames": [
+			"AccountEntryLocalService",
+			"AccountEntryLocalServiceUtil",
+			"AccountEntryService",
+			"AccountEntryServiceUtil"
+		],
+		"from": "getUserCommerceAccounts(long paramName, Long paramName, int paramName, String paramName, Boolean paramName, int paramName, int paramName)",
+		"issueKey": "LPD-34771",
+		"to": "getUserAccountEntries(param#0#, param#1#, param#3#, null, null, param#5#, param#6#)"
+	},
+	{
+		"classNames": [
+			"AccountEntryLocalService",
+			"AccountEntryLocalServiceUtil",
+			"AccountEntryService",
+			"AccountEntryServiceUtil"
+		],
+		"from": "getUserCommerceAccounts(long paramName, Long paramName, int paramName, String paramName, int paramName, int paramName)",
+		"issueKey": "LPD-34771",
+		"to": "getUserAccountEntries(param#0#, param#1#, param#3#, null, param#4#, param#5#)"
+	},
+	{
+		"classNames": [
+			"AccountEntryLocalService",
+			"AccountEntryLocalServiceUtil",
+			"AccountEntryService",
+			"AccountEntryServiceUtil"
+		],
+		"from": "getUserCommerceAccountsCount(long paramName, Long paramName, int paramName, String paramName)",
+		"issueKey": "LPD-34771",
+		"to": "getUserAccountEntriesCount(param#0#, param#1#, param#3#, null)"
+	},
+	{
+		"classNames": [
+			"AccountEntryLocalService",
+			"AccountEntryLocalServiceUtil",
+			"AccountEntryService",
+			"AccountEntryServiceUtil"
+		],
+		"from": "getUserCommerceAccountsCount(long paramName, Long paramName, int paramName, String paramName, Boolean paramName)",
+		"issueKey": "LPD-34771",
+		"to": "getUserAccountEntriesCount(param#0#, param#1#, param#3#, null, null)"
+	},
+	{
+		"classNames": [
+			"AccountEntryLocalService",
+			"AccountEntryLocalServiceUtil",
+			"AccountEntryService",
+			"AccountEntryServiceUtil"
+		],
+		"from": "updateAccountEntry(long paramName, String paramName, boolean paramName, byte[] paramName, String paramName, String paramName, boolean paramName, long paramName, long paramName, ServiceContext paramName)",
+		"issueKey": "LPD-34771",
+		"to": "updateAccountEntry(param#0#, null, param#1#, null, !param#2#, null, param#4#, param#3#, param#5#, null, param#9#)"
+	},
+	{
+		"classNames": [
+			"AccountEntryLocalService",
+			"AccountEntryLocalServiceUtil",
+			"AccountEntryService",
+			"AccountEntryServiceUtil"
+		],
+		"from": "updateAccountEntry(long paramName, String paramName, boolean paramName, byte[] paramName, String paramName, String paramName, boolean paramName, long paramName, long paramName, String paramName, ServiceContext paramName)",
+		"issueKey": "LPD-34771",
+		"to": "updateAccountEntry(param#0#, null, param#1#, null, !param#2#, null, param#4#, param#3#, param#5#, null, param#10#)"
 	},
 	{
 		"classNames": [
@@ -3256,6 +3656,19 @@
 			"com.liferay.portal.kernel.security.auth.CompanyThreadLocal"
 		],
 		"to": "addListType(CompanyThreadLocal.getCompanyId(), param#0#, param#1#)"
+	},
+	{
+		"classNames": [
+			"UpgradeProcess"
+		],
+		"classStructurePattern": true,
+		"issueKey": "LPD-35264",
+		"methodsToFormat": [
+			{
+				"from": "regex:alter\\(\\s*?(?<tableClass>\\w*),\\s*?new\\s*?AlterColumnName\\(\\s*?(?<oldColumnName>\\w*?)[\\s,]*?(?<newColumnName>\\w*)\\)\\);",
+				"to": "alterColumnName((String)${tableClass}.getField(\"TABLE_NAME\").get(null), ${oldColumnName}, ${newColumnName});"
+			}
+		]
 	},
 	{
 		"classNames": [
@@ -3310,18 +3723,27 @@
 			"ExpandoColumnLocalService",
 			"ExpandoColumnLocalServiceUtil"
 		],
-		"from": "getColumn",
+		"from": "getColumn(long paramName, String paramName)",
 		"issueKey": "LPD-36261",
-		"to": "fetchColumn"
+		"to": "fetchColumn(param#0#, param#1#)"
 	},
 	{
 		"classNames": [
 			"DLAppLocalService",
-			"DLAppService"
+			"DLAppLocalServiceUtil"
 		],
 		"from": "addFileEntry(long paramName, long paramName, long paramName, String paramName, String paramName, byte[] paramName, ServiceContext paramName)",
 		"issueKey": "LPD-36311",
-		"to": "addFileEntry(null, param#0#, param#1#, param#2#, param#3#, param#4#, param#5#, null, null, param#6#)"
+		"to": "addFileEntry(null, param#0#, param#1#, param#2#, param#3#, param#4#, param#5#, null, null, null, param#6#)"
+	},
+	{
+		"classNames": [
+			"DLAppService",
+			"DLAppServiceUtil"
+		],
+		"from": "addFileEntry(long paramName, long paramName, String paramName, String paramName, byte[] paramName, ServiceContext paramName)",
+		"issueKey": "LPD-36311",
+		"to": "addFileEntry(null, param#0#, param#1#, param#2#, param#3#, param#4#, null, null, null, param#5#)"
 	},
 	{
 		"classNames": [
@@ -3371,6 +3793,38 @@
 	},
 	{
 		"classNames": [
+			"Address",
+			"EmailAddress",
+			"OrgLabor",
+			"Phone",
+			"Website"
+		],
+		"from": "regex:(?<variableName>\\w+)\\.(?<prefixMethodName>get|set)Type(?<suffix>Id)?",
+		"issueKey": "LPD-36750",
+		"to": "${variableName}.${prefixMethodName}ListType${suffix}",
+		"validExtensions": [
+			"java",
+			"jsp"
+		]
+	},
+	{
+		"classNames": [
+			"Contact"
+		],
+		"from": "regex:(?<variableName>\\w+)\\.(?<prefixMethodName>getPrefix|getSuffix|setPrefix|setSuffix)Id",
+		"issueKey": "LPD-36750",
+		"to": "${variableName}.${prefixMethodName}ListTypeId"
+	},
+	{
+		"classNames": [
+			"Organization"
+		],
+		"from": "regex:(?<variableName>\\w+)\\.(?<prefixMethodName>getStatus|setStatus)Id",
+		"issueKey": "LPD-36750",
+		"to": "${variableName}.${prefixMethodName}ListTypeId"
+	},
+	{
+		"classNames": [
 			"CommercePriceListLocalService",
 			"CommercePriceListLocalServiceUtil"
 		],
@@ -3396,6 +3850,1914 @@
 			"com.liferay.portal.kernel.util.HtmlUtil_IW"
 		],
 		"to": "HtmlUtil_IW.getInstance"
+	},
+	{
+		"classNames": [
+			"ArchivedSettingsFactory"
+		],
+		"from": "getSettings(SettingsLocator paramName)",
+		"issueKey": "LPD-38353",
+		"newImports": [
+			"com.liferay.portal.kernel.settings.FallbackKeysSettingsUtil"
+		],
+		"to": "FallbackKeysSettingsUtil.getSettings(param#0#)"
+	},
+	{
+		"classNames": [
+			"CountryLocalService",
+			"CountryLocalServiceUtil"
+		],
+		"from": "deleteCommerceCountries",
+		"issueKey": "LPD-40539",
+		"to": "deleteCompanyCountries"
+	},
+	{
+		"classNames": [
+			"RegionLocalService",
+			"RegionLocalServiceUtil"
+		],
+		"from": "deleteCommerceRegions",
+		"issueKey": "LPD-40539",
+		"to": "deleteCountryRegions"
+	},
+	{
+		"classNames": [
+			"CountryLocalService",
+			"CountryLocalServiceUtil",
+			"CountryService",
+			"CountryServiceUtil"
+		],
+		"from": "getCommerceCountries",
+		"issueKey": "LPD-40539",
+		"to": "getCompanyCountries"
+	},
+	{
+		"classNames": [
+			"CountryLocalService",
+			"CountryLocalServiceUtil",
+			"CountryService",
+			"CountryServiceUtil"
+		],
+		"from": "getCommerceCountriesCount",
+		"issueKey": "LPD-40539",
+		"to": "getCompanyCountriesCount"
+	},
+	{
+		"classNames": [
+			"Country"
+		],
+		"from": "getCommerceCountryId",
+		"issueKey": "LPD-40539",
+		"to": "getCountryId"
+	},
+	{
+		"classNames": [
+			"RegionLocalService",
+			"RegionLocalServiceUtil"
+		],
+		"from": "getCommerceRegionByUuidAndCompanyId",
+		"issueKey": "LPD-40539",
+		"to": "getRegionByUuidAndCompanyId"
+	},
+	{
+		"classNames": [
+			"Region"
+		],
+		"from": "getCommerceRegionId",
+		"issueKey": "LPD-40539",
+		"to": "getRegionId"
+	},
+	{
+		"classNames": [
+			"RegionLocalService",
+			"RegionLocalServiceUtil",
+			"RegionService",
+			"RegionServiceUtil"
+		],
+		"from": "getCommerceRegions",
+		"issueKey": "LPD-40539",
+		"to": "getRegions"
+	},
+	{
+		"classNames": [
+			"RegionLocalService",
+			"RegionLocalServiceUtil",
+			"RegionService",
+			"RegionServiceUtil"
+		],
+		"from": "getCommerceRegionsCount",
+		"issueKey": "LPD-40539",
+		"to": "getRegionsCount"
+	},
+	{
+		"classNames": "CommercePaymentMethodGroupRel",
+		"from": "getEngineKey",
+		"issueKey": "LPD-40549",
+		"to": "getPaymentIntegrationKey"
+	},
+	{
+		"from": "CommercePaymentConstants.COMMERCE_PAYMENT_METHOD_TYPE_OFFLINE",
+		"issueKey": "LPD-40553",
+		"newImports": [
+			"com.liferay.commerce.constants.CommercePaymentMethodConstants"
+		],
+		"to": "CommercePaymentMethodConstants.TYPE_OFFLINE"
+	},
+	{
+		"from": "CommercePaymentConstants.COMMERCE_PAYMENT_METHOD_TYPE_ONLINE_REDIRECT",
+		"issueKey": "LPD-40553",
+		"newImports": [
+			"com.liferay.commerce.constants.CommercePaymentMethodConstants"
+		],
+		"to": "CommercePaymentMethodConstants.TYPE_ONLINE_REDIRECT"
+	},
+	{
+		"from": "CommercePaymentConstants.COMMERCE_PAYMENT_METHOD_TYPE_ONLINE_STANDARD",
+		"issueKey": "LPD-40553",
+		"newImports": [
+			"com.liferay.commerce.constants.CommercePaymentMethodConstants"
+		],
+		"to": "CommercePaymentMethodConstants.TYPE_ONLINE_STANDARD"
+	},
+	{
+		"classNames": [
+			"OrganizationLocalService",
+			"OrganizationLocalServiceUtil"
+		],
+		"from": "addOrganization(long paramName, long paramName, String paramName, String paramName, long paramName, long paramName, long paramName, String paramName, boolean paramName, ServiceContext paramName)",
+		"issueKey": "LPD-40617",
+		"newImports": [
+			"com.liferay.portal.kernel.model.ListTypeConstants",
+			"com.liferay.portal.kernel.security.auth.CompanyThreadLocal"
+		],
+		"newReference": "ListTypeLocalService _listTypeLocalService",
+		"to": "addOrganization(null, param#0#, param#1#, param#2#, param#3#, param#4#, param#5#,  _listTypeLocalService.getListTypeId(CompanyThreadLocal.getCompanyId(), param#6#, ListTypeConstants.ORGANIZATION_STATUS), param#7#, param#8#, param#9#)"
+	},
+	{
+		"classNames": [
+			"OrganizationService",
+			"OrganizationServiceUtil"
+		],
+		"from": "addOrganization(long paramName, String paramName, String paramName, long paramName, long paramName, long paramName, String paramName, boolean paramName, ServiceContext paramName)",
+		"issueKey": "LPD-40617",
+		"newImports": [
+			"com.liferay.portal.kernel.model.ListTypeConstants",
+			"com.liferay.portal.kernel.security.auth.CompanyThreadLocal"
+		],
+		"newReference": "ListTypeService _listTypeService",
+		"to": "addOrganization(null, param#0#, param#1#, param#2#, param#3#, param#4#,  _listTypeService.getListTypeId(CompanyThreadLocal.getCompanyId(), param#5#, ListTypeConstants.ORGANIZATION_STATUS), param#6#, param#7#, param#8#)"
+	},
+	{
+		"from": "MimeTypesUtil.isWebImage",
+		"issueKey": "LPD-40678",
+		"newImports": [
+			"com.liferay.portal.kernel.util.SetUtil",
+			"com.liferay.portal.kernel.util.PropsValues"
+		],
+		"to": "SetUtil.fromArray(PropsValues.MIME_TYPES_WEB_IMAGES).contains",
+		"validExtensions": [
+			"java",
+			"jsp"
+		]
+	},
+	{
+		"classNames": [
+			"LayoutLocalService",
+			"LayoutLocalServiceUtil",
+			"LayoutService",
+			"LayoutServiceUtil"
+		],
+		"from": "addLayout(long paramName, long paramName, boolean paramName, long paramName, String paramName, String paramName, String paramName, String paramName, boolean paramName, String paramName, ServiceContext paramName)",
+		"issueKey": "LPD-41026",
+		"to": "addLayout(null, param#0#, param#1#, param#2#, param#3#, param#4#, param#5#, param#6#, param#7#, param#8#, param#9#, param#10#)"
+	},
+	{
+		"classNames": [
+			"ListTypeLocalService",
+			"ListTypeLocalServiceUtil",
+			"ListTypeService",
+			"ListTypeServiceUtil"
+		],
+		"from": "getListType(String paramName, String paramName)",
+		"issueKey": "LPD-41220",
+		"newImports": [
+			"com.liferay.portal.kernel.security.auth.CompanyThreadLocal"
+		],
+		"to": "getListType(CompanyThreadLocal.getCompanyId(), param#0#, param#1#)"
+	},
+	{
+		"classNames": [
+			"AssetCategoryLocalService",
+			"AssetCategoryLocalServiceUtil"
+		],
+		"from": "getAssetEntryAssetCategories",
+		"issueKey": "LPD-41237",
+		"to": "getEntryCategories"
+	},
+	{
+		"classNames": [
+			"DLAppService",
+			"DLAppServiceUtil"
+		],
+		"from": "updateFileEntry(long paramName, String paramName, String paramName, String paramName, String paramName, String paramName, DLVersionNumberIncrease paramName, byte[] paramName, ServiceContext paramName)",
+		"issueKey": "LPD-41239",
+		"to": "updateFileEntry(param#0#, param#1#, param#2#, param#3#, null, param#4#, param#5#, param#6#, param#7#, null, null, null, param#8#)"
+	},
+	{
+		"classNames": [
+			"CommercePriceEntryLocalService",
+			"CommercePriceEntryLocalServiceUtil"
+		],
+		"from": "addCommercePriceEntry(long paramName, long paramName, BigDecimal paramName, BigDecimal paramName, ServiceContext paramName)",
+		"issueKey": "LPD-41244",
+		"to": "addCommercePriceEntry(null, param#0#, null, param#1#, param#2#, false, param#3#, null, param#4#)"
+	},
+	{
+		"classNames": [
+			"CommercePriceEntryService",
+			"CommercePriceEntryServiceUtil"
+		],
+		"from": "addCommercePriceEntry(long paramName, long paramName, BigDecimal paramName, BigDecimal paramName, ServiceContext paramName)",
+		"issueKey": "LPD-41244",
+		"to": "addCommercePriceEntry(null, param#0#, param#1#, param#2#, false, param#3#, null, param#4#)"
+	},
+	{
+		"classNames": [
+			"CommercePriceEntryLocalService",
+			"CommercePriceEntryLocalServiceUtil"
+		],
+		"from": "addCommercePriceEntry(long paramName, long paramName, String paramName, BigDecimal paramName, BigDecimal paramName, ServiceContext paramName)",
+		"issueKey": "LPD-41244",
+		"to": "addCommercePriceEntry(param#2#, param#0#, null, param#1#, param#3#, false, param#4#, null, param#5#)"
+	},
+	{
+		"classNames": [
+			"CommercePriceEntryService",
+			"CommercePriceEntryServiceUtil"
+		],
+		"from": "addCommercePriceEntry(long paramName, long paramName, String paramName, BigDecimal paramName, BigDecimal paramName, ServiceContext paramName)",
+		"issueKey": "LPD-41244",
+		"to": "addCommercePriceEntry(param#2#, param#0#, param#1#, param#3#, false, param#4#, null, param#5#)"
+	},
+	{
+		"classNames": [
+			"CommercePriceEntryLocalService",
+			"CommercePriceEntryLocalServiceUtil"
+		],
+		"from": "addCommercePriceEntry(long paramName, String paramName, long paramName, BigDecimal paramName, BigDecimal paramName, ServiceContext paramName)",
+		"issueKey": "LPD-41244",
+		"to": "addCommercePriceEntry(null, param#0#, param#1#, param#2#, param#3#, false, param#4#, null, param#5#)"
+	},
+	{
+		"classNames": [
+			"CommercePriceEntryLocalService",
+			"CommercePriceEntryLocalServiceUtil",
+			"CommercePriceEntryService",
+			"CommercePriceEntryServiceUtil"
+		],
+		"from": "fetchCommercePriceEntry(long paramName, long paramName)",
+		"issueKey": "LPD-41285",
+		"newImports": [
+			"com.liferay.petra.string.StringPool"
+		],
+		"to": "fetchCommercePriceEntry(param#1#, null, StringPool.BLANK)"
+	},
+	{
+		"classNames": [
+			"CommercePriceListService",
+			"CommercePriceListServiceUtil"
+		],
+		"from": "addCommercePriceList(long paramName, long paramName, long paramName, boolean paramName, long paramName, String paramName, double paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, boolean paramName, ServiceContext paramName)",
+		"issueKey": "LPD-41300",
+		"newImports": [
+			"com.liferay.commerce.currency.service.CommerceCurrencyLocalServiceUtil"
+		],
+		"to": "addCommercePriceList(null, param#0#, CommerceCurrencyLocalServiceUtil.fetchCommerceCurrency(param#2#).getCode(), param#3#, CommercePriceListConstants.TYPE_PRICE_LIST, param#4#, false, param#5#, param#6#, param#7#, param#8#, param#9#, param#10#, param#11#, param#12#, param#13#, param#14#, param#15#, param#16#, param#17#, param#18#)"
+	},
+	{
+		"classNames": [
+			"CommercePriceListService",
+			"CommercePriceListServiceUtil"
+		],
+		"from": "addCommercePriceList(long paramName, long paramName, long paramName, boolean paramName, long paramName, String paramName, double paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, String paramName, boolean paramName, ServiceContext paramName)",
+		"issueKey": "LPD-41300",
+		"newImports": [
+			"com.liferay.commerce.currency.service.CommerceCurrencyLocalServiceUtil"
+		],
+		"to": "addCommercePriceList(param#17#, param#0#, CommerceCurrencyLocalServiceUtil.fetchCommerceCurrency(param#2#).getCode(), param#3#, CommercePriceListConstants.TYPE_PRICE_LIST, param#4#, false, param#5#, param#6#, param#7#, param#8#, param#9#, param#10#, param#11#, param#12#, param#13#, param#14#, param#15#, param#16#, param#18#, param#19#)"
+	},
+	{
+		"classNames": [
+			"CommercePriceListLocalService",
+			"CommercePriceListLocalServiceUtil"
+		],
+		"from": "addCommercePriceList(long paramName, long paramName, long paramName, boolean paramName, long paramName, String paramName, double paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, String paramName, boolean paramName, ServiceContext paramName)",
+		"issueKey": "LPD-41300",
+		"newImports": [
+			"com.liferay.commerce.currency.service.CommerceCurrencyLocalServiceUtil"
+		],
+		"to": "addCommercePriceList(param#17#, param#1#, param#0#, CommerceCurrencyLocalServiceUtil.fetchCommerceCurrency(param#2#).getCode(), param#3#, CommercePriceListConstants.TYPE_PRICE_LIST, param#4#, false, param#5#, param#6#, param#7#, param#8#, param#9#, param#10#, param#11#, param#12#, param#13#, param#14#, param#15#, param#16#, param#18#, param#19#)"
+	},
+	{
+		"classNames": [
+			"CommercePriceListService",
+			"CommercePriceListServiceUtil"
+		],
+		"from": "addCommercePriceList(long paramName, long paramName, long paramName, boolean paramName, String paramName, long paramName, boolean paramName, String paramName, double paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, String paramName, boolean paramName, ServiceContext paramName)",
+		"issueKey": "LPD-41300",
+		"newImports": [
+			"com.liferay.commerce.currency.service.CommerceCurrencyLocalServiceUtil"
+		],
+		"to": "addCommercePriceList(param#19#, param#0#, CommerceCurrencyLocalServiceUtil.fetchCommerceCurrency(param#2#).getCode(), param#3#, param#4#, param#5#, param#6#, param#7#, param#8#, param#9#, param#10#, param#11#, param#12#, param#13#, param#14#, param#15#, param#16#, param#17#, param#18#, param#20#, param#21#)"
+	},
+	{
+		"classNames": [
+			"CommercePriceListLocalService",
+			"CommercePriceListLocalServiceUtil"
+		],
+		"from": "addCommercePriceList(long paramName, long paramName, long paramName, boolean paramName, String paramName, long paramName, boolean paramName, String paramName, double paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, String paramName, boolean paramName, ServiceContext paramName)",
+		"issueKey": "LPD-41300",
+		"newImports": [
+			"com.liferay.commerce.currency.service.CommerceCurrencyLocalServiceUtil"
+		],
+		"to": "addCommercePriceList(param#19#, param#1#, param#0#, CommerceCurrencyLocalServiceUtil.fetchCommerceCurrency(param#2#).getCode(), param#3#, param#4#, param#5#, param#6#, param#7#, param#8#, param#9#, param#10#, param#11#, param#12#, param#13#, param#14#, param#15#, param#16#, param#17#, param#18#, param#20#, param#21#)"
+	},
+	{
+		"classNames": [
+			"CommercePriceListService",
+			"CommercePriceListServiceUtil"
+		],
+		"from": "addCommercePriceList(long paramName, long paramName, long paramName, long paramName, String paramName, double paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, boolean paramName, ServiceContext paramName)",
+		"issueKey": "LPD-41300",
+		"newImports": [
+			"com.liferay.commerce.currency.service.CommerceCurrencyLocalServiceUtil"
+		],
+		"to": "addCommercePriceList(null, param#0#, CommerceCurrencyLocalServiceUtil.fetchCommerceCurrency(param#2#).getCode(), true, CommercePriceListConstants.TYPE_PRICE_LIST, param#3#, false, param#4#, param#5#, param#6#, param#7#, param#8#, param#9#, param#10#, param#11#, param#12#, param#13#, param#14#, param#15#, param#16#, param#17#)"
+	},
+	{
+		"classNames": [
+			"CommercePriceListLocalService",
+			"CommercePriceListLocalServiceUtil"
+		],
+		"from": "addCommercePriceList(long paramName, long paramName, long paramName, long paramName, String paramName, double paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, boolean paramName, ServiceContext paramName)",
+		"issueKey": "LPD-41300",
+		"newImports": [
+			"com.liferay.commerce.currency.service.CommerceCurrencyLocalServiceUtil"
+		],
+		"to": "addCommercePriceList(null, param#1#, param#0#, CommerceCurrencyLocalServiceUtil.fetchCommerceCurrency(param#2#).getCode(), true, CommercePriceListConstants.TYPE_PRICE_LIST, param#3#, false, param#4#, param#5#, param#6#, param#7#, param#8#, param#9#, param#10#, param#11#, param#12#, param#13#, param#14#, param#15#, param#16#, param#17#)"
+	},
+	{
+		"classNames": [
+			"CommercePriceListService",
+			"CommercePriceListServiceUtil"
+		],
+		"from": "addCommercePriceList(long paramName, long paramName, long paramName, long paramName, String paramName, double paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, String paramName, boolean paramName, ServiceContext paramName)",
+		"issueKey": "LPD-41300",
+		"newImports": [
+			"com.liferay.commerce.currency.service.CommerceCurrencyLocalServiceUtil"
+		],
+		"to": "addCommercePriceList(param#16#, param#0#, CommerceCurrencyLocalServiceUtil.fetchCommerceCurrency(param#2#).getCode(), true, CommercePriceListConstants.TYPE_PRICE_LIST, param#3#, false, param#4#, param#5#, param#6#, param#7#, param#8#, param#9#, param#10#, param#11#, param#12#, param#13#, param#14#, param#15#, param#17#, param#18#)"
+	},
+	{
+		"classNames": [
+			"CommercePriceListLocalService",
+			"CommercePriceListLocalServiceUtil"
+		],
+		"from": "addCommercePriceList(long paramName, long paramName, long paramName, long paramName, String paramName, double paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, String paramName, boolean paramName, ServiceContext paramName)",
+		"issueKey": "LPD-41300",
+		"newImports": [
+			"com.liferay.commerce.currency.service.CommerceCurrencyLocalServiceUtil"
+		],
+		"to": "addCommercePriceList(param#16#, param#1#, param#0#, CommerceCurrencyLocalServiceUtil.fetchCommerceCurrency(param#2#).getCode(), true, CommercePriceListConstants.TYPE_PRICE_LIST, param#3#, false, param#4#, param#5#, param#6#, param#7#, param#8#, param#9#, param#10#, param#11#, param#12#, param#13#, param#14#, param#15#, param#17#, param#18#)"
+	},
+	{
+		"classNames": [
+			"CommercePriceListService",
+			"CommercePriceListServiceUtil"
+		],
+		"from": "addCommercePriceList(long paramName, long paramName, long paramName, String paramName, double paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, boolean paramName, ServiceContext paramName)",
+		"issueKey": "LPD-41300",
+		"newImports": [
+			"com.liferay.commerce.currency.service.CommerceCurrencyLocalServiceUtil"
+		],
+		"to": "addCommercePriceList(null, param#0#, CommerceCurrencyLocalServiceUtil.fetchCommerceCurrency(param#2#).getCode(), true, CommercePriceListConstants.TYPE_PRICE_LIST, 0, false, param#3#, param#4#, param#5#, param#6#, param#7#, param#8#, param#9#, param#10#, param#11#, param#12#, param#13#, param#14#, param#15#, param#16#)"
+	},
+	{
+		"classNames": [
+			"CommercePriceListLocalService",
+			"CommercePriceListLocalServiceUtil"
+		],
+		"from": "addCommercePriceList(long paramName, long paramName, long paramName, String paramName, double paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, boolean paramName, ServiceContext paramName)",
+		"issueKey": "LPD-41300",
+		"newImports": [
+			"com.liferay.commerce.currency.service.CommerceCurrencyLocalServiceUtil"
+		],
+		"to": "addCommercePriceList(null, param#1#, param#0#, CommerceCurrencyLocalServiceUtil.fetchCommerceCurrency(param#2#).getCode(), true, CommercePriceListConstants.TYPE_PRICE_LIST, 0, false, param#3#, param#4#, param#5#, param#6#, param#7#, param#8#, param#9#, param#10#, param#11#, param#12#, param#13#, param#14#, param#15#, param#16#)"
+	},
+	{
+		"classNames": [
+			"CommercePriceListService",
+			"CommercePriceListServiceUtil"
+		],
+		"from": "addCommercePriceList(long paramName, long paramName, long paramName, String paramName, double paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, String paramName, boolean paramName, ServiceContext paramName)",
+		"issueKey": "LPD-41300",
+		"newImports": [
+			"com.liferay.commerce.currency.service.CommerceCurrencyLocalServiceUtil"
+		],
+		"to": "addCommercePriceList(param#15#, param#0#, CommerceCurrencyLocalServiceUtil.fetchCommerceCurrency(param#2#).getCode(), true, CommercePriceListConstants.TYPE_PRICE_LIST, 0, false, param#3#, param#4#, param#5#, param#6#, param#7#, param#8#, param#9#, param#10#, param#11#, param#12#, param#13#, param#14#, param#16#, param#17#)"
+	},
+	{
+		"classNames": [
+			"CommercePriceListLocalService",
+			"CommercePriceListLocalServiceUtil"
+		],
+		"from": "addCommercePriceList(long paramName, long paramName, long paramName, String paramName, double paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, String paramName, boolean paramName, ServiceContext paramName)",
+		"issueKey": "LPD-41300",
+		"newImports": [
+			"com.liferay.commerce.currency.service.CommerceCurrencyLocalServiceUtil"
+		],
+		"to": "addCommercePriceList(param#15#, param#1#, param#0#, CommerceCurrencyLocalServiceUtil.fetchCommerceCurrency(param#2#).getCode(), true, CommercePriceListConstants.TYPE_PRICE_LIST, 0, false, param#3#, param#4#, param#5#, param#6#, param#7#, param#8#, param#9#, param#10#, param#11#, param#12#, param#13#, param#14#, param#16#, param#17#)"
+	},
+	{
+		"classNames": [
+			"CommercePriceListLocalService",
+			"CommercePriceListLocalServiceUtil"
+		],
+		"from": "addCommercePriceList(long paramName, long paramName, long paramName, String paramName, long paramName, boolean paramName, String paramName, double paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, String paramName, boolean paramName, ServiceContext paramName)",
+		"issueKey": "LPD-41300",
+		"newImports": [
+			"com.liferay.commerce.currency.service.CommerceCurrencyLocalServiceUtil"
+		],
+		"to": "addCommercePriceList(param#18#, param#1#, param#0#, CommerceCurrencyLocalServiceUtil.fetchCommerceCurrency(param#2#).getCode(), true, param#3#, param#4#, param#5#, param#6#, param#7#, param#8#, param#9#, param#10#, param#11#, param#12#, param#13#, param#14#, param#15#, param#16#, param#17#, param#19#, param#20#)"
+	},
+	{
+		"classNames": [
+			"CommercePriceListLocalService",
+			"CommercePriceListLocalServiceUtil"
+		],
+		"from": "addCommercePriceList(long paramName, long paramName, long paramName, String paramName, long paramName, String paramName, double paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, boolean paramName, ServiceContext paramName)",
+		"issueKey": "LPD-41300",
+		"newImports": [
+			"com.liferay.commerce.currency.service.CommerceCurrencyLocalServiceUtil"
+		],
+		"to": "addCommercePriceList(null, param#1#, param#0#, CommerceCurrencyLocalServiceUtil.fetchCommerceCurrency(param#2#).getCode(), true, param#3#, param#4#, false, param#5#, param#6#, param#7#, param#8#, param#9#, param#10#, param#11#, param#12#, param#13#, param#14#, param#15#, param#16#, param#17#, param#18#)"
+	},
+	{
+		"classNames": [
+			"CommercePriceListLocalService",
+			"CommercePriceListLocalServiceUtil"
+		],
+		"from": "addCommercePriceList(long paramName, long paramName, long paramName, String paramName, String paramName, double paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, boolean paramName, ServiceContext paramName)",
+		"issueKey": "LPD-41300",
+		"newImports": [
+			"com.liferay.commerce.currency.service.CommerceCurrencyLocalServiceUtil"
+		],
+		"to": "addCommercePriceList(null, param#1#, param#0#, CommerceCurrencyLocalServiceUtil.fetchCommerceCurrency(param#2#).getCode(), true, param#3#, 0, false, param#4#, param#5#, param#6#, param#7#, param#8#, param#9#, param#10#, param#11#, param#12#, param#13#, param#14#, param#15#, param#16#, param#17#)"
+	},
+	{
+		"classNames": [
+			"CommercePriceListLocalService",
+			"CommercePriceListLocalServiceUtil"
+		],
+		"from": "updateCommercePriceList(long paramName, long paramName, boolean paramName, long paramName, String paramName, double paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, boolean paramName, ServiceContext paramName)",
+		"issueKey": "LPD-41300",
+		"newImports": [
+			"com.liferay.commerce.currency.service.CommerceCurrencyLocalServiceUtil"
+		],
+		"to": "updateCommercePriceList(param#0#, CommerceCurrencyLocalServiceUtil.fetchCommerceCurrency(param#1#).getCode(), param#2#, param#3#, param#4#, param#5#, param#6#, param#7#, param#8#, param#9#, param#10#, param#11#, param#12#, param#13#, param#14#, param#15#, param#16#, param#17#)"
+	},
+	{
+		"classNames": [
+			"CommercePriceListService",
+			"CommercePriceListServiceUtil"
+		],
+		"from": "updateCommercePriceList(long paramName, long paramName, boolean paramName, long paramName, String paramName, double paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, boolean paramName, ServiceContext paramName)",
+		"issueKey": "LPD-41300",
+		"newImports": [
+			"com.liferay.commerce.currency.service.CommerceCurrencyLocalServiceUtil"
+		],
+		"to": "updateCommercePriceList(param#0#, CommerceCurrencyLocalServiceUtil.fetchCommerceCurrency(param#1#).getCode(), param#2#, param#3#, param#4#, param#5#, param#6#, param#7#, param#8#, param#9#, param#10#, param#11#, param#12#, param#13#, param#14#, param#15#, param#16#, param#17#)"
+	},
+	{
+		"classNames": [
+			"CommercePriceListLocalService",
+			"CommercePriceListLocalServiceUtil"
+		],
+		"from": "updateCommercePriceList(long paramName, long paramName, boolean paramName, String paramName, long paramName, boolean paramName, String paramName, double paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, boolean paramName, ServiceContext paramName)",
+		"issueKey": "LPD-41300",
+		"newImports": [
+			"com.liferay.commerce.currency.service.CommerceCurrencyLocalServiceUtil"
+		],
+		"to": "updateCommercePriceList(param#0#, CommerceCurrencyLocalServiceUtil.fetchCommerceCurrency(param#1#).getCode(), param#2#, param#3#, param#4#, param#5#, param#6#, param#7#, param#8#, param#9#, param#10#, param#11#, param#12#, param#13#, param#14#, param#15#, param#16#, param#17#, param#18#, param#19#)"
+	},
+	{
+		"classNames": [
+			"CommercePriceListService",
+			"CommercePriceListServiceUtil"
+		],
+		"from": "updateCommercePriceList(long paramName, long paramName, boolean paramName, String paramName, long paramName, boolean paramName, String paramName, double paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, boolean paramName, ServiceContext paramName)",
+		"issueKey": "LPD-41300",
+		"newImports": [
+			"com.liferay.commerce.currency.service.CommerceCurrencyLocalServiceUtil"
+		],
+		"to": "updateCommercePriceList(param#0#, CommerceCurrencyLocalServiceUtil.fetchCommerceCurrency(param#1#).getCode(), param#2#, param#3#, param#4#, param#5#, param#6#, param#7#, param#8#, param#9#, param#10#, param#11#, param#12#, param#13#, param#14#, param#15#, param#16#, param#17#, param#18#, param#19#)"
+	},
+	{
+		"classNames": [
+			"CommercePriceListLocalService",
+			"CommercePriceListLocalServiceUtil"
+		],
+		"from": "updateCommercePriceList(long paramName, long paramName, long paramName, String paramName, double paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, boolean paramName, ServiceContext paramName)",
+		"issueKey": "LPD-41300",
+		"newImports": [
+			"com.liferay.commerce.currency.service.CommerceCurrencyLocalServiceUtil"
+		],
+		"to": "updateCommercePriceList(param#0#, CommerceCurrencyLocalServiceUtil.fetchCommerceCurrency(param#1#).getCode(), true, param#2#, param#3#, param#4#, param#5#, param#6#, param#7#, param#8#, param#9#, param#10#, param#11#, param#12#, param#13#, param#14#, param#15#, param#16#)"
+	},
+	{
+		"classNames": [
+			"CommercePriceListService",
+			"CommercePriceListServiceUtil"
+		],
+		"from": "updateCommercePriceList(long paramName, long paramName, long paramName, String paramName, double paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, boolean paramName, ServiceContext paramName)",
+		"issueKey": "LPD-41300",
+		"newImports": [
+			"com.liferay.commerce.currency.service.CommerceCurrencyLocalServiceUtil"
+		],
+		"to": "updateCommercePriceList(param#0#, CommerceCurrencyLocalServiceUtil.fetchCommerceCurrency(param#1#).getCode(), true, param#2#, param#3#, param#4#, param#5#, param#6#, param#7#, param#8#, param#9#, param#10#, param#11#, param#12#, param#13#, param#14#, param#15#, param#16#)"
+	},
+	{
+		"classNames": [
+			"CommercePriceListLocalService",
+			"CommercePriceListLocalServiceUtil"
+		],
+		"from": "updateCommercePriceList(long paramName, long paramName, String paramName, double paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, boolean paramName, ServiceContext paramName)",
+		"issueKey": "LPD-41300",
+		"newImports": [
+			"com.liferay.commerce.currency.service.CommerceCurrencyLocalServiceUtil"
+		],
+		"to": "updateCommercePriceList(param#0#, CommerceCurrencyLocalServiceUtil.fetchCommerceCurrency(param#1#).getCode(), true, 0, param#2#, param#3#, param#4#, param#5#, param#6#, param#7#, param#8#, param#9#, param#10#, param#11#, param#12#, param#13#, param#14#, param#15#)"
+	},
+	{
+		"classNames": [
+			"CommercePriceListService",
+			"CommercePriceListServiceUtil"
+		],
+		"from": "updateCommercePriceList(long paramName, long paramName, String paramName, double paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, boolean paramName, ServiceContext paramName)",
+		"issueKey": "LPD-41300",
+		"newImports": [
+			"com.liferay.commerce.currency.service.CommerceCurrencyLocalServiceUtil"
+		],
+		"to": "updateCommercePriceList(param#0#, CommerceCurrencyLocalServiceUtil.fetchCommerceCurrency(param#1#).getCode(), true, 0, param#2#, param#3#, param#4#, param#5#, param#6#, param#7#, param#8#, param#9#, param#10#, param#11#, param#12#, param#13#, param#14#, param#15#)"
+	},
+	{
+		"classNames": [
+			"CommercePriceListLocalService",
+			"CommercePriceListLocalServiceUtil"
+		],
+		"from": "updateCommercePriceList(long paramName, long paramName, String paramName, long paramName, boolean paramName, String paramName, double paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, boolean paramName, ServiceContext paramName)",
+		"issueKey": "LPD-41300",
+		"newImports": [
+			"com.liferay.commerce.currency.service.CommerceCurrencyLocalServiceUtil"
+		],
+		"to": "updateCommercePriceList(param#0#, CommerceCurrencyLocalServiceUtil.fetchCommerceCurrency(param#1#).getCode(), true, param#2#, param#3#, param#4#, param#5#, param#6#, param#7#, param#8#, param#9#, param#10#, param#11#, param#12#, param#13#, param#14#, param#15#, param#16#, param#17#, param#18#)"
+	},
+	{
+		"from": "Liferay.Notification",
+		"hasMessage": true,
+		"issueKey": "LPD-44043",
+		"validExtensions": [
+			"jsp"
+		]
+	},
+	{
+		"classNames": [
+			"DDMTemplateLocalService",
+			"DDMTemplateLocalServiceUtil"
+		],
+		"from": "addTemplate(long paramName, long paramName, long paramName, long paramName, long paramName, Map<Locale, String> paramName, Map<Locale, String> paramName, String paramName, String paramName, String paramName, String paramName, ServiceContext paramName)",
+		"issueKey": "LPD-46890",
+		"to": "addTemplate(null, param#0#, param#1#, param#2#, param#3#, param#4#, param#5#, param#6#, param#7#, param#8#, param#9#, param#10#, param#11#)"
+	},
+	{
+		"classNames": [
+			"DDMTemplateService",
+			"DDMTemplateServiceUtil"
+		],
+		"from": "addTemplate(long paramName, long paramName, long paramName, long paramName, Map<Locale, String> paramName, Map<Locale, String> paramName, String paramName, String paramName, String paramName, String paramName, ServiceContext paramName)",
+		"issueKey": "LPD-46890",
+		"to": "addTemplate(null, param#0#, param#1#, param#2#, param#3#, param#4#, param#5#, param#6#, param#7#, param#8#, param#9#, param#10#)"
+	},
+	{
+		"classNames": [
+			"SiteNavigationMenuLocalService",
+			"SiteNavigationMenuLocalServiceUtil"
+		],
+		"from": "addSiteNavigationMenu(long paramName, long paramName, String paramName, int paramName, boolean paramName, ServiceContext paramName)",
+		"issueKey": "LPD-47113",
+		"to": "addSiteNavigationMenu(null, param#0#, param#1#, param#2#, param#3#, param#4#, param#5#)"
+	},
+	{
+		"classNames": [
+			"SiteNavigationMenuService",
+			"SiteNavigationMenuServiceUtil"
+		],
+		"from": "addSiteNavigationMenu(long paramName, String paramName, int paramName, boolean paramName, ServiceContext paramName)",
+		"issueKey": "LPD-47113",
+		"to": "addSiteNavigationMenu(null, param#0#, param#1#, param#2#, param#3#, param#4#)"
+	},
+	{
+		"classNames": [
+			"SiteNavigationMenuItemLocalService",
+			"SiteNavigationMenuItemLocalServiceUtil"
+		],
+		"from": "addSiteNavigationMenuItem(long paramName, long paramName, long paramName, long paramName, String paramName, int paramName, String paramName, ServiceContext paramName)",
+		"issueKey": "LPD-47115",
+		"to": "addSiteNavigationMenuItem(null, param#0#, param#1#, param#2#, param#3#, param#4#, param#5#, param#6#, param#7#)"
+	},
+	{
+		"classNames": [
+			"SiteNavigationMenuItemService",
+			"SiteNavigationMenuItemServiceUtil"
+		],
+		"from": "addSiteNavigationMenuItem(long paramName, long paramName, long paramName, String paramName, String paramName, ServiceContext paramName)",
+		"issueKey": "LPD-47115",
+		"to": "addSiteNavigationMenuItem(null, param#0#, param#1#, param#2#, param#3#, param#4#, param#5#)"
+	},
+	{
+		"classNames": [
+			"RoleLocalService",
+			"RoleLocalServiceUtil"
+		],
+		"from": "addRole(long paramName, String paramName, long paramName, String paramName, Map<Locale, String> paramName, Map<Locale, String> paramName, int paramName, String paramName, ServiceContext paramName)",
+		"issueKey": "LPD-47117",
+		"to": "addRole(null, param#0#, param#1#, param#2#, param#3#, param#4#, param#5#, param#6#, param#7#, param#8#)"
+	},
+	{
+		"classNames": [
+			"RoleService",
+			"RoleServiceUtil"
+		],
+		"from": "addRole(String paramName, long paramName, String paramName, Map<Locale, String> paramName, Map<Locale, String> paramName, int paramName, String paramName, ServiceContext paramName)",
+		"issueKey": "LPD-47117",
+		"to": "addRole(null, param#0#, param#1#, param#2#, param#3#, param#4#, param#5#, param#6#, param#7#)"
+	},
+	{
+		"classNames": [
+			"PortletDisplay"
+		],
+		"from": "regex:(?<variableName>\\w+)\\.(?<prefixMethodName>getPortlet|setPortlet)Setup",
+		"issueKey": "LPD-47124",
+		"to": "${variableName}.${prefixMethodName}Preferences"
+	},
+	{
+		"classNames": [
+			"DLFileEntryLocalService",
+			"DLFileEntryLocalServiceUtil"
+		],
+		"from": "updateFileEntry(long paramName, long paramName, String paramName, String paramName, String paramName, String paramName, String paramName, DLVersionNumberIncrease paramName, long paramName, Map<String, DDMFormValues> paramName, File paramName, InputStream paramName, long paramName, ServiceContext paramName)",
+		"issueKey": "LPD-47411",
+		"to": "updateFileEntry(param#0#, param#1#, param#2#, param#3#, param#4#, null, param#5#, param#6#, param#7#, param#8#, param#9#, param#10#, param#11#, param#12#, null, null, null, param#13#)"
+	},
+	{
+		"classNames": [
+			"DLFileEntryService",
+			"DLFileEntryServiceUtil"
+		],
+		"from": "updateFileEntry(long paramName, String paramName, String paramName, String paramName, String paramName, String paramName, DLVersionNumberIncrease paramName, long paramName, Map<String, DDMFormValues> paramName, File paramName, InputStream paramName, long paramName, ServiceContext paramName)",
+		"issueKey": "LPD-47411",
+		"to": "updateFileEntry(param#0#, param#1#, param#2#, param#3#, null, param#4#, param#5#, param#6#, param#7#, param#8#, param#9#, param#10#, param#11#, null, null, null, param#12#)"
+	},
+	{
+		"classNames": [
+			"DefaultConfigurationAction"
+		],
+		"classStructurePattern": true,
+		"issueKey": "LPD-47432",
+		"methodsToFormat": [
+			{
+				"from": "regex:\\s*@Override\\s*@Reference\\s*\\(\\s*target\\s*=\\s*\\\"[^\\\"]*\\\",[\\s\\S]*?\\)\\s*public\\s+void\\s+setServletContext\\(ServletContext\\s+servletContext\\)\\s*\\{[\\s\\S]*?\\}",
+				"to": ""
+			}
+		]
+	},
+	{
+		"classNames": [
+			"RawMetadataProcessor"
+		],
+		"classStructurePattern": true,
+		"issueKey": "LPD-47852",
+		"methodsToFormat": [
+			{
+				"from": "@Override\n\tpublic Map<String, Set<String>> getFieldNames()",
+				"to": "@Override\n\tpublic Set<String> getFieldNames()"
+			}
+		]
+	},
+	{
+		"classNames": [
+			"CommerceDiscountRuleType"
+		],
+		"classStructurePattern": true,
+		"issueKey": "LPD-48183",
+		"newImports": [
+			"com.liferay.portal.kernel.util.Validator"
+		],
+		"newMethods": [
+			"@Override\n\tpublic boolean validate(String typeSettings) {\n\t\treturn Validator.isNotNull(typeSettings);\n\t}"
+		]
+	},
+	{
+		"classNames": [
+			"PortletSharedSearchSettings"
+		],
+		"from": "getParameterValues71",
+		"issueKey": "LPD-48215",
+		"to": "getParameterValues"
+	},
+	{
+		"classNames": [
+			"CommerceOrderItem"
+		],
+		"from": "getBookedQuantityId",
+		"issueKey": "LPD-48396",
+		"to": "getCommerceInventoryBookedQuantityId"
+	},
+	{
+		"classNames": [
+			"AccountEntry",
+			"CommerceContext"
+		],
+		"from": "getCommerceAccountId",
+		"issueKey": "LPD-48402",
+		"to": "getAccountEntryId",
+		"validExtensions": [
+			"java",
+			"jsp"
+		]
+	},
+	{
+		"from": "regex:CommerceOrderConstants\\.(?<methodName>getPaymentLabelStyle|getPaymentStatusLabel)",
+		"issueKey": "LPD-48412",
+		"newImports": [
+			"com.liferay.commerce.constants.CommercePaymentEntryConstants"
+		],
+		"to": "CommercePaymentEntryConstants.${methodName}",
+		"validExtensions": [
+			"java",
+			"jsp"
+		]
+	},
+	{
+		"classNames": [
+			"CommerceLowStockActivity"
+		],
+		"classStructurePattern": true,
+		"issueKey": "LPD-48704",
+		"newImports": [
+			"com.liferay.portal.kernel.language.LanguageUtil",
+			"java.util.HashMap",
+			"java.util.Locale",
+			"java.util.Map"
+		],
+		"newMethods": [
+			"@Override\n\tpublic Map<Locale,String> getLabelMap() {\n\t\tMap<Locale, String> labelMap = new HashMap<>();\n\n\t\tfor (Locale locale : LanguageUtil.getAvailableLocales()) {\n\t\t\tlabelMap.put(locale, getLabel(locale));\n\t\t}\n\n\t\treturn labelMap;\n\t}"
+		]
+	},
+	{
+		"from": "regex:(?<utilName>CPAttachmentFileEntryServiceUtil|CPAttachmentFileEntryLocalServiceUtil)\\.fetchByExternalReferenceCode",
+		"issueKey": "LPD-48708",
+		"to": "${utilName}.fetchCPAttachmentFileEntryByExternalReferenceCode",
+		"validExtensions": [
+			"java",
+			"jsp"
+		]
+	},
+	{
+		"classNames": [
+			"CPAttachmentFileEntryService",
+			"CPAttachmentFileEntryServiceUtil"
+		],
+		"from": "addCPAttachmentFileEntry(long paramName, long paramName, long paramName, long paramName, long paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, boolean paramName, Map<Locale, String> paramName, String paramName, double paramName, int paramName, ServiceContext paramName)",
+		"issueKey": "LPD-48712",
+		"to": "addCPAttachmentFileEntry(param#1#, param#2#, param#3#, param#4#, false, null, param#5#, param#6#, param#7#, param#8#, param#9#, param#10#, param#11#, param#12#, param#13#, param#14#, param#15#, true, param#16#, param#17#, param#18#, param#19#, param#20#)"
+	},
+	{
+		"classNames": [
+			"CPAttachmentFileEntryLocalService",
+			"CPAttachmentFileEntryLocalServiceUtil"
+		],
+		"from": "addCPAttachmentFileEntry(long paramName, long paramName, long paramName, long paramName, long paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, boolean paramName, Map<Locale, String> paramName, String paramName, double paramName, int paramName, String paramName, ServiceContext paramName)",
+		"issueKey": "LPD-48712",
+		"to": "addCPAttachmentFileEntry(param#20#, param#0#, param#1#, param#2#, param#3#, param#4#, false, null, param#5#, param#6#, param#7#, param#8#, param#9#, param#10#, param#11#, param#12#, param#13#, param#14#, param#15#, true, param#16#, param#17#, param#18#, param#19#, param#21#)"
+	},
+	{
+		"classNames": [
+			"CPAttachmentFileEntryService",
+			"CPAttachmentFileEntryServiceUtil"
+		],
+		"from": "addOrUpdateCPAttachmentFileEntry(String paramName, long paramName, long paramName, long paramName, long paramName, long paramName, boolean paramName, String paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, boolean paramName, Map<Locale, String> paramName, String paramName, double paramName, int paramName, ServiceContext paramName)",
+		"issueKey": "LPD-48759",
+		"to": "addOrUpdateCPAttachmentFileEntry(param#0#, param#1#, param#2#, param#3#, param#4#, param#5#, param#6#, param#7#, param#8#, param#9#, param#10#, param#11#, param#12#, param#13#, param#14#, param#15#, param#16#, param#17#, param#18#, true, param#19#, param#20#, param#21#, param#22#, param#23#)"
+	},
+	{
+		"classNames": [
+			"CPAttachmentFileEntryLocalService",
+			"CPAttachmentFileEntryLocalServiceUtil"
+		],
+		"from": "addOrUpdateCPAttachmentFileEntry(String paramName, long paramName, long paramName, long paramName, long paramName, long paramName, long paramName, boolean paramName, String paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, boolean paramName, Map<Locale, String> paramName, String paramName, double paramName, int paramName, ServiceContext paramName)",
+		"issueKey": "LPD-48759",
+		"to": "addOrUpdateCPAttachmentFileEntry(param#0#, param#1#, param#2#, param#3#, param#4#, param#5#, param#6#, param#7#, param#8#, param#9#, param#10#, param#11#, param#12#, param#13#, param#14#, param#15#, param#16#, param#17#, param#18#, param#19#, true, param#20#, param#21#, param#22#, param#23#, param#24#)"
+	},
+	{
+		"classNames": [
+			"AccountEntry"
+		],
+		"from": "regex:(?<variableName>\\w+)\\s*\\.\\s*getType\\s*\\(\\s*\\)\\s*==\\s*CommerceAccountConstants\\s*\\.\\s*ACCOUNT_TYPE_PERSONAL",
+		"issueKey": "LPD-48765",
+		"to": "${variableName}.isPersonalAccount()"
+	},
+	{
+		"from": "ZipWriterFactory.getZipWriter",
+		"issueKey": "LPD-48770",
+		"newReference": "ZipWriterFactory _zipWriterFactory",
+		"to": "_zipWriterFactory.getZipWriter"
+	},
+	{
+		"from": "AccountConstants.ACCOUNT_TYPE_BUSINESS",
+		"issueKey": "LPD-48783",
+		"to": "AccountConstants.ACCOUNT_ENTRY_TYPE_BUSINESS",
+		"validExtensions": [
+			"java",
+			"jsp"
+		]
+	},
+	{
+		"from": "AccountConstants.ACCOUNT_TYPE_GUEST",
+		"issueKey": "LPD-48783",
+		"to": "AccountConstants.ACCOUNT_ENTRY_TYPE_GUEST",
+		"validExtensions": [
+			"java",
+			"jsp"
+		]
+	},
+	{
+		"from": "AccountConstants.ACCOUNT_TYPE_PERSONAL",
+		"issueKey": "LPD-48783",
+		"to": "AccountConstants.ACCOUNT_ENTRY_TYPE_PERSON",
+		"validExtensions": [
+			"java",
+			"jsp"
+		]
+	},
+	{
+		"classNames": [
+			"CommerceInventoryBookedQuantityLocalService",
+			"CommerceInventoryBookedQuantityLocalServiceUtil"
+		],
+		"from": "getCommerceBookedQuantity(long paramName, String paramName)",
+		"issueKey": "LPD-48784",
+		"newImports": [
+			"com.liferay.petra.string.StringPool"
+		],
+		"to": "getCommerceInventoryBookedQuantity(param#0#, param#1#, StringPool.BLANK)"
+	},
+	{
+		"classNames": [
+			"CommerceShippingEngine"
+		],
+		"classStructurePattern": true,
+		"issueKey": "LPD-48918",
+		"newMethods": [
+			"@Override\n\tpublic String getKey() {\n\t\treturn KEY;\n\t}"
+		]
+	},
+	{
+		"classNames": [
+			"DLFileEntryLocalService",
+			"DLFileEntryLocalServiceUtil"
+		],
+		"from": "addFileEntry(long paramName, long paramName, long paramName, long paramName, String paramName, String paramName, String paramName, String paramName, String paramName, long paramName, Map<String, DDMFormValues> paramName, File paramName, InputStream paramName, long paramName, ServiceContext paramName)",
+		"issueKey": "LPD-49109",
+		"to": "addFileEntry(null, param#0#, param#1#, param#2#, param#3#, param#4#, param#5#, param#6#, null, param#7#, param#8#, param#9#, param#10#, param#11#, param#12#, param#13#, null, null, null, param#14#)"
+	},
+	{
+		"classNames": [
+			"DLFileEntryService",
+			"DLFileEntryServiceUtil"
+		],
+		"from": "addFileEntry(long paramName, long paramName, long paramName, String paramName, String paramName, String paramName, String paramName, String paramName, long paramName, Map<String, DDMFormValues> paramName, File paramName, InputStream paramName, long paramName, ServiceContext paramName)",
+		"issueKey": "LPD-49109",
+		"to": "addFileEntry(null, param#0#, param#1#, param#2#, param#3#, param#4#, param#5#, null, param#6#, param#7#, param#8#, param#9#, param#10#, param#11#, param#12#, null,  null, null, param#13#)"
+	},
+	{
+		"classNames": [
+			"CommerceOrderItemLocalService",
+			"CommerceOrderItemLocalServiceUtil"
+		],
+		"from": "addOrUpdateCommerceOrderItem(long paramName, long paramName, long paramName, String paramName, BigDecimal paramName, long paramName, int paramName, String paramName, CommerceContext paramName, ServiceContext paramName)",
+		"issueKey": "LPD-49117",
+		"newImports": [
+			"java.math.BigDecimal"
+		],
+		"to": "addOrUpdateCommerceOrderItem(param#0#, param#1#, param#2#, param#3#, param#4#, param#5#, BigDecimal.valueOf(param#6#), param#7#, param#8#, param#9#)"
+	},
+	{
+		"classNames": [
+			"CPAttachmentFileEntryLocalService",
+			"CPAttachmentFileEntryLocalServiceUtil"
+		],
+		"from": "updateCPAttachmentFileEntry(long paramName, long paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, boolean paramName, Map<Locale, String> paramName, String paramName, double paramName, int paramName, ServiceContext paramName)",
+		"issueKey": "LPD-49281",
+		"to": "updateCPAttachmentFileEntry(null, param#0#, param#1#, false, null, param#2#, param#3#, param#4#, param#5#, param#6#, param#7#, param#8#, param#9#, param#10#, param#11#, param#12#, true, param#13#, param#14#, param#15#, param#16#, param#17#)"
+	},
+	{
+		"classNames": [
+			"CPAttachmentFileEntryService",
+			"CPAttachmentFileEntryServiceUtil"
+		],
+		"from": "updateCPAttachmentFileEntry(long paramName, long paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, boolean paramName, Map<Locale, String> paramName, String paramName, double paramName, int paramName, ServiceContext paramName)",
+		"issueKey": "LPD-49281",
+		"to": "updateCPAttachmentFileEntry(param#0#, param#1#, false, null, param#2#, param#3#, param#4#, param#5#, param#6#, param#7#, param#8#, param#9#, param#10#, param#11#, param#12#, true, param#13#, param#14#, param#15#, param#16#, param#17#)"
+	},
+	{
+		"classNames": [
+			"CPAttachmentFileEntryLocalService",
+			"CPAttachmentFileEntryLocalServiceUtil"
+		],
+		"from": "updateCPAttachmentFileEntry(long paramName, long paramName, long paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, boolean paramName, Map<Locale, String> paramName, String paramName, double paramName, int paramName, ServiceContext paramName)",
+		"issueKey": "LPD-49281",
+		"to": "updateCPAttachmentFileEntry(param#0#, param#1#, param#2#, false, null, param#3#, param#4#, param#5#, param#6#, param#7#, param#8#, param#9#, param#10#, param#11#, param#12#, param#13#, true, param#14#, param#15#, param#16#, param#17#, param#18#)"
+	},
+	{
+		"classNames": [
+			"CPSpecificationOptionLocalService",
+			"CPSpecificationOptionLocalServiceUtil"
+		],
+		"from": "addCPSpecificationOption(long paramName, long paramName, Map<Locale, String> paramName, Map<Locale, String> paramName, boolean paramName, String paramName, ServiceContext paramName)",
+		"issueKey": "LPD-49731",
+		"to": "addCPSpecificationOption(null, param#0#, param#1#, null, param#2#, param#3#, param#4#, param#5#, 0, param#6#)"
+	},
+	{
+		"classNames": [
+			"CommerceOrderItem"
+		],
+		"from": "getDeliveryGroup",
+		"issueKey": "LPD-49755",
+		"to": "getDeliveryGroupName"
+	},
+	{
+		"from": "SitemapManager.addURLElement",
+		"issueKey": "LPD-50074",
+		"newReference": "SitemapManager _sitemapManager",
+		"to": "_sitemapManager.addURLElement"
+	},
+	{
+		"classNames": [
+			"AccountEntryLocalService",
+			"AccountEntryLocalServiceUtil",
+			"AccountEntryService",
+			"AccountEntryServiceUtil"
+		],
+		"from": "fetchByExternalReferenceCode(long paramName, String paramName)",
+		"issueKey": "LPD-50175",
+		"to": "fetchAccountEntryByExternalReferenceCode(param#1#, param#0#)"
+	},
+	{
+		"classNames": [
+			"JournalArticleLocalService",
+			"JournalArticleLocalServiceUtil"
+		],
+		"from": "addArticle(long paramName, long paramName, long paramName, long paramName, long paramName, String paramName, boolean paramName, double paramName, Map<Locale, String> paramName, Map<Locale, String> paramName, Map<Locale, String> paramName, String paramName, String paramName, String paramName, String paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, boolean paramName, int paramName, int paramName, int paramName, int paramName, int paramName, boolean paramName, boolean paramName, boolean paramName, String paramName, File paramName, Map<String, byte[]> paramName, String paramName, ServiceContext paramName)",
+		"issueKey": "LPD-52326",
+		"newImports": [
+			"com.liferay.dynamic.data.mapping.service.DDMStructureLocalServiceUtil"
+		],
+		"to": "addArticle(null, param#0#, param#1#, param#2#, param#3#, param#4#, param#5#, param#6#, param#7#, param#8#, param#9#, param#10#, param#11#, DDMStructureLocalServiceUtil.getStructure(param#1#, param#3#, param#12#).getStructureId(), param#13#, param#14#, param#15#, param#16#, param#17#, param#18#, param#19#, param#20#, param#21#, param#22#, param#23#, param#24#, param#25#, param#26#, param#27#, param#28#, param#29#, param#30#, param#31#, param#32#, param#33#, 0, 0, param#34#, param#35#, param#36#, param#37#, param#38#)"
+	},
+	{
+		"classNames": [
+			"JournalArticleLocalService",
+			"JournalArticleLocalServiceUtil"
+		],
+		"from": "addArticle(long paramName, long paramName, long paramName, long paramName, long paramName, String paramName, boolean paramName, double paramName, Map<Locale, String> paramName, Map<Locale, String> paramName, String paramName, String paramName, String paramName, String paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, boolean paramName, int paramName, int paramName, int paramName, int paramName, int paramName, boolean paramName, boolean paramName, boolean paramName, String paramName, File paramName, Map<String, byte[]> paramName, String paramName, ServiceContext paramName)",
+		"issueKey": "LPD-52326",
+		"newImports": [
+			"com.liferay.dynamic.data.mapping.service.DDMStructureLocalServiceUtil"
+		],
+		"to": "addArticle(null, param#0#, param#1#, param#2#, param#3#, param#4#, param#5#, param#6#, param#7#, param#8#, param#9#, null, param#10#, DDMStructureLocalServiceUtil.getStructure(param#1#, param#3#, param#11#).getStructureId(), param#12#, param#13#, param#14#, param#15#, param#16#, param#17#, param#18#, param#19#, param#20#, param#21#, param#22#, param#23#, param#24#, param#25#, param#26#, param#27#, param#28#, param#29#, param#30#, param#31#, param#32#, 0, 0, param#33#, param#34#, param#35#, param#36#, param#37#)"
+	},
+	{
+		"classNames": [
+			"JournalArticleService",
+			"JournalArticleServiceUtil"
+		],
+		"from": "addArticle(long paramName, long paramName, long paramName, long paramName, String paramName, boolean paramName, Map<Locale, String> paramName, Map<Locale, String> paramName, Map<Locale, String> paramName, String paramName, String paramName, String paramName, String paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, boolean paramName, int paramName, int paramName, int paramName, int paramName, int paramName, boolean paramName, boolean paramName, boolean paramName, String paramName, File paramName, Map<String, byte[]> paramName, String paramName, ServiceContext paramName)",
+		"issueKey": "LPD-52326",
+		"newImports": [
+			"com.liferay.dynamic.data.mapping.service.DDMStructureLocalServiceUtil"
+		],
+		"to": "addArticle(null, param#0#, param#1#, param#2#, param#3#, param#4#, param#5#, param#6#, param#7#, param#8#, param#9#, DDMStructureLocalServiceUtil.getStructure(param#0#, param#2#, param#10#).getStructureId(), param#11#, param#12#, param#13#, param#14#, param#15#, param#16#, param#17#, param#18#, param#19#, param#20#, param#21#, param#22#, param#23#, param#24#, param#25#, param#26#, param#27#, param#28#, param#29#, param#30#, param#31#, 0, 0, param#32#, param#33#, param#34#, param#35#, param#36#)"
+	},
+	{
+		"classNames": [
+			"JournalArticleService",
+			"JournalArticleServiceUtil"
+		],
+		"from": "addArticle(long paramName, long paramName, long paramName, long paramName, String paramName, boolean paramName, Map<Locale, String> paramName, Map<Locale, String> paramName, String paramName, String paramName, String paramName, String paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, boolean paramName, int paramName, int paramName, int paramName, int paramName, int paramName, boolean paramName, boolean paramName, boolean paramName, String paramName, File paramName, Map<String, byte[]> paramName, String paramName, ServiceContext paramName)",
+		"issueKey": "LPD-52326",
+		"newImports": [
+			"com.liferay.dynamic.data.mapping.service.DDMStructureLocalServiceUtil"
+		],
+		"to": "addArticle(null, param#0#, param#1#, param#2#, param#3#, param#4#, param#5#, param#6#, param#7#, null, param#8#, DDMStructureLocalServiceUtil.getStructure(param#0#, param#2#, param#9#).getStructureId(), param#10#, param#11#, param#12#, param#13#, param#14#, param#15#, param#16#, param#17#, param#18#, param#19#, param#20#, param#21#, param#22#, param#23#, param#24#, param#25#, param#26#, param#27#, param#28#, param#29#, param#30#, 0, 0, param#31#, param#32#, param#33#, param#34#, param#35#)"
+	},
+	{
+		"classNames": [
+			"JournalArticleService",
+			"JournalArticleServiceUtil"
+		],
+		"from": "addArticle(long paramName, long paramName, long paramName, long paramName, String paramName, boolean paramName, Map<Locale, String> paramName, Map<Locale, String> paramName, String paramName, String paramName, String paramName, String paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, boolean paramName, int paramName, int paramName, int paramName, int paramName, int paramName, boolean paramName, boolean paramName, String paramName, ServiceContext paramName)",
+		"issueKey": "LPD-52326",
+		"newImports": [
+			"com.liferay.dynamic.data.mapping.service.DDMStructureLocalServiceUtil"
+		],
+		"to": "addArticle(null, param#0#, param#1#, param#2#, param#3#, param#4#, param#5#, param#6#, param#7#, null, param#8#, DDMStructureLocalServiceUtil.getStructure(param#0#, param#2#, param#9#).getStructureId(), param#10#, param#11#, param#12#, param#13#, param#14#, param#15#, param#16#, param#17#, param#18#, param#19#, param#20#, param#21#, param#22#, param#23#, param#24#, param#25#, param#26#, param#27#, param#28#, param#29#, false, 0, 0, null, null, param#30#, param#31#)"
+	},
+	{
+		"classNames": [
+			"JournalArticleLocalService",
+			"JournalArticleLocalServiceUtil"
+		],
+		"from": "addArticle(long paramName, long paramName, long paramName, Map<Locale, String> paramName, Map<Locale, String> paramName, String paramName, String paramName, String paramName, ServiceContext paramName)",
+		"issueKey": "LPD-52326",
+		"newImports": [
+			"com.liferay.dynamic.data.mapping.service.DDMStructureLocalServiceUtil",
+			"com.liferay.portal.kernel.util.PortalUtil",
+			"com.liferay.dynamic.data.mapping.model.DDMStructure"
+		],
+		"to": "addArticle(null, param#0#, param#1#, param#2#, param#3#, param#4#, param#5#, DDMStructureLocalServiceUtil.getStructure(param#1#, PortalUtil.getClassNameId(DDMStructure.class), param#6#).getStructureId(), param#7#, param#8#)"
+	},
+	{
+		"classNames": [
+			"JournalArticleService",
+			"JournalArticleServiceUtil"
+		],
+		"from": "addArticle(long paramName, long paramName, Map<Locale, String> paramName, Map<Locale, String> paramName, String paramName, String paramName, String paramName, ServiceContext paramName)",
+		"issueKey": "LPD-52326",
+		"newImports": [
+			"com.liferay.dynamic.data.mapping.service.DDMStructureLocalServiceUtil",
+			"com.liferay.portal.kernel.util.PortalUtil",
+			"com.liferay.dynamic.data.mapping.model.DDMStructure"
+		],
+		"to": "addArticle(null, param#0#, param#1#, param#2#, param#3#, param#4#, DDMStructureLocalServiceUtil.getStructure(param#0#, PortalUtil.getClassNameId(DDMStructure.class), param#5#).getStructureId(), param#6#, param#7#)"
+	},
+	{
+		"classNames": [
+			"JournalArticleLocalService",
+			"JournalArticleLocalServiceUtil"
+		],
+		"from": "addArticleDefaultValues(long paramName, long paramName, long paramName, long paramName, Map<Locale, String> paramName, Map<Locale, String> paramName, String paramName, String paramName, String paramName, String paramName, boolean paramName, boolean paramName, String paramName, File paramName, ServiceContext serviceContext)",
+		"issueKey": "LPD-52326",
+		"newImports": [
+			"com.liferay.dynamic.data.mapping.service.DDMStructureLocalServiceUtil"
+		],
+		"to": "addArticleDefaultValues(param#0#, param#1#, param#2#, param#3#, param#4#, param#5#, param#6#, DDMStructureLocalServiceUtil.getStructure(param#1#, param#2#, param#7#).getStructureId(), param#8#, param#9#, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, true, 0, 0, 0, 0, 0, true, param#10#, param#11#, 0, 0, param#12#, param#13#, param#14#)"
+	},
+	{
+		"classNames": [
+			"JournalArticleService",
+			"JournalArticleServiceUtil"
+		],
+		"from": "addArticleDefaultValues(long paramName, long paramName, long paramName, Map<Locale, String> paramName, Map<Locale, String> paramName, String paramName, String paramName, String paramName, String paramName, boolean paramName, boolean paramName, String paramName, File paramName, ServiceContext paramName)",
+		"issueKey": "LPD-52326",
+		"newImports": [
+			"com.liferay.dynamic.data.mapping.service.DDMStructureLocalServiceUtil"
+		],
+		"to": "addArticleDefaultValues(param#0#, param#1#, param#2#, param#3#, param#4#, param#5#, DDMStructureLocalServiceUtil.getStructure(param#0#, param#1#, param#6#).getStructureId(), param#7#, param#8#, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, true, 0, 0, 0, 0, 0, true, param#9#, param#10#, 0, 0, param#11#, param#12#, param#13#)"
+	},
+	{
+		"classNames": [
+			"JournalArticleLocalService",
+			"JournalArticleLocalServiceUtil"
+		],
+		"from": "updateArticle(long paramName, long paramName, long paramName, String paramName, double paramName, Map<Locale, String> paramName, Map<Locale, String> paramName, Map<Locale, String> paramName, String paramName, String paramName, String paramName, String paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, boolean paramName, int paramName, int paramName, int paramName, int paramName, int paramName, boolean paramName, boolean paramName, boolean paramName, String paramName, File paramName, Map<String, byte[]> paramName, String paramName, ServiceContext paramName)",
+		"issueKey": "LPD-52326",
+		"to": "updateArticle(param#0#, param#1#, param#2#, param#3#, param#4#, param#5#, param#6#, param#7#, param#8#, param#10#, param#11#, param#12#, param#13#, param#14#, param#15#, param#16#, param#17#, param#18#, param#19#, param#20#, param#21#, param#22#, param#23#, param#24#, param#25#, param#26#, param#27#, param#28#, param#29#, param#30#, 0, 0, param#31#, param#32#, param#33#, param#34#, param#35#)"
+	},
+	{
+		"classNames": [
+			"JournalArticleLocalService",
+			"JournalArticleLocalServiceUtil"
+		],
+		"from": "updateArticle(long paramName, long paramName, long paramName, String paramName, double paramName, Map<Locale, String> paramName, Map<Locale, String> paramName, String paramName, String paramName, String paramName, String paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, boolean paramName, int paramName, int paramName, int paramName, int paramName, int paramName, boolean paramName, boolean paramName, boolean paramName, String paramName, File paramName, Map<String, byte[]> paramName, String paramName, ServiceContext paramName)",
+		"issueKey": "LPD-52326",
+		"to": "updateArticle(param#0#, param#1#, param#2#, param#3#, param#4#, param#5#, param#6#, null, param#7#, param#9#, param#10#, param#11#, param#12#, param#13#, param#14#, param#15#, param#16#, param#17#, param#18#, param#19#, param#20#, param#21#, param#22#, param#23#, param#24#, param#25#, param#26#, param#27#, param#28#, param#29#, 0, 0, param#30#, param#31#, param#32#, param#33#, param#34#)"
+	},
+	{
+		"classNames": [
+			"JournalArticleService",
+			"JournalArticleServiceUtil"
+		],
+		"from": "updateArticle(long paramName, long paramName, String paramName, double paramName, Map<Locale, String> paramName, Map<Locale, String> paramName, Map<Locale, String> paramName, String paramName, String paramName, String paramName, String paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, boolean paramName, int paramName, int paramName, int paramName, int paramName, int paramName, boolean paramName, boolean paramName, boolean paramName, String paramName, File paramName, Map<String, byte[]> paramName, String paramName, ServiceContext paramName)",
+		"issueKey": "LPD-52326",
+		"to": "updateArticle(param#0#, param#1#, param#2#, param#3#, param#4#, param#5#, param#6#, param#7#, param#9#, param#10#, param#11#, param#12#, param#13#, param#14#, param#15#, param#16#, param#17#, param#18#, param#19#, param#20#, param#21#, param#22#, param#23#, param#24#, param#25#, param#26#, param#27#, param#28#, param#29#, 0, 0, param#30#, param#31#, param#32#, param#33#, param#34#)"
+	},
+	{
+		"classNames": [
+			"JournalArticleService",
+			"JournalArticleServiceUtil"
+		],
+		"from": "updateArticle(long paramName, long paramName, String paramName, double paramName, Map<Locale, String> paramName, Map<Locale, String> paramName, String paramName, String paramName, String paramName, String paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, int paramName, boolean paramName, int paramName, int paramName, int paramName, int paramName, int paramName, boolean paramName, boolean paramName, boolean paramName, String paramName, File paramName, Map<String, byte[]> paramName, String paramName, ServiceContext paramName)",
+		"issueKey": "LPD-52326",
+		"to": "updateArticle(param#0#, param#1#, param#2#, param#3#, param#4#, param#5#, null, param#6#, param#8#, param#9#, param#10#, param#11#, param#12#, param#13#, param#14#, param#15#, param#16#, param#17#, param#18#, param#19#, param#20#, param#21#, param#22#, param#23#, param#24#, param#25#, param#26#, param#27#, param#28#, 0, 0, param#29#, param#30#, param#31#, param#32#, param#33#)"
+	},
+	{
+		"classNames": [
+			"JournalArticleLocalService",
+			"JournalArticleLocalServiceUtil"
+		],
+		"from": "updateArticleDefaultValues(long paramName, long paramName, String paramName, Map<Locale, String> paramName, Map<Locale, String> paramName, String paramName, String paramName, String paramName, String paramName, boolean paramName, boolean paramName, String paramName, File paramName, ServiceContext serviceContext)",
+		"issueKey": "LPD-52326",
+		"to": "updateArticleDefaultValues(param#0#, param#1#, param#2#, param#3#, param#4#, param#5#, param#7#, param#8#, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, true, 0, 0, 0, 0, 0, true, param#9#, param#10#, 0, 0, param#11#, param#12#, param#13#)"
+	},
+	{
+		"classNames": [
+			"JournalArticleService",
+			"JournalArticleServiceUtil"
+		],
+		"from": "updateArticleDefaultValues(long paramName, String paramName, Map<Locale, String> paramName, Map<Locale, String> paramName, String paramName, String paramName, String paramName, String paramName, boolean paramName, boolean paramName, String paramName, File paramName, ServiceContext serviceContext)",
+		"issueKey": "LPD-52326",
+		"to": "updateArticleDefaultValues(param#0#, param#1#, param#2#, param#3#, param#4#, param#6#, param#7#, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, true, 0, 0, 0, 0, 0, true, param#8#, param#9#, 0, 0, param#10#, param#11#, param#12#)"
+	},
+	{
+		"classNames": [
+			"CommercePriceEntryLocalService",
+			"CommercePriceEntryLocalServiceUtil",
+			"CommercePriceEntryService",
+			"CommercePriceEntryServiceUtil"
+		],
+		"from": "fetchCommercePriceEntryByExternalReferenceCode(long paramName, String paramName)",
+		"issueKey": "LPD-53012",
+		"to": "fetchCommercePriceEntryByExternalReferenceCode(param#1#, param#0#)"
+	},
+	{
+		"classNames": [
+			"CommercePriceEntryLocalService",
+			"CommercePriceEntryLocalServiceUtil",
+			"CommercePriceEntryService",
+			"CommercePriceEntryServiceUtil"
+		],
+		"from": "fetchCommercePriceEntryByReferenceCode(long paramName, String paramName)",
+		"issueKey": "LPD-53012",
+		"to": "fetchCommercePriceEntryByExternalReferenceCode(param#1#, param#0#)"
+	},
+	{
+		"classNames": [
+			"CommerceOrderItem",
+			"CommerceOrderItemLocalService",
+			"CommerceOrderItemLocalServiceUtil",
+			"CommerceOrderItemLocalServiceWrapper",
+			"CommerceOrderItemUtil",
+			"CommerceOrderItemWrapper"
+		],
+		"from": "regex:(?<variableName>\\w+)\\.\\s*(?<prefixMethodName>get|set|fetchBy|findBy|fetch|removeBy|countBy|fetchCommerceOrderItemBy)BookedQuantity",
+		"issueKey": "LPD-53535",
+		"to": "${variableName}.${prefixMethodName}CommerceInventoryBookedQuantity"
+	},
+	{
+		"classNames": [
+			"TemplateContextHelper"
+		],
+		"from": "getHelperUtilities(ClassLoader paramName, boolean paramName)",
+		"issueKey": "LPD-54558",
+		"to": "getHelperUtilities(param#1#)"
+	},
+	{
+		"from": "Liferay.Notice",
+		"hasMessage": true,
+		"issueKey": "LPD-56577",
+		"validExtensions": [
+			"jsp"
+		]
+	},
+	{
+		"classNames": [
+			"DDMTemplateLocalService",
+			"DDMTemplateLocalServiceUtil"
+		],
+		"from": "addTemplate(long param, long param, long param, long param, long param, String param, Map<Locale, String> param, Map<Locale, String> param, String param, String param, String param, String param, boolean param, boolean param, String param, File param, ServiceContext param)",
+		"issueKey": "LPD-58228",
+		"to": "addTemplate(null, param#0#, param#1#, param#2#, param#3#, param#4#, param#5#, param#6#, param#7#, param#8#, param#9#, param#10#, param#11#, param#12#, param#13#, param#14#, param#15#, param#16#)"
+	},
+	{
+		"classNames": [
+			"DDMTemplateService",
+			"DDMTemplateServiceUtil"
+		],
+		"from": "addTemplate(long param, long param, long param, long param, String param, Map<Locale, String> param, Map<Locale, String> param, String param, String param, String param, String param, boolean param, boolean param, String param, File param, ServiceContext param)",
+		"issueKey": "LPD-58228",
+		"to": "addTemplate(null, param#0#, param#1#, param#2#, param#3#, param#4#, param#5#, param#6#, param#7#, param#8#, param#9#, param#10#, param#11#, param#12#, param#13#, param#14#, param#15#)"
+	},
+	{
+		"from": "new NavItem(HttpServletRequest param, ThemeDisplay param, Layout param, Map<String, Object> param)",
+		"issueKey": "LPD-58259",
+		"to": "new NavItem(param#0#, param#1#, param#2#)"
+	},
+	{
+		"classNames": [
+			"LayoutLocalService",
+			"LayoutLocalServiceUtil",
+			"LayoutService",
+			"LayoutServiceUtil"
+		],
+		"from": "addLayout(long paramName, long paramName, boolean paramName, long paramName, String paramName, String paramName, String paramName, String paramName, boolean paramName, boolean paramName, String paramName, ServiceContext paramName)",
+		"issueKey": "LPD-58261",
+		"to": "addLayout(null, param#0#, param#1#, param#2#, param#3#, param#4#, param#5#, param#6#, param#7#, param#8#, param#9#, param#10#, param#11#)"
+	},
+	{
+		"classNames": [
+			"OrganizationLocalService",
+			"OrganizationLocalServiceUtil"
+		],
+		"from": "updateOrganization(long paramName, long paramName, long paramName, String paramName, String paramName, long paramName, long paramName, long paramName, String paramName, boolean paramName, byte[] paramName, boolean paramName, ServiceContext serviceContext)",
+		"issueKey": "LPD-58268",
+		"to": "updateOrganization(null, param#0#, param#1#, param#2#, param#3#, param#4#, param#5#, param#6#, param#7#, param#8#, param#9#, param#10#, param#11#, param#12#)"
+	},
+	{
+		"classNames": [
+			"JournalUtil"
+		],
+		"from": "addRecentArticle(ActionRequest paramName, JournalArticle paramName)",
+		"issueKey": "LPD-58341",
+		"to": ""
+	},
+	{
+		"classNames": [
+			"ProxyModeThreadLocal"
+		],
+		"from": "setForceSync(boolean paramName)",
+		"hasMessage": true,
+		"issueKey": "LPD-58370"
+	},
+	{
+		"classNames": [
+			"ProxyModeThreadLocal"
+		],
+		"from": "setWithSafeClosable(boolean paramName)",
+		"hasMessage": true,
+		"issueKey": "LPD-58370"
+	},
+	{
+		"classNames": [
+			"SafePortalLDAP"
+		],
+		"from": "getUser(long paramName, long paramName, String paramName, String paramName, boolean paramName)",
+		"issueKey": "LPD-58380",
+		"to": "getUser(param#0#, param#1#, param#2#, param#3#, param#4#, false)"
+	},
+	{
+		"classNames": [
+			"ModelListener"
+		],
+		"from": "regex:(?<variableName>\\w+)\\.onAfterUpdate\\((?<className>\\w+)\\)",
+		"issueKey": "LPD-58402",
+		"to": "${variableName}.onAfterUpdate(${className}.cloneWithOriginalValues(), ${className})"
+	},
+	{
+		"classNames": [
+			"MBMessageLocalService",
+			"MBMessageLocalServiceUtil"
+		],
+		"from": "addDiscussionMessage(long param, String param, long param, String param, long param, long param, long param, String param, String param, ServiceContext param)",
+		"issueKey": "LPD-58406",
+		"to": "addDiscussionMessage(null, param#0#, param#1#, param#2#, param#3#, param#4#, param#5#, param#6#, param#7#, param#8#, param#9#)"
+	},
+	{
+		"classNames": [
+			"LayoutCopyHelper"
+		],
+		"from": "copyLayout",
+		"issueKey": "LPD-58415",
+		"to": "copyLayoutContent"
+	},
+	{
+		"classNames": [
+			"CompanyThreadLocal"
+		],
+		"from": "setWithSafeCloseable",
+		"issueKey": "LPD-58435",
+		"to": "setCompanyIdWithSafeCloseable"
+	},
+	{
+		"classNames": [
+			"LayoutClassedModelUsageLocalService",
+			"LayoutClassedModelUsageLocalServiceUtil"
+		],
+		"from": "addLayoutClassedModelUsage(long paramName, long paramName, long paramName, String paramName, long paramName, long paramName, ServiceContext paramName)",
+		"issueKey": "LPD-58438",
+		"to": "addLayoutClassedModelUsage(param#0#, null, param#1#, param#2#, param#3#, param#4#, param#5#, param#6#)"
+	},
+	{
+		"classNames": [
+			"LayoutClassedModelUsageLocalService",
+			"LayoutClassedModelUsageLocalServiceUtil"
+		],
+		"from": "fetchLayoutClassedModelUsage(long paramName, long paramName, String paramName, long paramName, long paramName)",
+		"issueKey": "LPD-58438",
+		"to": "fetchLayoutClassedModelUsage(null, null, param#0#, param#1#, param#2#, param#3#, param#4#)"
+	},
+	{
+		"classNames": [
+			"DLUtil"
+		],
+		"from": "getUniqueFileName(long paramName, long paramName, String paramName)",
+		"issueKey": "LPD-58469",
+		"to": "getUniqueFileName(param#0#, param#1#, param#2#, false)"
+	},
+	{
+		"classNames": [
+			"DLAppLocalService",
+			"DLAppLocalServiceUtil"
+		],
+		"from": "addFileEntry(long paramName, long paramName, long paramName, String paramName, String paramName, String paramName, String paramName, String paramName, File paramName, ServiceContext paramName)",
+		"issueKey": "LPD-58470",
+		"to": "addFileEntry(null, param#0#, param#1#, param#2#, param#3#, param#4#, param#5#, null, param#6#, param#7#, param#8#, null, null, null, param#9#)"
+	},
+	{
+		"classNames": [
+			"DLAppLocalService",
+			"DLAppLocalServiceUtil"
+		],
+		"from": "addFileEntry(long paramName, long paramName, long paramName, String paramName, String paramName, String paramName, String paramName, String paramName, InputStream paramName, long paramName, ServiceContext paramName)",
+		"issueKey": "LPD-58470",
+		"to": "addFileEntry(null, param#0#, param#1#, param#2#, param#3#, param#4#, param#5#, null, param#6#, param#7#, param#8#, param#9#, null, null, null, param#10#)"
+	},
+	{
+		"classNames": [
+			"DLAppService",
+			"DLAppServiceUtil"
+		],
+		"from": "addFileEntry(long paramName, long paramName, String paramName, String paramName, String paramName, String paramName, String paramName, byte[] paramName, ServiceContext paramName)",
+		"issueKey": "LPD-58470",
+		"to": "addFileEntry(null, param#0#, param#1#, param#2#, param#3#, param#4#, null, param#5#, param#6#, param#7#, null, null, null, param#8#)"
+	},
+	{
+		"classNames": [
+			"DLAppService",
+			"DLAppServiceUtil"
+		],
+		"from": "addFileEntry(long paramName, long paramName, String paramName, String paramName, String paramName, String paramName, String paramName, File paramName, ServiceContext paramName)",
+		"issueKey": "LPD-58470",
+		"to": "addFileEntry(null, param#0#, param#1#, param#2#, param#3#, param#4#, null, param#5#, param#6#, param#7#, null, null, null, param#8#)"
+	},
+	{
+		"classNames": [
+			"DLAppService",
+			"DLAppServiceUtil"
+		],
+		"from": "addFileEntry(long paramName, long paramName, String paramName, String paramName, String paramName, String paramName, String paramName, InputStream paramName, long paramName, ServiceContext paramName)",
+		"issueKey": "LPD-58470",
+		"to": "addFileEntry(null, param#0#, param#1#, param#2#, param#3#, param#4#, null, param#5#, param#6#, param#7#, param#8#, null, null, null, param#9#)"
+	},
+	{
+		"classNames": [
+			"DLAppLocalService",
+			"DLAppLocalServiceUtil"
+		],
+		"from": "updateFileEntry(long paramName, long paramName, String paramName, String paramName, String paramName, String paramName, String paramName, DLVersionNumberIncrease paramName, File paramName, ServiceContext paramName)",
+		"issueKey": "LPD-58470",
+		"to": "updateFileEntry(param#0#, param#1#, param#2#, param#3#, param#4#, null,  param#5#, param#6#, param#7#, param#8#, null, null, null, param#9#)"
+	},
+	{
+		"classNames": [
+			"DLAppLocalService",
+			"DLAppLocalServiceUtil"
+		],
+		"from": "updateFileEntry(long paramName, long paramName, String paramName, String paramName, String paramName, String paramName, String paramName, DLVersionNumberIncrease paramName, InputStream paramName, long paramName, ServiceContext paramName)",
+		"issueKey": "LPD-58470",
+		"to": "updateFileEntry(param#0#, param#1#, param#2#, param#3#, param#4#, null, param#5#, param#6#, param#7#, param#8#, param#9#, null, null, null, param#10#)"
+	},
+	{
+		"classNames": [
+			"DLAppService",
+			"DLAppServiceUtil"
+		],
+		"from": "updateFileEntry(long paramName, String paramName, String paramName, String paramName, String paramName, String paramName, DLVersionNumberIncrease paramName, byte[] paramName, ServiceContext paramName)",
+		"issueKey": "LPD-58470",
+		"to": "updateFileEntry(param#0#, param#1#, param#2#, param#3#, null, param#4#, param#5#, param#6#, param#7#, null, null, null, param#8#)"
+	},
+	{
+		"classNames": [
+			"DLAppService",
+			"DLAppServiceUtil"
+		],
+		"from": "updateFileEntry(long paramName, String paramName, String paramName, String paramName, String paramName, String paramName, DLVersionNumberIncrease paramName, File paramName, ServiceContext paramName)",
+		"issueKey": "LPD-58470",
+		"to": "updateFileEntry(param#0#, param#1#, param#2#, param#3#, null, param#4#, param#5#, param#6#, param#7#, null, null, null, param#8#)"
+	},
+	{
+		"classNames": [
+			"DLAppService",
+			"DLAppServiceUtil"
+		],
+		"from": "updateFileEntry(long paramName, String paramName, String paramName, String paramName, String paramName, String paramName, DLVersionNumberIncrease paramName, InputStream paramName, long paramName, ServiceContext paramName)",
+		"issueKey": "LPD-58470",
+		"to": "updateFileEntry(param#0#, param#1#, param#2#, param#3#, null, param#4#, param#5#, param#6#, param#7#, param#8#, null, null, null, param#9#)"
+	},
+	{
+		"classNames": [
+			"DLAppService",
+			"DLAppServiceUtil"
+		],
+		"from": "updateFileEntryAndCheckIn(long paramName, String paramName, String paramName, String paramName, String paramName, String paramName, DLVersionNumberIncrease paramName, File file, ServiceContext paramName)",
+		"issueKey": "LPD-58470",
+		"to": "updateFileEntryAndCheckIn(param#0#, param#1#, param#2#, param#3#, null, param#4#, param#5#, param#6#, param#7#, null, null, null, param#8#)"
+	},
+	{
+		"classNames": [
+			"DLAppService",
+			"DLAppServiceUtil"
+		],
+		"from": "updateFileEntryAndCheckIn(long paramName, String paramName, String paramName, String paramName, String paramName, String paramName, DLVersionNumberIncrease paramName, InputStream paramName, long paramName, ServiceContext paramName)",
+		"issueKey": "LPD-58470",
+		"to": "updateFileEntryAndCheckIn(param#0#, param#1#, param#2#, param#3#, null, param#4#, param#5#, param#6#, param#7#, param#8#, null, null, null, param#9#)"
+	},
+	{
+		"ClassNames": [
+			"UserLocalService",
+			"UserLocalServiceUtil"
+		],
+		"from": "addUser(long paramName, long paramName, boolean paramName, String paramName, String paramName, boolean paramName, String paramName, String paramName, Locale paramName, String paramName, String paramName, String paramName, long paramName, long paramName, boolean paramName, int paramName, int paramName, int paramName, String paramName, long[] paramName, long[] paramName, long[] paramName, long[] paramName, boolean paramName, ServiceContext paramName)",
+		"issueKey": "LPD-58511",
+		"newImports": [
+			"com.liferay.portal.kernel.model.UserConstants"
+		],
+		"to": "addUser(param#0#, param#1#, param#2#, param#3#, param#4#, param#5#, param#6#, param#7#, param#8#, param#9#, param#10#, param#11#, param#12#, param#13#, param#14#, param#15#, param#16#, param#17#, param#18#, UserConstants.TYPE_REGULAR, param#19#, param#20#, param#21#, param#22#, param#23#, param#24#)"
+	},
+	{
+		"classNames": [
+			"FragmentEntryLinkLocalService",
+			"FragmentEntryLinkLocalServiceUtil"
+		],
+		"from": "addFragmentEntryLink(long paramName, long paramName, long paramName, long paramName, long paramName, long paramName, String paramName, String paramName, String paramName, String paramName, String paramName, String paramName, int paramName, String paramName, int paramName, ServiceContext paramName)",
+		"issueKey": "LPD-58603",
+		"to": "addFragmentEntryLink(null, param#0#, param#1#, param#2#, param#3#, param#4#, param#5#, param#6#, param#7#, param#8#, param#9#, param#10#, param#11#, param#12#, param#13#, param#14#, param#15#)"
+	},
+	{
+		"classNames": [
+			"FragmentEntryLinkService",
+			"FragmentEntryLinkServiceUtil"
+		],
+		"from": "addFragmentEntryLink(long paramName, long paramName, long paramName, long paramName, long paramName, String paramName, String paramName, String paramName, String paramName, String paramName, String paramName, int paramName, String paramName, int paramName, ServiceContext paramName)",
+		"issueKey": "LPD-58603",
+		"to": "addFragmentEntryLink(null, param#0#, param#1#, param#2#, param#3#, param#4#, param#5#, param#6#, param#7#, param#8#, param#9#, param#10#, param#11#, param#12#, param#13#, param#14#)"
+	},
+	{
+		"classNames": [
+			"LayoutPageTemplateStructureLocalService",
+			"LayoutPageTemplateStructureLocalServiceUtil"
+		],
+		"from": "fetchLayoutPageTemplateStructure(long paramName, long paramName, boolean paramName)",
+		"issueKey": "LPD-58976",
+		"to": "fetchLayoutPageTemplateStructure(param#0#, param#1#)"
+	},
+	{
+		"classNames": [
+			"JournalArticleLocalServiceWrapper"
+		],
+		"classStructurePattern": true,
+		"issueKey": "LPD-59748",
+		"methodsToFormat": [
+			{
+				"from": "regex:@Override\\s+public JournalArticle (?<methodName>add|update)Article\\(\\s+String externalReferenceCode,\\s+long userId,\\s+long groupId,\\s+long folderId,\\s+long classNameId,\\s+long classPK,\\s+String articleId,\\s+boolean autoArticleId,\\s+double version,\\s+Map<Locale,\\s+String> titleMap,\\s+Map<Locale,\\s+String> descriptionMap,\\s+Map<Locale,\\s+String> friendlyURLMap,\\s+String content,\\s+long ddmStructureId,\\s+String ddmTemplateKey,\\s+String layoutUuid,\\s+int displayDateMonth,\\s+int displayDateDay,\\s+int displayDateYear,\\s+int displayDateHour,\\s+int displayDateMinute,\\s+int expirationDateMonth,\\s+int expirationDateDay,\\s+int expirationDateYear,\\s+int expirationDateHour,\\s+int expirationDateMinute,\\s+boolean neverExpire,\\s+int reviewDateMonth,\\s+int reviewDateDay,\\s+int reviewDateYear,\\s+int reviewDateHour,\\s+int reviewDateMinute,\\s+boolean neverReview,\\s+boolean indexable,\\s+boolean smallImage,\\s+String smallImageURL,\\s+File smallImageFile,\\s+Map<String,\\s+byte\\[\\]> images,\\s+String articleURL,\\s+ServiceContext serviceContext\\)",
+				"to": "@Override\n\tpublic JournalArticle ${methodName}Article(\n\t\t\tString externalReferenceCode, long userId, long groupId,\n\t\t\tlong folderId, long classNameId, long classPK, String articleId,\n\t\t\tboolean autoArticleId, double version, Map<Locale, String> titleMap,\n\t\t\tMap<Locale, String> descriptionMap,\n\t\t\tMap<Locale, String> friendlyURLMap, String content,\n\t\t\tlong ddmStructureId, String ddmTemplateKey, String layoutUuid,\n\t\t\tint displayDateMonth, int displayDateDay, int displayDateYear,\n\t\t\tint displayDateHour, int displayDateMinute, int expirationDateMonth,\n\t\t\tint expirationDateDay, int expirationDateYear,\n\t\t\tint expirationDateHour, int expirationDateMinute,\n\t\t\tboolean neverExpire, int reviewDateMonth, int reviewDateDay,\n\t\t\tint reviewDateYear, int reviewDateHour, int reviewDateMinute,\n\t\t\tboolean neverReview, boolean indexable, boolean smallImage,\n\t\t\tlong smallImageId, int smallImageSource, String smallImageURL,\n\t\t\tFile smallImageFile, Map<String, byte[]> images, String articleURL,\n\t\t\tServiceContext serviceContext)"
+			}
+		]
+	},
+	{
+		"from": "PropsValues.XML_SITEMAP_INDEX_ENABLED",
+		"issueKey": "LPD-59753",
+		"newImports": [
+			"com.liferay.site.constants.LegacySitemapIndexPropsKeys"
+		],
+		"to": "LegacySitemapIndexPropsKeys.XML_SITEMAP_INDEX_ENABLED"
+	},
+	{
+		"classNames": [
+			"SitemapManager"
+		],
+		"from": "getSiteMapManager(long paramName, boolean paramName, ThemeDisplay paramName)",
+		"issueKey": "LPD-59820",
+		"to": "getSitemap(param#0#, param#1#, param#2#)"
+	},
+	{
+		"from": "regex:(?<variableName>\\w+)\\.getParameter\\((?<nameAttribute>\\w*)\\)",
+		"issueKey": "LPD-59929",
+		"newImports": [
+			"com.liferay.portal.kernel.util.HttpComponentsUtil"
+		],
+		"to": "HttpComponentsUtil.getParameter(HttpComponentsUtil.getRequestURL(${variableName}), ${nameAttribute})"
+	},
+	{
+		"classNames": [
+			"CPMedia"
+		],
+		"from": "getDownloadUrl",
+		"issueKey": "LPD-60622",
+		"to": "getDownloadURL"
+	},
+	{
+		"from": "CommerceAccountHelper.getCommerceAccountGroupIds(long paramName)",
+		"issueKey": "LPD-60625",
+		"newImports": [
+			"com.liferay.account.service.AccountGroupLocalService"
+		],
+		"newReference": "AccountGroupLocalService _accountGroupLocalService",
+		"to": "_accountGroupLocalService.getAccountGroupIds(param#0#)"
+	},
+	{
+		"classNames": [
+			"CPDefinitionLocalServiceWrapper"
+		],
+		"classStructurePattern": true,
+		"issueKey": "LPD-60627",
+		"methodsToFormat": [
+			{
+				"from": "regex:@Override\\s+public\\s+CPAttachmentFileEntry\\s+getDefaultImage\\(",
+				"to": "@Override\n\tpublic CPAttachmentFileEntry\n\t\tgetDefaultImageCPAttachmentFileEntry("
+			}
+		]
+	},
+	{
+		"classNames": [
+			"CPCompareHelperUtil"
+		],
+		"from": "addCompareProduct(long paramName, long paramName, long paramName, HttpSession paramName)",
+		"hasMessage": true,
+		"issueKey": "LPD-61133"
+	},
+	{
+		"classNames": [
+			"CPCompareHelperUtil"
+		],
+		"from": "getCPDefinitionIds(long paramName, long paramName, HttpSession paramName)",
+		"hasMessage": true,
+		"issueKey": "LPD-61133"
+	},
+	{
+		"classNames": [
+			"CPCompareHelperUtil"
+		],
+		"from": "removeCompareProduct(long paramName, long paramName, long paramName, HttpSession paramName)",
+		"hasMessage": true,
+		"issueKey": "LPD-61133"
+	},
+	{
+		"classNames": [
+			"CPDefinitionLocalService",
+			"CPDefinitionLocalServiceUtil",
+			"CPDefinitionService",
+			"CPDefinitionServiceUtil"
+		],
+		"from": "getLayoutUuid(long paramName)",
+		"hasMessage": true,
+		"issueKey": "LPD-61140"
+	},
+	{
+		"classNames": [
+			"UserLocalService",
+			"UserLocalServiceUtil"
+		],
+		"from": "addUserWithWorkflow(long paramName, long paramName, boolean paramName, String paramName, String paramName, boolean paramName, String paramName, String paramName, Locale paramName, String paramName, String paramName, String paramName, long paramName, long paramName, boolean paramName, int paramName, int paramName, int paramName, String paramName, long[] paramName, long[] paramName, long[] paramName, long[] paramName, boolean paramName, ServiceContext paramName)",
+		"issueKey": "LPD-61150",
+		"newImports": [
+			"com.liferay.portal.kernel.model.UserConstants"
+		],
+		"to": "addUserWithWorkflow(param#0#, param#1#, param#2#, param#3#, param#4#, param#5#, param#6#, param#7#, param#8#, param#9#, param#10#, param#11#, param#12#, param#13#, param#14#, param#15#, param#16#, param#17#, param#18#, UserConstants.TYPE_REGULAR, param#19#, param#20#, param#21#, param#22#, param#23#, param#24#)"
+	},
+	{
+		"classNames": [
+			"LayoutLocalService",
+			"LayoutLocalServiceUtil",
+			"LayoutService",
+			"LayoutServiceUtil"
+		],
+		"from": "addLayout(long paramName, long paramName, boolean paramName, long paramName, long paramName, long paramName, Map<Locale, String> paramName, Map<Locale, String> paramName, Map<Locale, String> paramName, Map<Locale, String> paramName, Map<Locale, String> paramName, String paramName, String paramName, boolean paramName, boolean paramName, Map<Locale, String> paramName, ServiceContext paramName)",
+		"issueKey": "LPD-61495",
+		"to": "addLayout(null, param#0#, param#1#, param#2#, param#3#, param#4#, param#5#, param#6#, param#7#, param#8#, param#9#, param#10#, param#11#, param#12#, param#13#, param#14#, param#15#, 0, param#16#)"
+	},
+	{
+		"from": "PluginPackage.REPOSITORY_XML_FILENAME_EXTENSION",
+		"issueKey": "LPD-61573",
+		"to": "\"xml\""
+	},
+	{
+		"classNames": [
+			"JournalArticleLocalService",
+			"JournalArticleLocalServiceUtil",
+			"JournalArticleService",
+			"JournalArticleServiceUtil"
+		],
+		"from": "getArticlesByStructureId(long param, long param, String param, int param, int param, int param, OrderByComparator<JournalArticle> param)",
+		"issueKey": "LPD-61670",
+		"newImports": [
+			"com.liferay.dynamic.data.mapping.service.DDMStructureLocalServiceUtil",
+			"com.liferay.portal.kernel.util.PortalUtil"
+		],
+		"to": "getArticlesByStructureId(param#0#, param#1#, DDMStructureLocalServiceUtil.getStructure(param#0#, PortalUtil.getClassNameId(JournalArticle.class), param#2#).getStructureId(), param#3#, param#4#, param#5#, param#6#)"
+	},
+	{
+		"classNames": [
+			"JournalArticleLocalService",
+			"JournalArticleLocalServiceUtil",
+			"JournalArticleService",
+			"JournalArticleServiceUtil"
+		],
+		"from": "getArticlesByStructureId(long param, long param, String param, Locale param, int param, int param, int param, OrderByComparator<JournalArticle> param)",
+		"issueKey": "LPD-61670",
+		"newImports": [
+			"com.liferay.dynamic.data.mapping.service.DDMStructureLocalServiceUtil",
+			"com.liferay.portal.kernel.util.PortalUtil"
+		],
+		"to": "getArticlesByStructureId(param#0#, param#1#, DDMStructureLocalServiceUtil.getStructure(param#0#, PortalUtil.getClassNameId(JournalArticle.class), param#2#).getStructureId(), param#3#, param#4#, param#5#, param#6#, param#7#)"
+	},
+	{
+		"classNames": [
+			"JournalArticleLocalService",
+			"JournalArticleLocalServiceUtil",
+			"JournalArticleService",
+			"JournalArticleServiceUtil"
+		],
+		"from": "getArticlesByStructureId(long param, String param, int param, int param, int param, OrderByComparator<JournalArticle> param)",
+		"issueKey": "LPD-61670",
+		"newImports": [
+			"com.liferay.dynamic.data.mapping.service.DDMStructureLocalServiceUtil",
+			"com.liferay.portal.kernel.util.PortalUtil"
+		],
+		"to": "getArticlesByStructureId(param#0#, DDMStructureLocalServiceUtil.getStructure(param#0#, PortalUtil.getClassNameId(JournalArticle.class), param#1#).getStructureId(), param#2#, param#3#, param#4#, param#5#)"
+	},
+	{
+		"classNames": [
+			"JournalArticleLocalService",
+			"JournalArticleLocalServiceUtil",
+			"JournalArticleService",
+			"JournalArticleServiceUtil"
+		],
+		"from": "getArticlesByStructureId(long param, String param, int param, int param, OrderByComparator<JournalArticle> param)",
+		"issueKey": "LPD-61670",
+		"newImports": [
+			"com.liferay.dynamic.data.mapping.service.DDMStructureLocalServiceUtil",
+			"com.liferay.portal.kernel.util.PortalUtil"
+		],
+		"to": "getArticlesByStructureId(param#0#, DDMStructureLocalServiceUtil.getStructure(param#0#, PortalUtil.getClassNameId(JournalArticle.class), param#1#).getStructureId(), param#2#, param#3#, param#4#)"
+	},
+	{
+		"classNames": [
+			"JournalArticleLocalService",
+			"JournalArticleLocalServiceUtil",
+			"JournalArticleService",
+			"JournalArticleServiceUtil"
+		],
+		"from": "getArticlesByStructureId(long param, String param, Locale param, int param, int param, int param, OrderByComparator<JournalArticle> param)",
+		"issueKey": "LPD-61670",
+		"newImports": [
+			"com.liferay.dynamic.data.mapping.service.DDMStructureLocalServiceUtil",
+			"com.liferay.portal.kernel.util.PortalUtil"
+		],
+		"to": "getArticlesByStructureId(param#0#, DDMStructureLocalServiceUtil.getStructure(param#0#, PortalUtil.getClassNameId(JournalArticle.class), param#1#).getStructureId(), param#2#, param#3#, param#4#, param#5#, param#6#)"
+	},
+	{
+		"classNames": [
+			"CommercePriceEntryLocalServiceUtil"
+		],
+		"from": "fetchCommercePriceEntry(long paramName, long paramName)",
+		"issueKey": "LPD-62914",
+		"newImports": [
+			"com.liferay.petra.string.StringPool"
+		],
+		"to": "fetchCommercePriceEntry(param#1#, null, StringPool.BLANK)"
+	},
+	{
+		"from": "StorageEngineUtil.getFields(long paramName)",
+		"issueKey": "LPD-65038",
+		"newImports": [
+			"com.liferay.dynamic.data.mapping.util.DDMUtil",
+			"com.liferay.portal.kernel.service.ServiceContextThreadLocal"
+		],
+		"to": "DDMUtil.getFields(param#0#, ServiceContextThreadLocal.getServiceContext())"
+	},
+	{
+		"classNames": [
+			"PropsKeys"
+		],
+		"from": "AUTO_DEPLOY_TOMCAT_DEST_DIR",
+		"hasMessage": true,
+		"issueKey": "LPD-65815"
+	},
+	{
+		"from": "PropsValues.FEATURE_FLAGS_JSON",
+		"issueKey": "LPD-66289",
+		"newImports": [
+			"com.liferay.portal.kernel.json.JSONFactoryUtil",
+			"com.liferay.portal.kernel.util.PropsUtil"
+		],
+		"to": "String.valueOf(JSONFactoryUtil.createJSONObject(PropsUtil.getProperties(\"feature.flag.\", true)))"
+	},
+	{
+		"from": "PropsFiles.CAPTCHA",
+		"issueKey": "LPD-66321",
+		"to": "\"captcha\""
+	},
+	{
+		"from": "PropsFiles.CONTENT_TYPES",
+		"issueKey": "LPD-66321",
+		"to": "\"content-types\""
+	},
+	{
+		"from": "PropsFiles.PORTAL",
+		"issueKey": "LPD-66321",
+		"to": "\"portal\""
+	},
+	{
+		"classNames": [
+			"CommercePriceEntryLocalService",
+			"CommercePriceEntryLocalServiceUtil",
+			"CommercePriceEntryService",
+			"CommercePriceEntryServiceUtil"
+		],
+		"from": "fetchCommercePriceEntry(long paramName, long paramName, boolean paramName)",
+		"issueKey": "LPD-66666",
+		"newImports": [
+			"com.liferay.petra.string.StringPool"
+		],
+		"to": "fetchCommercePriceEntry(param#1#, null, StringPool.BLANK, param#2#)"
+	},
+	{
+		"classNames": [
+			"CommercePriceEntryLocalService",
+			"CommercePriceEntryLocalServiceUtil",
+			"CommercePriceEntryService",
+			"CommercePriceEntryServiceUtil"
+		],
+		"from": "fetchCommercePriceEntry(long paramName, String paramName)",
+		"issueKey": "LPD-66667",
+		"newImports": [
+			"com.liferay.petra.string.StringPool"
+		],
+		"to": "fetchCommercePriceEntry(param#0#, param#1#, StringPool.BLANK)"
+	},
+	{
+		"classNames": [
+			"CommercePriceEntryLocalService",
+			"CommercePriceEntryLocalServiceUtil",
+			"CommercePriceEntryService",
+			"CommercePriceEntryServiceUtil"
+		],
+		"from": "fetchCommercePriceEntry(long paramName, String paramName, boolean paramName)",
+		"issueKey": "LPD-66668",
+		"newImports": [
+			"com.liferay.petra.string.StringPool"
+		],
+		"to": "fetchCommercePriceEntry(param#0#, param#1#, StringPool.BLANK, param#2#)"
+	},
+	{
+		"classNames": [
+			"CommercePriceEntryLocalService",
+			"CommercePriceEntryLocalServiceUtil",
+			"CommercePriceEntryService",
+			"CommercePriceEntryServiceUtil"
+		],
+		"from": "fetchCommercePriceEntry(long paramName, String paramName, int paramName)",
+		"issueKey": "LPD-66669",
+		"newImports": [
+			"com.liferay.petra.string.StringPool"
+		],
+		"to": "fetchCommercePriceEntry(param#0#, param#1#, param#2#, StringPool.BLANK)"
+	},
+	{
+		"classNames": [
+			"DDMStructureLocalService",
+			"DDMStructureLocalServiceUtil"
+		],
+		"from": "addStructure(long paramName, long paramName, long paramName, long paramName, String paramName, Map<Locale, String> paramName, Map<Locale, String> paramName, DDMForm paramName, DDMFormLayout paramName, String paramName, int paramName, ServiceContext paramName)",
+		"issueKey": "LPD-69589",
+		"newImports": [
+			"com.liferay.petra.string.StringPool"
+		],
+		"to": "addStructure(StringPool.BLANK, param#0#, param#1#, param#2#, param#3#, param#4#, param#5#, param#6#, param#7#, param#8#, param#9#, param#10#, param#11#)"
+	},
+	{
+		"classNames": [
+			"DDMStructureLocalService",
+			"DDMStructureLocalServiceUtil"
+		],
+		"from": "addStructure(long paramName, long paramName, long paramName, long paramName, String paramName, Map<Locale, String> paramName, Map<Locale, String> paramName, String paramName, String paramName, ServiceContext paramName)",
+		"issueKey": "LPD-69589",
+		"newImports": [
+			"com.liferay.petra.string.StringPool"
+		],
+		"to": "addStructure(StringPool.BLANK, param#0#, param#1#, param#2#, param#3#, param#4#, param#5#, param#6#, param#7#, param#8#, param#9#)"
+	},
+	{
+		"classNames": [
+			"DDMStructureLocalService",
+			"DDMStructureLocalServiceUtil"
+		],
+		"from": "updateStructure(long paramName, long paramName, long paramName, Map<Locale, String> paramName, Map<Locale, String> paramName, String paramName, ServiceContext paramName)",
+		"issueKey": "LPD-69589",
+		"newImports": [
+			"com.liferay.petra.string.StringPool"
+		],
+		"to": "updateStructure(StringPool.BLANK, param#0#, param#1#, param#6#.getScopeGroupId(), param#2#, DDMStructureLocalServiceUtil.getStructure(param#1#).getClassNameId(), DDMStructureLocalServiceUtil.getStructure(param#1#).getStructureKey(), param#3#, param#4#, param#5#, param#6#)"
+	},
+	{
+		"classNames": [
+			"FFDocumentLibraryDDMEditorConfigurationUtil"
+		],
+		"from": "useDataEngineEditor()",
+		"hasMessage": true,
+		"issueKey": "LPD-76458"
+	},
+	{
+		"classNames": [
+			"DLFileEntryLocalServiceWrapper"
+		],
+		"classStructurePattern": true,
+		"issueKey": "LPD-78192",
+		"methodsToFormat": [
+			{
+				"from": "@Override\n\tpublic DLFileEntry addFileEntry(\n\t\t\tlong userId, long groupId, long repositoryId, long folderId,\n\t\t\tString sourceFileName, String mimeType, String title,\n\t\t\tString description, String changeLog, long fileEntryTypeId,\n\t\t\tMap<String, DDMFormValues> ddmFormValuesMap, File file,\n\t\t\tInputStream inputStream, long size, ServiceContext serviceContext)\n\t\tthrows PortalException",
+				"to": "@Override\n\tpublic DLFileEntry addFileEntry(\n\t\t\tString externalReferenceCode, long userId, long groupId,\n\t\t\tlong repositoryId, long folderId, String sourceFileName,\n\t\t\tString mimeType, String title, String urlTitle, String description,\n\t\t\tString changeLog, long fileEntryTypeId,\n\t\t\tMap<String, DDMFormValues> ddmFormValuesMap, File file,\n\t\t\tInputStream inputStream, long size, java.util.Date displayDate,\n\t\t\tjava.util.Date expirationDate, java.util.Date reviewDate,\n\t\t\tServiceContext serviceContext)\n\t\tthrows PortalException"
+			},
+			{
+				"from": "@Override\n\tpublic DLFileEntry updateFileEntry(\n\t\t\tlong userId, long fileEntryId, String sourceFileName,\n\t\t\tString mimeType, String title, String description, String changeLog,\n\t\t\tDLVersionNumberIncrease dlVersionNumberIncrease,\n\t\t\tlong fileEntryTypeId, Map<String, DDMFormValues> ddmFormValuesMap,\n\t\t\tFile file, InputStream inputStream, long size,\n\t\t\tServiceContext serviceContext)\n\t\tthrows PortalException",
+				"to": "@Override\n\tpublic DLFileEntry updateFileEntry(\n\t\t\tlong userId, long fileEntryId, String sourceFileName,\n\t\t\tString mimeType, String title, String urlTitle, String description,\n\t\t\tString changeLog, DLVersionNumberIncrease dlVersionNumberIncrease,\n\t\t\tlong fileEntryTypeId, Map<String, DDMFormValues> ddmFormValuesMap,\n\t\t\tFile file, InputStream inputStream, long size,\n\t\t\tjava.util.Date displayDate, java.util.Date expirationDate,\n\t\t\tjava.util.Date reviewDate, ServiceContext serviceContext)\n\t\tthrows PortalException"
+			}
+		]
+	},
+	{
+		"classNames": [
+			"AssetVocabularyLocalService",
+			"AssetVocabularyLocalServiceUtil",
+			"AssetVocabularyService",
+			"AssetVocabularyServiceUtil"
+		],
+		"from": "updateVocabulary(long paramName, String paramName, String paramName, Map<Locale, String> paramName, Map<Locale, String> paramName, String paramName, ServiceContext paramName)",
+		"issueKey": "LPD-80776",
+		"to": "updateVocabulary(param#0#, param#2#, param#3#, param#4#, param#5#, param#6#)"
+	},
+	{
+		"classNames": [
+			"DDMStructureLocalService",
+			"DDMStructureLocalServiceUtil"
+		],
+		"from": "addStructure(long paramName, long paramName, long paramName, long paramName, String paramName,  Map<Locale, String> paramName, Map<Locale, String> paramName, DDMForm paramName, DDMFormLayout paramName, String paramName, int paramName, ServiceContext paramName)",
+		"issueKey": "LPD-80777",
+		"newImports": [
+			"com.liferay.petra.string.StringPool"
+		],
+		"to": "addStructure(StringPool.BLANK, param#0#, param#1#, param#2#, param#3#, param#4#, param#5#, param#6#, param#7#, param#8#, param#9#, param#10#, param#11#)"
+	},
+	{
+		"classNames": [
+			"DDMStructureLocalService",
+			"DDMStructureLocalServiceUtil"
+		],
+		"from": "addStructure(long paramName, long paramName, long paramName, long paramName, String paramName,  Map<Locale, String> paramName, Map<Locale, String> paramName, String paramName, String paramName, ServiceContext paramName)",
+		"issueKey": "LPD-80777",
+		"newImports": [
+			"com.liferay.petra.string.StringPool"
+		],
+		"to": "addStructure(StringPool.BLANK, param#0#, param#1#, param#2#, param#3#, param#4#, param#5#, param#6#, param#7#, param#8#, param#9#)"
+	},
+	{
+		"classNames": [
+			"AssetEntryLocalService",
+			"AssetEntryLocalServiceUtil"
+		],
+		"from": "updateEntry(long paramName, long paramName, Date paramName, Date paramName, String paramName, long paramName, String paramName, long paramName, long[] paramName, String[] paramName, boolean paramName, Date paramName, Date paramName, Date paramName, String paramName, String paramName, String paramName, String paramName, String paramName, String paramName, int paramName, int paramName, Double paramName, boolean paramName)",
+		"issueKey": "LPD-81811",
+		"to": "updateEntry(param#0#, param#1#, param#2#, param#3#, param#4#, param#5#, param#6#, param#7#, param#8#, param#9#, false, param#10#, param#11#, param#12#, null, param#13#, param#14#, param#15#, param#16#, param#17#, param#18#, param#19#, param#20#, param#21#, param#22#)"
+	},
+	{
+		"classNames": [
+			"CompanyLocalService",
+			"CompanyLocalServiceUtil",
+			"CompanyService",
+			"CompanyServiceUtil"
+		],
+		"from": "getCompanyByMx(String paramName)",
+		"hasMessage": true,
+		"issueKey": "LPD-82354"
+	},
+	{
+		"from": "regex:MultiVMPoolUtil\\s*.\\s*getPortalCache\\(\\s*(?<prefixMethodName>[\\s\\S]*?)\\)",
+		"issueKey": "LPS-153962",
+		"newImports": [
+			"com.liferay.portal.kernel.cache.PortalCacheHelperUtil",
+			"com.liferay.portal.kernel.cache.PortalCacheManagerNames"
+		],
+		"to": "PortalCacheHelperUtil.getPortalCache(PortalCacheManagerNames.MULTI_VM, ${prefixMethodName})"
 	},
 	{
 		"from": "CookieKeys.COMMERCE_CONTINUE_AS_GUEST",
@@ -3524,9 +5886,9 @@
 		"classNames": [
 			"CountryService"
 		],
-		"from": "fetchCommerceCountry",
+		"from": "fetchCountry(long param, String param)",
 		"issueKey": "LPS-187663",
-		"to": "fetchCountryByA2"
+		"to": "fetchCountryByA2(param#0#, param#1#)"
 	},
 	{
 		"from": "CommerceShippingOption(String paramName, String paramName, BigDecimal paramName)",
@@ -3592,6 +5954,8 @@
 	},
 	{
 		"classNames": [
+			"CPDefinitionLocalServiceUtil",
+			"CPDefinitionServiceUtil",
 			"CPDefinitionLocalService",
 			"CPDefinitionService"
 		],
@@ -3709,6 +6073,7 @@
 	},
 	{
 		"classNames": [
+			"PhoneLocalService",
 			"PhoneLocalServiceUtil"
 		],
 		"from": "addPhone(long paramName, String paramName, long paramName, String paramName, String paramName, long paramName, boolean paramName)",
@@ -3716,7 +6081,7 @@
 		"newImports": [
 			"com.liferay.portal.kernel.service.ServiceContextThreadLocal"
 		],
-		"to": "addPhone(param#0#, param#1#, param#2#, param#3#, param#4#, param#5#, param#6#, ServiceContextThreadLocal.getServiceContext())"
+		"to": "addPhone(null, param#0#, param#1#, param#2#, param#3#, param#4#, param#5#, param#6#, ServiceContextThreadLocal.getServiceContext())"
 	},
 	{
 		"classNames": [
@@ -3744,10 +6109,9 @@
 		"from": "updateFileEntry(long paramName, long paramName, String paramName, String paramName, String paramName, String paramName, String paramName, boolean paramName, byte[] paramName, ServiceContext paramName)",
 		"issueKey": "LPS-194134",
 		"newImports": [
-			"com.liferay.document.library.kernel.model.DLVersionNumberIncrease",
-			"java.util.Date"
+			"com.liferay.document.library.kernel.model.DLVersionNumberIncrease"
 		],
-		"to": "updateFileEntry(param#0#, param#1#, param#2#, param#3#, param#4#, null, param#5#, param#6#, dlVersionNumberIncrease, param#7#, null, null, param#8#, param#9#)"
+		"to": "updateFileEntry(param#0#, param#1#, param#2#, param#3#, param#4#, null, param#5#, param#6#, DLVersionNumberIncrease.fromMajorVersion(param#7#), param#8#, null, null, null, param#9#)"
 	},
 	{
 		"classNames": [
@@ -3756,11 +6120,7 @@
 		],
 		"from": "updateFileEntry(long paramName, long paramName, String paramName, String paramName, String paramName, String paramName, String paramName, DLVersionNumberIncrease paramName, byte[] paramName, ServiceContext paramName)",
 		"issueKey": "LPS-194134",
-		"newImports": [
-			"com.liferay.document.library.kernel.model.DLVersionNumberIncrease",
-			"java.util.Date"
-		],
-		"to": "updateFileEntry(param#0#, param#1#, param#2#, param#3#, param#4#, null, param#5#, param#6#, param#7#, param#8#, null, null, param#9#)"
+		"to": "updateFileEntry(param#0#, param#1#, param#2#, param#3#, param#4#, null, param#5#, param#6#, param#7#, param#8#, null, null, null, param#9#)"
 	},
 	{
 		"from": "compat/mixins",
@@ -3777,12 +6137,12 @@
 		],
 		"from": "addFileEntry(long paramName, long paramName, long paramName, String paramName, String paramName, String paramName, String paramName, String paramName, byte[] paramName, ServiceContext paramName)",
 		"issueKey": "LPS-194818",
-		"to": "addFileEntry(null, param#0#, param#1#, param#2#, param#3#, param#4#, param#5#, null, param#6#, param#7#, param#8#, null, null, param#9#)"
+		"to": "addFileEntry(null, param#0#, param#1#, param#2#, param#3#, param#4#, param#5#, null, param#6#, param#7#, param#8#, null, null, null, param#9#)"
 	},
 	{
-		"from": "ServiceTrackerList<Class<T>, Class<E>>",
+		"from": "regex:ServiceTrackerList<\\w+(?:<[^<>]+>)?,\\s*(?<TypeName>\\w+(?:<[^<>]+>)?)>",
 		"issueKey": "LPS-195079",
-		"to": "ServiceTrackerList<typeParam#1#>"
+		"to": "ServiceTrackerList<${TypeName}>"
 	},
 	{
 		"classNames": [
@@ -3820,10 +6180,27 @@
 	},
 	{
 		"classNames": [
+			"CommerceOrderValidator"
+		],
+		"classStructurePattern": true,
+		"issueKey": "LPS-196599",
+		"methodsToFormat": [
+			{
+				"from": "regex:(?<methodSignature>@Override\\n\\tpublic CommerceOrderValidatorResult validate\\(\\n\\s+Locale locale, CommerceOrder commerceOrder, CPInstance cpInstance,\\n\\s+)int quantity\\)",
+				"to": "${methodSignature}String json, BigDecimal quantity, boolean child)"
+			}
+		],
+		"newImports": [
+			"java.math.BigDecimal"
+		]
+	},
+	{
+		"classNames": [
 			"AssetCategoryLocalService",
 			"AssetCategoryLocalServiceUtil"
 		],
 		"from": "fetchAssetCategoryByExternalReferenceCode(long paramName, String paramName)",
+		"hasMessage": true,
 		"issueKey": "LPS-196608"
 	},
 	{
@@ -3861,7 +6238,7 @@
 		"classNames": [
 			"CommerceAccountHelper"
 		],
-		"from": "getCurrentCommerceAccount(HttpServletRequest paramName)",
+		"from": "getCurrentAccountEntry(HttpServletRequest paramName)",
 		"issueKey": "LPS-196638",
 		"to": "getCurrentAccountEntry(0, param#0#)"
 	},
@@ -3881,7 +6258,7 @@
 			"AccountGroupRelService",
 			"AccountGroupRelServiceUtil"
 		],
-		"from": "addCommerceAccountGroupRel(String paramName, long paramName, long paramName, ServiceContext paramName)",
+		"from": "addAccountGroupRel(String paramName, long paramName, long paramName, ServiceContext paramName)",
 		"issueKey": "LPS-196652",
 		"to": "addAccountGroupRel(param#2#, param#0#, param#1#)"
 	},
@@ -3904,19 +6281,25 @@
 	{
 		"classNames": [
 			"CommerceOrderItemLocalService",
-			"CommerceOrderItemService"
+			"CommerceOrderItemLocalServiceUtil"
 		],
 		"from": "addCommerceOrderItem(long paramName, long paramName, int paramName, int paramName, String paramName, CommerceContext paramName, ServiceContext paramName)",
 		"issueKey": "LPS-197459",
+		"newImports": [
+			"java.math.BigDecimal"
+		],
 		"to": "addCommerceOrderItem(0, param#0#, param#1#, param#4#, BigDecimal.valueOf(param#2#), param#1#, BigDecimal.valueOf(param#3#), null, param#5#, param#6#)"
 	},
 	{
 		"classNames": [
-			"CommerceOrderItemLocalServiceUtil",
+			"CommerceOrderItemService",
 			"CommerceOrderItemServiceUtil"
 		],
 		"from": "addCommerceOrderItem(long paramName, long paramName, int paramName, int paramName, String paramName, CommerceContext paramName, ServiceContext paramName)",
 		"issueKey": "LPS-197459",
+		"newImports": [
+			"java.math.BigDecimal"
+		],
 		"to": "addCommerceOrderItem(param#0#, param#1#, param#4#, BigDecimal.valueOf(param#2#), param#1#, BigDecimal.valueOf(param#3#), null, param#5#, param#6#)"
 	},
 	{
@@ -3926,7 +6309,10 @@
 		],
 		"from": "deleteCommerceOrderItems(long paramName)",
 		"issueKey": "LPS-197459",
-		"to": "deleteCommerceOrderItems(0, param#0#)"
+		"newImports": [
+			"com.liferay.portal.kernel.service.ServiceContextThreadLocal"
+		],
+		"to": "deleteCommerceOrderItems(ServiceContextThreadLocal.getServiceContext().getUserId(), param#0#)"
 	},
 	{
 		"classNames": [
@@ -3979,8 +6365,12 @@
 		"classNames": [
 			"CommerceOrderItem"
 		],
-		"from": "getQuantity()",
-		"issueKey": "LPS-197931"
+		"from": "regex:(?<!\\.valueOf\\()\\b(?<variableName>_?\\w+)\\.(?<methodName>getQuantity\\(\\))",
+		"issueKey": "LPS-197931",
+		"newImports": [
+			"java.math.BigDecimal"
+		],
+		"to": "BigDecimal.valueOf(${variableName}.${methodName})"
 	},
 	{
 		"classNames": [
@@ -4052,78 +6442,6 @@
 	},
 	{
 		"classNames": [
-			"Contact"
-		],
-		"from": "getPrefixId",
-		"issueKey": "LPS-197984",
-		"to": "getPrefixListTypeId"
-	},
-	{
-		"classNames": [
-			"Organization"
-		],
-		"from": "getStatusId",
-		"issueKey": "LPS-197984",
-		"to": "getStatusListTypeId"
-	},
-	{
-		"classNames": [
-			"Contact"
-		],
-		"from": "getSuffixId",
-		"issueKey": "LPS-197984",
-		"to": "getSuffixListTypeId"
-	},
-	{
-		"classNames": [
-			"Address",
-			"EmailAddress",
-			"OrgLabor",
-			"Phone",
-			"Website"
-		],
-		"from": "getTypeId",
-		"issueKey": "LPS-197984",
-		"to": "getListTypeId"
-	},
-	{
-		"classNames": [
-			"Contact"
-		],
-		"from": "setPrefixId",
-		"issueKey": "LPS-197984",
-		"to": "setPrefixListTypeId"
-	},
-	{
-		"classNames": [
-			"Organization"
-		],
-		"from": "setStatusId",
-		"issueKey": "LPS-197984",
-		"to": "setStatusListTypeId"
-	},
-	{
-		"classNames": [
-			"Contact"
-		],
-		"from": "setSuffixId",
-		"issueKey": "LPS-197984",
-		"to": "setSuffixListTypeId"
-	},
-	{
-		"classNames": [
-			"Address",
-			"EmailAddress",
-			"OrgLabor",
-			"Phone",
-			"Website"
-		],
-		"from": "setTypeId",
-		"issueKey": "LPS-197984",
-		"to": "setListTypeId"
-	},
-	{
-		"classNames": [
 			"CommerceOrderLocalService",
 			"CommerceOrderLocalServiceUtil"
 		],
@@ -4137,6 +6455,7 @@
 			"AssetVocabularyLocalServiceUtil"
 		],
 		"from": "fetchAssetVocabularyByExternalReferenceCode(long paramName, String paramName)",
+		"hasMessage": true,
 		"issueKey": "LPS-198292"
 	},
 	{
@@ -4157,6 +6476,7 @@
 	},
 	{
 		"from": "ConfigurationBeanDeclaration",
+		"hasMessage": true,
 		"issueKey": "LPS-198405"
 	},
 	{
@@ -4182,22 +6502,35 @@
 	{
 		"from": "PortletDisplayTemplateManager.DISPLAY_STYLE_PREFIX",
 		"issueKey": "LPS-202918",
+		"newImports": [
+			"com.liferay.portlet.display.template.constants.PortletDisplayTemplateConstants"
+		],
 		"to": "PortletDisplayTemplateConstants.DISPLAY_STYLE_PREFIX"
 	},
 	{
 		"from": "PortletDisplayTemplateManager.ENTRIES",
 		"issueKey": "LPS-202918",
+		"newImports": [
+			"com.liferay.portlet.display.template.constants.PortletDisplayTemplateConstants"
+		],
 		"to": "PortletDisplayTemplateConstants.ENTRIES"
 	},
 	{
 		"classNames": [
 			"DLAppLocalService",
-			"DLAppLocalServiceUtil",
-			"DLAppService",
-			"DLAppServiceUtil"
+			"DLAppLocalServiceUtil"
 		],
 		"from": "addFolder(long paramName, long paramName, long paramName, String paramName, String paramName, ServiceContext paramName)",
 		"issueKey": "LPS-202927",
 		"to": "addFolder(null, param#0#, param#1#, param#2#, param#3#, param#4#, param#5#)"
+	},
+	{
+		"classNames": [
+			"DLAppService",
+			"DLAppServiceUtil"
+		],
+		"from": "addFolder(long paramName, long paramName, String paramName, String paramName, ServiceContext paramName)",
+		"issueKey": "LPS-202927",
+		"to": "addFolder(null, param#0#, param#1#, param#2#, param#3#, param#4#)"
 	}
 ]
